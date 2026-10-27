@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/contact/contact_type.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../model/user_info.dart';
@@ -20,8 +21,7 @@ import '../../util/scaffold_messenger_key.dart';
 import '../../util/storage.dart';
 import '../../util/notifications_notifier.dart';
 import '../../util/units_notifier.dart';
-import '../shared/email_address_text_field.dart';
-import '../shared/phone_number_text_field.dart';
+import '../shared/contact_text_field.dart';
 import '../shared/verification_code_text_field.dart';
 import '../sheet/encryption_sheet.dart';
 import '../sheet/paywall_sheet.dart';
@@ -335,39 +335,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 if (isLoggedIn) ...[
                   _SectionLabel(localizations.settingsSectionAccount),
                   _SettingsCard(children: [
-                    _LoginMethodTile(
-                      icon: Icons.email_outlined,
-                      iconColor: Colors.indigo,
-                      label: localizations.settingsLoginMethodEmail,
-                      value: _userInfo?.email,
-                      isLoading: _loadingUserInfo,
-                      canRemove: (_userInfo?.loginMethodCount ?? 0) > 1,
-                      removeLabel: localizations.removeEmail,
-                      onTap: () => _showChangeContact(
-                        context,
-                        localizations,
-                        theme,
-                        isEmail: true,
-                      ),
-                      onRemove: () => _removeContact(context, localizations, isEmail: true),
-                    ),
+                    _contactTile(context, localizations, theme, ContactType.email),
                     const _CardDivider(),
-                    _LoginMethodTile(
-                      icon: Icons.phone_outlined,
-                      iconColor: Colors.teal,
-                      label: localizations.settingsLoginMethodPhone,
-                      value: _userInfo?.phone,
-                      isLoading: _loadingUserInfo,
-                      canRemove: (_userInfo?.loginMethodCount ?? 0) > 1,
-                      removeLabel: localizations.removePhone,
-                      onTap: () => _showChangeContact(
-                        context,
-                        localizations,
-                        theme,
-                        isEmail: false,
-                      ),
-                      onRemove: () => _removeContact(context, localizations, isEmail: false),
-                    ),
+                    _contactTile(context, localizations, theme, ContactType.phone),
                     if (_userInfo?.googleLinked == true) ...[
                       const _CardDivider(),
                       _TileRow(
@@ -729,24 +699,31 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showChangeContact(
-    BuildContext context,
-    AppLocalizations localizations,
-    ThemeData theme, {
-    required bool isEmail,
-  }) {
+  Widget _contactTile(BuildContext context, AppLocalizations localizations, ThemeData theme, ContactType type) {
+    final isEmail = type == ContactType.email;
+
+    return _LoginMethodTile(
+      icon: isEmail ? Icons.email_outlined : Icons.phone_outlined,
+      iconColor: isEmail ? Colors.indigo : Colors.teal,
+      label: isEmail ? localizations.settingsLoginMethodEmail : localizations.settingsLoginMethodPhone,
+      value: isEmail ? _userInfo?.email : _userInfo?.phone,
+      isLoading: _loadingUserInfo,
+      canRemove: (_userInfo?.loginMethodCount ?? 0) > 1,
+      removeLabel: isEmail ? localizations.removeEmail : localizations.removePhone,
+      onTap: () => _showChangeContact(context, localizations, theme, type),
+      onRemove: () => _removeContact(context, localizations, type),
+    );
+  }
+
+  void _showChangeContact(BuildContext context, AppLocalizations localizations, ThemeData theme, ContactType type) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => _UpdateContactSheet(isEmail: isEmail, localizations: localizations, theme: theme),
+      builder: (_) => _UpdateContactSheet(type: type, localizations: localizations, theme: theme),
     ).then((_) => _loadUserInfo());
   }
 
-  Future<void> _removeContact(
-    BuildContext context,
-    AppLocalizations localizations, {
-    required bool isEmail,
-  }) async {
+  Future<void> _removeContact(BuildContext context, AppLocalizations localizations, ContactType type) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -772,16 +749,15 @@ class _SettingsPageState extends State<SettingsPage> {
       return;
     }
 
-    final result = await requestService.deleteAuthenticatedRequest(
-      isEmail ? 'user/email' : 'user/phone',
-    );
+    final result = await contactService.deleteContact(type);
 
     if (!context.mounted) {
       return;
     }
 
-    if (result is Failure) {
-      (result as Failure).show(localizations);
+    if (result is Failure<void>) {
+      result.show(localizations);
+
       return;
     }
 
@@ -1338,11 +1314,11 @@ class _LoginMethodTile extends StatelessWidget {
 }
 
 class _UpdateContactSheet extends StatefulWidget {
-  final bool isEmail;
+  final ContactType type;
   final AppLocalizations localizations;
   final ThemeData theme;
 
-  const _UpdateContactSheet({required this.isEmail, required this.localizations, required this.theme});
+  const _UpdateContactSheet({required this.type, required this.localizations, required this.theme});
 
   @override
   State<_UpdateContactSheet> createState() => _UpdateContactSheetState();
@@ -1355,10 +1331,6 @@ class _UpdateContactSheetState extends State<_UpdateContactSheet> {
   bool _codeSent = false;
   String? _error;
   final _codeController = TextEditingController();
-
-  String get _type => widget.isEmail ? 'email' : 'phone';
-
-  String get _contactKey => widget.isEmail ? 'emailAddress' : 'phoneNumber';
 
   @override
   void dispose() {
@@ -1386,21 +1358,23 @@ class _UpdateContactSheetState extends State<_UpdateContactSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.isEmail ? localizations.changeEmailTitle : localizations.changePhoneTitle,
+              widget.type == ContactType.email ? localizations.changeEmailTitle : localizations.changePhoneTitle,
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 16),
             if (!_codeSent) ...[
-              if (widget.isEmail)
-                EmailAddressTextField(onSubmit: (email) => _validContact = email, submitted: _submitted)
-              else
-                PhoneNumberTextField(onSubmit: (phone) => _validContact = phone, submitted: _submitted),
+              ContactTextField(
+                type: widget.type,
+                onSubmit: (contact) => _validContact = contact,
+                submitted: _submitted,
+              ),
               ?error,
               const SizedBox(height: 16),
               LoadingButton(
                 loading: _loading,
                 onPressed: _requestCode,
-                label: widget.isEmail ? localizations.requestEmail : localizations.requestSms,
+                label: contactRequestLabel(widget.type, localizations),
+                icon: contactRequestIcon(widget.type),
               ),
             ] else ...[
               Text(localizations.enterCodeFromInbox, style: theme.textTheme.bodySmall),
@@ -1430,18 +1404,18 @@ class _UpdateContactSheetState extends State<_UpdateContactSheet> {
 
     setState(() => _loading = true);
 
-    final result = await requestService.postAuthenticatedRequest('update/$_type', {_contactKey: contact});
+    final result = await contactService.requestUpdate(widget.type, contact);
 
     if (!mounted) {
       return;
     }
 
-    final isPending = result is ServerFailure && (result as ServerFailure).key == 'pending-verification';
+    final isPending = result is ServerFailure<void> && result.key == 'pending-verification';
 
     setState(() {
       _loading = false;
-      _codeSent = result is! Failure || isPending;
-      _error = result is Failure ? (result as Failure).localizedMessage(widget.localizations) : null;
+      _codeSent = result is! Failure<void> || isPending;
+      _error = result is Failure<void> ? result.localizedMessage(widget.localizations) : null;
     });
   }
 
@@ -1458,19 +1432,16 @@ class _UpdateContactSheetState extends State<_UpdateContactSheet> {
       _error = null;
     });
 
-    final result = await requestService.postAuthenticatedRequest('update/verify/$_type', {
-      _contactKey: contact,
-      'code': code,
-    });
+    final result = await contactService.verifyUpdate(widget.type, contact, code);
 
     if (!mounted) {
       return;
     }
 
-    if (result is Failure) {
+    if (result is Failure<void>) {
       setState(() {
         _loading = false;
-        _error = (result as Failure).localizedMessage(widget.localizations);
+        _error = result.localizedMessage(widget.localizations);
       });
 
       return;

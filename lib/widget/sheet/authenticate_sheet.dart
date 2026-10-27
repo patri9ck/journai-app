@@ -6,49 +6,36 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/auth_mode.dart';
+import '../../model/contact/contact_type.dart';
+import '../../model/login/external_account_type.dart';
+import '../../model/login/login.dart';
+import '../../model/result.dart';
+import '../../service/services.dart';
+import '../../util/navigation.dart';
+import '../page/contact_page.dart';
 
-class AuthenticateSheet extends StatelessWidget {
-  final String _title;
-  final String? _appleAccountAuthenticate;
-  final String _googleAccountAuthenticate;
-  final String _emailAddressAuthenticate;
-  final String _phoneNumberAuthenticate;
-  final void Function()? _onAppleAccountSubmit;
-  final void Function()? _onGoogleAccountSubmit;
-  final void Function()? _onEmailAddressSubmit;
-  final void Function()? _onPhoneNumberSubmit;
-  final Widget _caption;
-  final String? _error;
+class AuthenticateSheet extends StatefulWidget {
+  final AuthMode mode;
+  final bool termsAccepted;
+  final Widget caption;
 
-  const AuthenticateSheet({
-    required String title,
-    String? appleAccountAuthenticate,
-    required String googleAccountAuthenticate,
-    required String emailAddressAuthenticate,
-    required String phoneNumberAuthenticate,
-    void Function()? onAppleAccountSubmit,
-    void Function()? onGoogleAccountSubmit,
-    void Function()? onEmailAddressSubmit,
-    void Function()? onPhoneNumberSubmit,
-    required Widget caption,
-    String? error,
-    super.key,
-  }) : _title = title,
-       _appleAccountAuthenticate = appleAccountAuthenticate,
-       _googleAccountAuthenticate = googleAccountAuthenticate,
-       _emailAddressAuthenticate = emailAddressAuthenticate,
-       _phoneNumberAuthenticate = phoneNumberAuthenticate,
-       _onAppleAccountSubmit = onAppleAccountSubmit,
-       _onGoogleAccountSubmit = onGoogleAccountSubmit,
-       _onEmailAddressSubmit = onEmailAddressSubmit,
-       _onPhoneNumberSubmit = onPhoneNumberSubmit,
-       _caption = caption,
-       _error = error;
+  const AuthenticateSheet({required this.mode, this.termsAccepted = false, required this.caption, super.key});
+
+  @override
+  State<AuthenticateSheet> createState() => _AuthenticateSheetState();
+}
+
+class _AuthenticateSheetState extends State<AuthenticateSheet> {
+  String? _error;
+
+  bool get _enabled => widget.mode == AuthMode.login || widget.termsAccepted;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isLogin = widget.mode == AuthMode.login;
 
     return SafeArea(
       child: Column(
@@ -72,38 +59,23 @@ class AuthenticateSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_title, style: theme.textTheme.headlineMedium),
+                Text(isLogin ? localizations.login : localizations.register, style: theme.textTheme.headlineMedium),
                 const SizedBox(height: 24),
-                if (Platform.isIOS && _appleAccountAuthenticate != null && _onAppleAccountSubmit != null) ...[
-                  ElevatedButton(
-                    onPressed: _onAppleAccountSubmit,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.apple, size: 18),
-                        const SizedBox(width: 10),
-                        Text(_appleAccountAuthenticate),
-                      ],
-                    ),
+                if (Platform.isIOS) ...[
+                  _button(
+                    icon: const Icon(Icons.apple, size: 18),
+                    label: isLogin ? localizations.appleAccountLogin : localizations.appleAccountRegister,
+                    onPressed: () => _authenticateWithExternalAccount(ExternalAccountType.apple),
                   ),
                   const SizedBox(height: 8),
                 ],
-                ElevatedButton(
-                  onPressed: _onGoogleAccountSubmit,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                        child: Image.asset('assets/google.png', width: 16),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(_googleAccountAuthenticate),
-                    ],
+                _button(
+                  icon: ColorFiltered(
+                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    child: Image.asset('assets/google.png', width: 16),
                   ),
+                  label: isLogin ? localizations.googleAccountLogin : localizations.googleAccountRegister,
+                  onPressed: () => _authenticateWithExternalAccount(ExternalAccountType.google),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -117,38 +89,26 @@ class AuthenticateSheet extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                OutlinedButton(
-                  onPressed: _onEmailAddressSubmit,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.email_outlined, size: 18),
-                      const SizedBox(width: 10),
-                      Text(_emailAddressAuthenticate),
-                    ],
-                  ),
+                _button(
+                  icon: const Icon(Icons.email_outlined, size: 18),
+                  label: isLogin ? localizations.emailAddressLogin : localizations.emailAddressRegister,
+                  onPressed: () => _authenticateWithContact(ContactType.email),
+                  outlined: true,
                 ),
                 const SizedBox(height: 8),
-                OutlinedButton(
-                  onPressed: _onPhoneNumberSubmit,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.phone_outlined, size: 18),
-                      const SizedBox(width: 10),
-                      Text(_phoneNumberAuthenticate),
-                    ],
-                  ),
+                _button(
+                  icon: const Icon(Icons.phone_outlined, size: 18),
+                  label: isLogin ? localizations.phoneNumberLogin : localizations.phoneNumberRegister,
+                  onPressed: () => _authenticateWithContact(ContactType.phone),
+                  outlined: true,
                 ),
                 const SizedBox(height: 24),
-                Center(child: _caption),
+                Center(child: widget.caption),
                 if (_error != null) ...[
                   const SizedBox(height: 12),
                   Text(
-                    _error,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                    _error!,
+                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -157,6 +117,53 @@ class AuthenticateSheet extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _button({
+    required Widget icon,
+    required String label,
+    required VoidCallback onPressed,
+    bool outlined = false,
+  }) {
+    final child = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [icon, const SizedBox(width: 10), Text(label)],
+    );
+
+    if (outlined) {
+      return OutlinedButton(onPressed: _enabled ? onPressed : null, child: child);
+    }
+
+    return ElevatedButton(onPressed: _enabled ? onPressed : null, child: child);
+  }
+
+  Future<void> _authenticateWithExternalAccount(ExternalAccountType type) async {
+    setState(() => _error = null);
+
+    final navigator = Navigator.of(context);
+    final localizations = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+
+    final result = await loginService.authenticateWithExternalAccount(type, widget.mode, locale, widget.termsAccepted);
+
+    if (result == null || !mounted) {
+      return;
+    }
+
+    if (result is Failure<Login>) {
+      setState(() => _error = result.localizedMessage(localizations));
+
+      return;
+    }
+
+    navigateAfterLogin(navigator);
+  }
+
+  void _authenticateWithContact(ContactType type) {
+    Navigator.push(
+      context,
+      slideUpRoute(ContactPage(type: type, mode: widget.mode, termsAccepted: widget.termsAccepted)),
     );
   }
 }

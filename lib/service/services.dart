@@ -5,6 +5,7 @@ import '../util/storage.dart';
 import 'apple_account_service.dart';
 import 'overpass_service.dart';
 import 'consent_service.dart';
+import 'contact_service.dart';
 import 'cryptography_service.dart';
 import 'currency_service.dart';
 import 'data_service.dart';
@@ -34,9 +35,13 @@ const _revenueCatAppleApiKey = String.fromEnvironment('REVENUE_CAT_APPLE_API_KEY
 
 final requestService = RequestService(baseUrl: baseUrl);
 final cryptographyService = CryptographyService();
+final appleAccountService = AppleAccountService();
+final googleAccountService = GoogleAccountService(serverClientId: _googleWebClientId);
 final loginService = LoginService(
   requestService: requestService,
   cryptographyService: cryptographyService,
+  googleAccountService: googleAccountService,
+  appleAccountService: appleAccountService,
 );
 final encryptionService = EncryptionService(
   requestService: requestService,
@@ -49,8 +54,7 @@ final dataService = DataService(
 final consentService = ConsentService(requestService: requestService);
 final limitsService = LimitsService(requestService: requestService);
 final entryCheckService = EntryCheckService(requestService: requestService);
-final appleAccountService = AppleAccountService();
-final googleAccountService = GoogleAccountService(serverClientId: _googleWebClientId);
+final contactService = ContactService(requestService: requestService);
 final weatherService = WeatherService();
 final geocodingService = GeocodingService(contactEmail: _contactEmail);
 final travelWarningService = TravelWarningService();

@@ -4,22 +4,25 @@
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/auth_mode.dart';
+import '../../model/contact/contact_type.dart';
 import '../../model/login/login.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/navigation.dart';
-import '../shared/verification_code_text_field.dart';
-import 'email_address_page.dart';
 import '../shared/loading_button.dart';
+import '../shared/verification_code_text_field.dart';
 
-class PhoneVerificationPage extends StatefulWidget {
-  final String phone;
+class ContactVerificationPage extends StatefulWidget {
+  final ContactType type;
+  final String contact;
   final AuthMode mode;
   final bool termsAccepted;
   final String? initialError;
 
-  const PhoneVerificationPage({
-    required this.phone,
+  const ContactVerificationPage({
+    required this.type,
+    required this.contact,
     required this.mode,
     this.termsAccepted = false,
     this.initialError,
@@ -27,10 +30,10 @@ class PhoneVerificationPage extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _PhoneVerificationPageState();
+  State<StatefulWidget> createState() => _ContactVerificationPageState();
 }
 
-class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
+class _ContactVerificationPageState extends State<ContactVerificationPage> {
   final _controller = TextEditingController();
   bool _loading = false;
   late String? _error = widget.initialError;
@@ -59,10 +62,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               Text(localizations.enterCodeFromInbox, style: theme.textTheme.bodySmall),
               if (_error != null) ...[
                 const SizedBox(height: 12),
-                Text(
-                  _error!,
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
-                ),
+                Text(_error!, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),
               ],
               const SizedBox(height: 32),
               VerificationCodeTextField(controller: _controller),
@@ -87,13 +87,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     final Result<Login> result;
 
     if (widget.mode == AuthMode.login) {
-      result = await loginService.verifyPhoneLogin(widget.phone, code);
+      result = await loginService.verifyLogin(widget.type, widget.contact, code);
     } else {
-      result = await loginService.verifyPhoneRegistration(
-        widget.phone,
-        code,
-        widget.termsAccepted,
-      );
+      result = await loginService.verifyRegistration(widget.type, widget.contact, code, widget.termsAccepted);
     }
 
     if (!mounted) {

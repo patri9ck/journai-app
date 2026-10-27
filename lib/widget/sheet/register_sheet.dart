@@ -6,13 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../messages/app_localizations.dart';
-import '../../model/login/login.dart';
-import '../../model/result.dart';
+import '../../model/auth_mode.dart';
 import '../../service/services.dart';
-import '../../util/navigation.dart';
 import 'authenticate_sheet.dart';
-import '../page/email_address_page.dart';
-import '../page/phone_number_page.dart';
 
 class RegisterSheet extends StatefulWidget {
   const RegisterSheet({super.key});
@@ -23,7 +19,6 @@ class RegisterSheet extends StatefulWidget {
 
 class _RegisterSheetState extends State<RegisterSheet> {
   bool _termsAccepted = false;
-  String? _error;
 
   @override
   Widget build(BuildContext context) {
@@ -31,104 +26,8 @@ class _RegisterSheetState extends State<RegisterSheet> {
     final theme = Theme.of(context);
 
     return AuthenticateSheet(
-      title: localizations.register,
-      appleAccountAuthenticate: localizations.appleAccountRegister,
-      googleAccountAuthenticate: localizations.googleAccountRegister,
-      emailAddressAuthenticate: localizations.emailAddressRegister,
-      phoneNumberAuthenticate: localizations.phoneNumberRegister,
-      error: _error,
-      onAppleAccountSubmit: _termsAccepted
-          ? () async {
-              setState(() => _error = null);
-
-              final navigator = Navigator.of(context);
-              final locale = Localizations.localeOf(context).languageCode;
-              final localizations = AppLocalizations.of(context)!;
-
-              final token = await appleAccountService.getIdentityToken();
-
-              if (token == null || !mounted) {
-                return;
-              }
-
-              final result = await loginService.registerWithApple(
-                token,
-                locale,
-                _termsAccepted,
-              );
-
-              if (!mounted) {
-                return;
-              }
-
-              if (result is Failure<Login>) {
-                setState(() => _error = result.localizedMessage(localizations));
-
-                return;
-              }
-
-              navigateAfterLogin(navigator);
-            }
-          : null,
-      onGoogleAccountSubmit: _termsAccepted
-          ? () async {
-              setState(() => _error = null);
-
-              final navigator = Navigator.of(context);
-              final locale = Localizations.localeOf(context).languageCode;
-              final localizations = AppLocalizations.of(context)!;
-
-              final token = await googleAccountService.getIdToken();
-
-              if (token == null || !mounted) {
-                return;
-              }
-
-              final result = await loginService.registerWithGoogle(
-                token,
-                locale,
-                _termsAccepted,
-              );
-
-              if (!mounted) {
-                return;
-              }
-
-              if (result is Failure<Login>) {
-                setState(() => _error = result.localizedMessage(localizations));
-
-                return;
-              }
-
-              navigateAfterLogin(navigator);
-            }
-          : null,
-      onEmailAddressSubmit: _termsAccepted
-          ? () {
-              Navigator.push(
-                context,
-                slideUpRoute(
-                  EmailAddressPage(
-                    mode: AuthMode.register,
-                    termsAccepted: _termsAccepted,
-                  ),
-                ),
-              );
-            }
-          : null,
-      onPhoneNumberSubmit: _termsAccepted
-          ? () {
-              Navigator.push(
-                context,
-                slideUpRoute(
-                  PhoneNumberPage(
-                    mode: AuthMode.register,
-                    termsAccepted: _termsAccepted,
-                  ),
-                ),
-              );
-            }
-          : null,
+      mode: AuthMode.register,
+      termsAccepted: _termsAccepted,
       caption: Column(
         children: [
           CheckboxListTile(

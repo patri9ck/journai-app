@@ -26,3 +26,18 @@ void navigateAfterLogin(NavigatorState navigator) {
     (_) => false,
   );
 }
+
+Route slideUpRoute(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: Tween(
+          begin: const Offset(0.0, 1.0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.ease)),
+        child: child,
+      );
+    },
+  );
+}
