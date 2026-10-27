@@ -12,7 +12,6 @@ import '../../util/storage.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../sheet/encryption_sheet.dart';
-import '../shared/loading_button.dart';
 import '../shared/form_sheet.dart';
 
 String _categoryForKey(String key, AppLocalizations localizations) {
@@ -712,6 +711,8 @@ class _HealthValueFormSheetState extends State<_HealthValueFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.healthValueEditTitle : localizations.healthValueManualTitle,
+      onSave: _submit,
+      saving: _saving,
       children: [
         Text(
           localizations.healthValueSelectKey,
@@ -738,7 +739,7 @@ class _HealthValueFormSheetState extends State<_HealthValueFormSheet> {
             Opacity(
               opacity: widget.limits.isFeatureEnabled('MISCELLANEOUS') ? 1.0 : 0.38,
               child: ChoiceChip(
-                label: Text(localizations.allergyCustom),
+                label: Text(localizations.customName),
                 selected: _showCustomKey,
                 onSelected: widget.limits.isFeatureEnabled('MISCELLANEOUS')
                     ? (_) {
@@ -773,8 +774,8 @@ class _HealthValueFormSheetState extends State<_HealthValueFormSheet> {
           decoration: InputDecoration(labelText: localizations.documentNotesHint),
           maxLines: 2,
         ),
-        const SizedBox(height: 20),
         if (_error != null) ...[
+          const SizedBox(height: 12),
           Text(
             _error!,
             style: theme.textTheme.bodySmall?.copyWith(
@@ -782,9 +783,7 @@ class _HealthValueFormSheetState extends State<_HealthValueFormSheet> {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
         ],
-        LoadingButton(loading: _saving, onPressed: _submit, label: localizations.documentSave),
       ],
     );
   }

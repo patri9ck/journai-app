@@ -158,6 +158,7 @@ class _TicketFormSheetState extends State<_TicketFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.ticketEditTitle : localizations.ticketManualTitle,
+      onSave: _submit,
       children: [
         TextField(
           controller: _titleController,
@@ -229,11 +230,6 @@ class _TicketFormSheetState extends State<_TicketFormSheet> {
           onRemove: _imageBase64 != null
               ? () => setState(() => _imageBase64 = null)
               : null,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
         ),
       ],
     );

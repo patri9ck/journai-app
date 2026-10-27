@@ -716,7 +716,7 @@ class _ScanResultSheetState extends State<_ScanResultSheet> {
               ),
               const SizedBox(height: 8),
             ],
-            LoadingButton(loading: _saving, onPressed: _saveAll, label: localizations.vaccineSave),
+            LoadingButton(loading: _saving, onPressed: _saveAll, label: localizations.documentSave),
           ],
         ),
       ),
@@ -917,6 +917,8 @@ class _VaccineFormSheetState extends State<_VaccineFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.vaccineEditTitle : localizations.vaccineManualTitle,
+      onSave: _submit,
+      saving: _saving,
       children: [
         TextField(
           controller: _nameController,
@@ -953,16 +955,14 @@ class _VaccineFormSheetState extends State<_VaccineFormSheet> {
           controller: _batchNumberController,
           decoration: InputDecoration(labelText: localizations.vaccineBatchNumberHint),
         ),
-        const SizedBox(height: 20),
         if (_error != null) ...[
+          const SizedBox(height: 12),
           Text(
             _error!,
             style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
         ],
-        LoadingButton(loading: _saving, onPressed: _submit, label: localizations.vaccineSave),
       ],
     );
   }

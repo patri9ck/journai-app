@@ -129,6 +129,7 @@ class _CertFormSheetState extends State<_CertFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.medicalCertificateEditTitle : localizations.medicalCertificateManualTitle,
+      onSave: _submit,
       children: [
         TextField(
           controller: _titleController,
@@ -165,11 +166,6 @@ class _CertFormSheetState extends State<_CertFormSheet> {
           onAddImage: _addImage,
           onRemoveImage: (index) =>
               setState(() => _images.removeAt(index)),
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
         ),
       ],
     );

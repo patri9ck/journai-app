@@ -140,6 +140,7 @@ class _VisaFormSheetState extends State<_VisaFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.visaEditTitle : localizations.visaManualTitle,
+      onSave: _submit,
       children: [
         TextField(
           controller: _countryController,
@@ -184,11 +185,6 @@ class _VisaFormSheetState extends State<_VisaFormSheet> {
           onRemove: _imageBase64 != null
               ? () => setState(() => _imageBase64 = null)
               : null,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
         ),
       ],
     );

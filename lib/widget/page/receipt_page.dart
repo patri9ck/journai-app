@@ -230,6 +230,7 @@ class _ReceiptFormSheetState extends State<_ReceiptFormSheet> {
 
     return FormSheet(
       title: widget.initialFields != null ? localizations.receiptEditTitle : localizations.receiptManualTitle,
+      onSave: _submit,
       children: [
         TextField(
           controller: _merchantController,
@@ -285,8 +286,6 @@ class _ReceiptFormSheetState extends State<_ReceiptFormSheet> {
           onPick: _pickImage,
           onRemove: _imageBase64 != null ? () => setState(() => _imageBase64 = null) : null,
         ),
-        const SizedBox(height: 20),
-        ElevatedButton(onPressed: _submit, child: Text(localizations.documentSave)),
       ],
     );
   }

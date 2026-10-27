@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../messages/app_localizations.dart';
 import '../shared/document_list_page.dart';
 import '../shared/form_sheet.dart';
+import '../shared/predefined_name_field.dart';
 
 class AllergyPage extends StatelessWidget {
   const AllergyPage({super.key});
@@ -55,8 +56,6 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
   late final TextEditingController _notesController;
   String? _severity;
   bool _submitted = false;
-  bool _showCustomInput = false;
-  bool _initialized = false;
 
   static const _severityKeys = ['mild', 'moderate', 'severe', 'life-threatening'];
 
@@ -71,27 +70,6 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
       text: initial['notes'] as String? ?? '',
     );
     _severity = initial['severity'] as String?;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_initialized) {
-      return;
-    }
-
-    _initialized = true;
-
-    final existingName = (widget.initialFields ?? {})['name'] as String? ?? '';
-
-    if (existingName.isEmpty) {
-      return;
-    }
-
-    final localizations = AppLocalizations.of(context)!;
-
-    _showCustomInput = !_allergyList(localizations).contains(existingName);
   }
 
   List<String> _allergyList(AppLocalizations localizations) => [
@@ -127,13 +105,6 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
     super.dispose();
   }
 
-  void _selectPredefined(String name) {
-    setState(() {
-      _nameController.text = name;
-      _showCustomInput = false;
-    });
-  }
-
   void _submit() {
     setState(() => _submitted = true);
 
@@ -156,7 +127,6 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final isEditing = widget.initialFields != null;
     final nameError = _submitted && _nameController.text.trim().isEmpty
         ? localizations.allergyNameRequired
@@ -165,57 +135,15 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.allergyEditTitle : localizations.allergyManualTitle,
+      onSave: _submit,
       children: [
-        Text(
-          localizations.allergySelectFromList,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-          ),
+        PredefinedNameField(
+          controller: _nameController,
+          names: allergyList,
+          selectLabel: localizations.allergySelectFromList,
+          nameLabel: localizations.allergyNameHint,
+          errorText: nameError,
         ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            ...allergyList.map(
-              (name) => ChoiceChip(
-                label: Text(name),
-                selected: _nameController.text == name,
-                onSelected: (_) => _selectPredefined(name),
-              ),
-            ),
-            ChoiceChip(
-              label: Text(localizations.allergyCustom),
-              selected: _showCustomInput,
-              onSelected: (_) {
-                setState(() {
-                  _showCustomInput = true;
-                  _nameController.clear();
-                });
-              },
-            ),
-          ],
-        ),
-        if (_showCustomInput || nameError != null) ...[
-          const SizedBox(height: 12),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: '${localizations.allergyNameHint} *',
-              errorText: nameError,
-            ),
-            textCapitalization: TextCapitalization.sentences,
-            autofocus: _showCustomInput,
-          ),
-        ] else if (_submitted && _nameController.text.trim().isEmpty) ...[
-          const SizedBox(height: 8),
-          Text(
-            localizations.allergyNameRequired,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.error,
-            ),
-          ),
-        ],
         const SizedBox(height: 16),
         InputDecorator(
           decoration: InputDecoration(
@@ -254,11 +182,6 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
             labelText: localizations.documentNotesHint,
           ),
           maxLines: 2,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
         ),
       ],
     );

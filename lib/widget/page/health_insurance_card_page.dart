@@ -145,6 +145,7 @@ class _CardFormSheetState extends State<_CardFormSheet> {
 
     return FormSheet(
       title: isEditing ? localizations.healthInsuranceCardEditTitle : localizations.healthInsuranceCardManualTitle,
+      onSave: _submit,
       children: [
         TextField(
           controller: _nameController,
@@ -198,11 +199,6 @@ class _CardFormSheetState extends State<_CardFormSheet> {
           onRemove: _backImageBase64 != null
               ? () => setState(() => _backImageBase64 = null)
               : null,
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
         ),
       ],
     );

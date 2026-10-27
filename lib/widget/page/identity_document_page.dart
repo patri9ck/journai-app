@@ -289,6 +289,7 @@ class _IdentityFormSheetState extends State<_IdentityFormSheet> {
 
     return FormSheet(
       title: title,
+      onSave: _submit,
       children: [
         TextField(
           controller: _numberController,
@@ -389,11 +390,6 @@ class _IdentityFormSheetState extends State<_IdentityFormSheet> {
                 : null,
           ),
         ],
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _submit,
-          child: Text(localizations.documentSave),
-        ),
       ],
     );
   }
