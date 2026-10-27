@@ -11,8 +11,6 @@ cp config.dev.json config.json  # fill in your values
 flutter run --dart-define-from-file=config.json
 ```
 
-Push notifications need a Firebase project. Fill in the `FIREBASE_*` values in `config.json` from your project's settings. Without them the app runs without push notifications.
-
 `flutter gen-l10n` generates the `lib/messages/app_localizations*.dart` files from the ARB sources. These generated files are not committed - run the command whenever you add or change strings in `lib/messages/*.arb`.
 
 To build a release AAB for Google Play:
