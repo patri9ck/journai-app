@@ -17,6 +17,7 @@ import '../../service/services.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
 import '../sheet/consent_sheet.dart';
+import '../shared/form_sheet.dart';
 
 const _categories = ['DOCTOR', 'PHARMACY', 'HOSPITAL', 'OTHER'];
 
@@ -226,81 +227,67 @@ class _ReceiptFormSheetState extends State<_ReceiptFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: MediaQuery.of(context).viewInsets.bottom + 24),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                widget.initialFields != null ? localizations.receiptEditTitle : localizations.receiptManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _merchantController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.receiptMerchant} *',
-                  errorText: _submitted && _merchantController.text.trim().isEmpty ? localizations.receiptRequired : null,
-                ),
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(controller: _dateController, labelText: localizations.receiptDate),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextField(
-                      controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        labelText: '${localizations.receiptAmount} *',
-                        errorText: _submitted && double.tryParse(_amountController.text.trim().replaceAll(',', '.')) == null
-                            ? localizations.receiptRequired
-                            : null,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: _currencyController,
-                      textCapitalization: TextCapitalization.characters,
-                      maxLength: 3,
-                      decoration: InputDecoration(labelText: localizations.receiptCurrency, counterText: ''),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                initialValue: _category,
-                decoration: InputDecoration(labelText: localizations.receiptCategory),
-                items: [
-                  for (final category in _categories)
-                    DropdownMenuItem(value: category, child: Text(_categoryName(localizations, category))),
-                ],
-                onChanged: (category) => setState(() => _category = category ?? _category),
-              ),
-              const SizedBox(height: 16),
-              DocumentPhotoSlot(
-                label: localizations.documentPhotosTitle,
-                imageBase64: _imageBase64,
-                onPick: _pickImage,
-                onRemove: _imageBase64 != null ? () => setState(() => _imageBase64 = null) : null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(onPressed: _submit, child: Text(localizations.documentSave)),
-            ],
+    return FormSheet(
+      title: widget.initialFields != null ? localizations.receiptEditTitle : localizations.receiptManualTitle,
+      children: [
+        TextField(
+          controller: _merchantController,
+          decoration: InputDecoration(
+            labelText: '${localizations.receiptMerchant} *',
+            errorText: _submitted && _merchantController.text.trim().isEmpty ? localizations.receiptRequired : null,
           ),
+          textCapitalization: TextCapitalization.words,
         ),
-      ),
+        const SizedBox(height: 12),
+        DatePickerField(controller: _dateController, labelText: localizations.receiptDate),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: _amountController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: '${localizations.receiptAmount} *',
+                  errorText: _submitted && double.tryParse(_amountController.text.trim().replaceAll(',', '.')) == null
+                      ? localizations.receiptRequired
+                      : null,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextField(
+                controller: _currencyController,
+                textCapitalization: TextCapitalization.characters,
+                maxLength: 3,
+                decoration: InputDecoration(labelText: localizations.receiptCurrency, counterText: ''),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        DropdownButtonFormField<String>(
+          initialValue: _category,
+          decoration: InputDecoration(labelText: localizations.receiptCategory),
+          items: [
+            for (final category in _categories)
+              DropdownMenuItem(value: category, child: Text(_categoryName(localizations, category))),
+          ],
+          onChanged: (category) => setState(() => _category = category ?? _category),
+        ),
+        const SizedBox(height: 16),
+        DocumentPhotoSlot(
+          label: localizations.documentPhotosTitle,
+          imageBase64: _imageBase64,
+          onPick: _pickImage,
+          onRemove: _imageBase64 != null ? () => setState(() => _imageBase64 = null) : null,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(onPressed: _submit, child: Text(localizations.documentSave)),
+      ],
     );
   }
 }

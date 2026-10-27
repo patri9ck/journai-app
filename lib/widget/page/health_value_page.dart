@@ -13,6 +13,7 @@ import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../sheet/encryption_sheet.dart';
 import '../shared/loading_button.dart';
+import '../shared/form_sheet.dart';
 
 String _categoryForKey(String key, AppLocalizations localizations) {
   final map = {
@@ -709,102 +710,82 @@ class _HealthValueFormSheetState extends State<_HealthValueFormSheet> {
       localizations.healthKeyRhFactor,
     ];
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.healthValueEditTitle
-                    : localizations.healthValueManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                localizations.healthValueSelectKey,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  ...keyList.map((key) {
-                    final enabled = widget.limits.isFeatureEnabled(_categoryForKey(key, localizations));
-                    return Opacity(
-                      opacity: enabled ? 1.0 : 0.38,
-                      child: ChoiceChip(
-                        label: Text(key),
-                        selected: _keyController.text == key,
-                        onSelected: enabled ? (_) => _selectPredefinedKey(key) : null,
-                      ),
-                    );
-                  }),
-                  Opacity(
-                    opacity: widget.limits.isFeatureEnabled('MISCELLANEOUS') ? 1.0 : 0.38,
-                    child: ChoiceChip(
-                      label: Text(localizations.allergyCustom),
-                      selected: _showCustomKey,
-                      onSelected: widget.limits.isFeatureEnabled('MISCELLANEOUS')
-                          ? (_) {
-                              setState(() {
-                                _showCustomKey = true;
-                                _keyController.clear();
-                                _valueController.clear();
-                              });
-                            }
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
-              if (_showCustomKey || keyError != null) ...[
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _keyController,
-                  decoration: InputDecoration(
-                    labelText: '${localizations.healthValueKeyHint} *',
-                    errorText: keyError,
-                  ),
-                  textCapitalization: TextCapitalization.sentences,
-                  autofocus: _showCustomKey,
-                ),
-              ],
-              const SizedBox(height: 12),
-              _buildValueInput(localizations, valueError),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(labelText: localizations.documentNotesHint),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 20),
-              if (_error != null) ...[
-                Text(
-                  _error!,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-              ],
-              LoadingButton(loading: _saving, onPressed: _submit, label: localizations.documentSave),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.healthValueEditTitle : localizations.healthValueManualTitle,
+      children: [
+        Text(
+          localizations.healthValueSelectKey,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
-      ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...keyList.map((key) {
+              final enabled = widget.limits.isFeatureEnabled(_categoryForKey(key, localizations));
+              return Opacity(
+                opacity: enabled ? 1.0 : 0.38,
+                child: ChoiceChip(
+                  label: Text(key),
+                  selected: _keyController.text == key,
+                  onSelected: enabled ? (_) => _selectPredefinedKey(key) : null,
+                ),
+              );
+            }),
+            Opacity(
+              opacity: widget.limits.isFeatureEnabled('MISCELLANEOUS') ? 1.0 : 0.38,
+              child: ChoiceChip(
+                label: Text(localizations.allergyCustom),
+                selected: _showCustomKey,
+                onSelected: widget.limits.isFeatureEnabled('MISCELLANEOUS')
+                    ? (_) {
+                        setState(() {
+                          _showCustomKey = true;
+                          _keyController.clear();
+                          _valueController.clear();
+                        });
+                      }
+                    : null,
+              ),
+            ),
+          ],
+        ),
+        if (_showCustomKey || keyError != null) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _keyController,
+            decoration: InputDecoration(
+              labelText: '${localizations.healthValueKeyHint} *',
+              errorText: keyError,
+            ),
+            textCapitalization: TextCapitalization.sentences,
+            autofocus: _showCustomKey,
+          ),
+        ],
+        const SizedBox(height: 12),
+        _buildValueInput(localizations, valueError),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(labelText: localizations.documentNotesHint),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 20),
+        if (_error != null) ...[
+          Text(
+            _error!,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+        ],
+        LoadingButton(loading: _saving, onPressed: _submit, label: localizations.documentSave),
+      ],
     );
   }
 }

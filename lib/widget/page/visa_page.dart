@@ -9,6 +9,7 @@ import '../../messages/app_localizations.dart';
 import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
+import '../shared/form_sheet.dart';
 import '../sheet/consent_sheet.dart';
 
 class VisaPage extends StatelessWidget {
@@ -132,85 +133,64 @@ class _VisaFormSheetState extends State<_VisaFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final isEditing = widget.initialFields != null;
     final countryError = _submitted && _countryController.text.trim().isEmpty
         ? localizations.visaCountryRequired
         : null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.visaEditTitle
-                    : localizations.visaManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _countryController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.visaCountryHint} *',
-                  errorText: countryError,
-                ),
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _typeController,
-                decoration: InputDecoration(labelText: localizations.visaTypeHint),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _validFromController,
-                labelText: localizations.visaValidFromHint,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _validUntilController,
-                labelText: localizations.visaValidUntilHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _numberController,
-                decoration: InputDecoration(labelText: localizations.visaNumberHint),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(labelText: localizations.documentNotesHint),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 16),
-              DocumentPhotoSlot(
-                label: localizations.documentPhotosTitle,
-                imageBase64: _imageBase64,
-                onPick: _pickImage,
-                onRemove: _imageBase64 != null
-                    ? () => setState(() => _imageBase64 = null)
-                    : null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.visaEditTitle : localizations.visaManualTitle,
+      children: [
+        TextField(
+          controller: _countryController,
+          decoration: InputDecoration(
+            labelText: '${localizations.visaCountryHint} *',
+            errorText: countryError,
           ),
+          textCapitalization: TextCapitalization.words,
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _typeController,
+          decoration: InputDecoration(labelText: localizations.visaTypeHint),
+          textCapitalization: TextCapitalization.sentences,
+        ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _validFromController,
+          labelText: localizations.visaValidFromHint,
+        ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _validUntilController,
+          labelText: localizations.visaValidUntilHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _numberController,
+          decoration: InputDecoration(labelText: localizations.visaNumberHint),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(labelText: localizations.documentNotesHint),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 16),
+        DocumentPhotoSlot(
+          label: localizations.documentPhotosTitle,
+          imageBase64: _imageBase64,
+          onPick: _pickImage,
+          onRemove: _imageBase64 != null
+              ? () => setState(() => _imageBase64 = null)
+              : null,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

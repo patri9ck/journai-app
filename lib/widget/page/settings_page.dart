@@ -29,6 +29,7 @@ import '../sheet/paywall_sheet.dart';
 import 'start_page.dart';
 import 'travel_warning_alert_page.dart';
 import '../shared/loading_button.dart';
+import '../shared/form_sheet.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -1326,43 +1327,32 @@ class _UpdateContactSheetState extends State<_UpdateContactSheet> {
             child: Text(_error!, style: TextStyle(fontSize: 12, color: theme.colorScheme.error)),
           );
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: MediaQuery.of(context).viewInsets.bottom + 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.type == ContactType.email ? localizations.changeEmailTitle : localizations.changePhoneTitle,
-              style: theme.textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            if (!_codeSent) ...[
-              ContactTextField(
-                type: widget.type,
-                onSubmit: (contact) => _validContact = contact,
-                submitted: _submitted,
-              ),
-              ?error,
-              const SizedBox(height: 16),
-              LoadingButton(
-                loading: _loading,
-                onPressed: _requestCode,
-                label: contactRequestLabel(widget.type, localizations),
-                icon: contactRequestIcon(widget.type),
-              ),
-            ] else ...[
-              Text(localizations.enterCodeFromInbox, style: theme.textTheme.bodySmall),
-              const SizedBox(height: 16),
-              VerificationCodeTextField(controller: _codeController, onSubmitted: _verifyCode),
-              ?error,
-              const SizedBox(height: 16),
-              LoadingButton(loading: _loading, onPressed: _verifyCode, label: localizations.verify),
-            ],
-          ],
-        ),
-      ),
+    return FormSheet(
+      title: widget.type == ContactType.email ? localizations.changeEmailTitle : localizations.changePhoneTitle,
+      children: [
+        if (!_codeSent) ...[
+          ContactTextField(
+            type: widget.type,
+            onSubmit: (contact) => _validContact = contact,
+            submitted: _submitted,
+          ),
+          ?error,
+          const SizedBox(height: 16),
+          LoadingButton(
+            loading: _loading,
+            onPressed: _requestCode,
+            label: contactRequestLabel(widget.type, localizations),
+            icon: contactRequestIcon(widget.type),
+          ),
+        ] else ...[
+          Text(localizations.enterCodeFromInbox, style: theme.textTheme.bodySmall),
+          const SizedBox(height: 16),
+          VerificationCodeTextField(controller: _codeController, onSubmitted: _verifyCode),
+          ?error,
+          const SizedBox(height: 16),
+          LoadingButton(loading: _loading, onPressed: _verifyCode, label: localizations.verify),
+        ],
+      ],
     );
   }
 
@@ -1552,61 +1542,48 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
     final localizations = widget.localizations;
     final theme = widget.theme;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(localizations.changePasswordTitle, style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _newController,
-              obscureText: _obscureNew,
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: localizations.changePasswordNewHint,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscureNew
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
-                  onPressed: () => setState(() => _obscureNew = !_obscureNew),
-                ),
-              ),
+    return FormSheet(
+      title: localizations.changePasswordTitle,
+      children: [
+        TextField(
+          controller: _newController,
+          obscureText: _obscureNew,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: localizations.changePasswordNewHint,
+            suffixIcon: IconButton(
+              icon: Icon(_obscureNew
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscureNew = !_obscureNew),
             ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _confirmController,
-              obscureText: _obscureConfirm,
-              decoration: InputDecoration(
-                hintText: localizations.changePasswordConfirmHint,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscureConfirm
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
-                  onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
-                ),
-              ),
-              onSubmitted: (_) => _save(),
-            ),
-            if (_error != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                _error!,
-                style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
-              ),
-            ],
-            const SizedBox(height: 16),
-            LoadingButton(loading: _loading, onPressed: _save, label: localizations.confirm),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _confirmController,
+          obscureText: _obscureConfirm,
+          decoration: InputDecoration(
+            hintText: localizations.changePasswordConfirmHint,
+            suffixIcon: IconButton(
+              icon: Icon(_obscureConfirm
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+            ),
+          ),
+          onSubmitted: (_) => _save(),
+        ),
+        if (_error != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            _error!,
+            style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
+          ),
+        ],
+        const SizedBox(height: 16),
+        LoadingButton(loading: _loading, onPressed: _save, label: localizations.confirm),
+      ],
     );
   }
 

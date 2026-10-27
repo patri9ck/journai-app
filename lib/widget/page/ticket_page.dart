@@ -9,6 +9,7 @@ import '../../messages/app_localizations.dart';
 import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
+import '../shared/form_sheet.dart';
 import '../sheet/consent_sheet.dart';
 
 class TicketPage extends StatelessWidget {
@@ -155,106 +156,86 @@ class _TicketFormSheetState extends State<_TicketFormSheet> {
         ? localizations.ticketTitleRequired
         : null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.ticketEditTitle
-                    : localizations.ticketManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.ticketTitleHint} *',
-                  errorText: titleError,
-                ),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _dateController,
-                labelText: localizations.ticketDateHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(labelText: localizations.documentNotesHint),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 16),
-              ..._extraFields.asMap().entries.map((entry) {
-                final index = entry.key;
-                final pair = entry.value;
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: pair.key,
-                          decoration: InputDecoration(
-                            labelText: localizations.ticketFieldName,
-                          ),
-                          textCapitalization: TextCapitalization.sentences,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          controller: pair.value,
-                          decoration: InputDecoration(
-                            labelText: localizations.ticketFieldValue,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, size: 18),
-                        onPressed: () => _removeExtraField(index),
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(8),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-              TextButton.icon(
-                onPressed: _addExtraField,
-                icon: const Icon(Icons.add, size: 18),
-                label: Text(localizations.ticketAddField),
-              ),
-              const SizedBox(height: 8),
-              DocumentPhotoSlot(
-                label: localizations.documentPhotosTitle,
-                imageBase64: _imageBase64,
-                onPick: _pickImage,
-                onRemove: _imageBase64 != null
-                    ? () => setState(() => _imageBase64 = null)
-                    : null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.ticketEditTitle : localizations.ticketManualTitle,
+      children: [
+        TextField(
+          controller: _titleController,
+          decoration: InputDecoration(
+            labelText: '${localizations.ticketTitleHint} *',
+            errorText: titleError,
           ),
+          textCapitalization: TextCapitalization.sentences,
         ),
-      ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _dateController,
+          labelText: localizations.ticketDateHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(labelText: localizations.documentNotesHint),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 16),
+        ..._extraFields.asMap().entries.map((entry) {
+          final index = entry.key;
+          final pair = entry.value;
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: pair.key,
+                    decoration: InputDecoration(
+                      labelText: localizations.ticketFieldName,
+                    ),
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: pair.value,
+                    decoration: InputDecoration(
+                      labelText: localizations.ticketFieldValue,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, size: 18),
+                  onPressed: () => _removeExtraField(index),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                  constraints: const BoxConstraints(),
+                  padding: const EdgeInsets.all(8),
+                ),
+              ],
+            ),
+          );
+        }),
+        TextButton.icon(
+          onPressed: _addExtraField,
+          icon: const Icon(Icons.add, size: 18),
+          label: Text(localizations.ticketAddField),
+        ),
+        const SizedBox(height: 8),
+        DocumentPhotoSlot(
+          label: localizations.documentPhotosTitle,
+          imageBase64: _imageBase64,
+          onPick: _pickImage,
+          onRemove: _imageBase64 != null
+              ? () => setState(() => _imageBase64 = null)
+              : null,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

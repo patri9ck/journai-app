@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource, X
 import '../../messages/app_localizations.dart';
 import '../../model/result.dart';
 import '../sheet/encryption_sheet.dart';
+import 'form_sheet.dart';
 
 Future<List<XFile>?> pickDocumentImages(
   BuildContext context, {
@@ -686,72 +687,51 @@ class _ScanSetupSheetState extends State<ScanSetupSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final canScan = _frontBytes != null || _backBytes != null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FormSheet(
+      title: localizations.documentScanSetupTitle,
+      subtitle: localizations.documentScanSetupSubtitle,
+      children: [
+        Row(
           children: [
-            Text(
-              localizations.documentScanSetupTitle,
-              style: theme.textTheme.headlineSmall,
+            Expanded(
+              child: DocumentPhotoSlot(
+                label: localizations.documentScanFront,
+                imageBase64: _frontBase64,
+                onPick: _pickFront,
+                onRemove: _frontBytes != null
+                    ? () => setState(() {
+                          _frontBytes = null;
+                          _frontBase64 = null;
+                        })
+                    : null,
+              ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              localizations.documentScanSetupSubtitle,
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: DocumentPhotoSlot(
-                    label: localizations.documentScanFront,
-                    imageBase64: _frontBase64,
-                    onPick: _pickFront,
-                    onRemove: _frontBytes != null
-                        ? () => setState(() {
-                              _frontBytes = null;
-                              _frontBase64 = null;
-                            })
-                        : null,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: DocumentPhotoSlot(
-                    label: localizations.documentScanBack,
-                    imageBase64: _backBase64,
-                    onPick: _pickBack,
-                    onRemove: _backBytes != null
-                        ? () => setState(() {
-                              _backBytes = null;
-                              _backBase64 = null;
-                            })
-                        : null,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: canScan
-                  ? () => Navigator.of(context).pop((_frontBytes, _backBytes))
-                  : null,
-              child: Text(localizations.documentScan),
+            const SizedBox(width: 12),
+            Expanded(
+              child: DocumentPhotoSlot(
+                label: localizations.documentScanBack,
+                imageBase64: _backBase64,
+                onPick: _pickBack,
+                onRemove: _backBytes != null
+                    ? () => setState(() {
+                          _backBytes = null;
+                          _backBase64 = null;
+                        })
+                    : null,
+              ),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: canScan
+              ? () => Navigator.of(context).pop((_frontBytes, _backBytes))
+              : null,
+          child: Text(localizations.documentScan),
+        ),
+      ],
     );
   }
 }

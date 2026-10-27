@@ -9,6 +9,7 @@ import '../../messages/app_localizations.dart';
 import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
+import '../shared/form_sheet.dart';
 import '../sheet/consent_sheet.dart';
 
 class MedicalCertificatePage extends StatelessWidget {
@@ -121,77 +122,56 @@ class _CertFormSheetState extends State<_CertFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final isEditing = widget.initialFields != null;
     final titleError = _submitted && _titleController.text.trim().isEmpty
         ? localizations.medicalCertificateTitleRequired
         : null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.medicalCertificateEditTitle
-                    : localizations.medicalCertificateManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.medicalCertificateTitleHint} *',
-                  errorText: titleError,
-                ),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _dateController,
-                labelText: localizations.medicalCertificateDateHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _issuerController,
-                decoration: InputDecoration(
-                  labelText: localizations.medicalCertificateIssuerHint,
-                ),
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  labelText: localizations.documentNotesHint,
-                ),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              DocumentImageList(
-                images: _images,
-                onAddImage: _addImage,
-                onRemoveImage: (index) =>
-                    setState(() => _images.removeAt(index)),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.medicalCertificateEditTitle : localizations.medicalCertificateManualTitle,
+      children: [
+        TextField(
+          controller: _titleController,
+          decoration: InputDecoration(
+            labelText: '${localizations.medicalCertificateTitleHint} *',
+            errorText: titleError,
           ),
+          textCapitalization: TextCapitalization.sentences,
         ),
-      ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _dateController,
+          labelText: localizations.medicalCertificateDateHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _issuerController,
+          decoration: InputDecoration(
+            labelText: localizations.medicalCertificateIssuerHint,
+          ),
+          textCapitalization: TextCapitalization.words,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(
+            labelText: localizations.documentNotesHint,
+          ),
+          maxLines: 3,
+        ),
+        const SizedBox(height: 16),
+        DocumentImageList(
+          images: _images,
+          onAddImage: _addImage,
+          onRemoveImage: (index) =>
+              setState(() => _images.removeAt(index)),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

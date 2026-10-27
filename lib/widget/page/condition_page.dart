@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../messages/app_localizations.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
+import '../shared/form_sheet.dart';
 
 class ConditionPage extends StatelessWidget {
   const ConditionPage({super.key});
@@ -159,88 +160,68 @@ class _ConditionFormSheetState extends State<_ConditionFormSheet> {
         : null;
     final conditionList = _conditionList(localizations);
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.conditionEditTitle
-                    : localizations.conditionManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                localizations.conditionSelectFromList,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  ...conditionList.map(
-                    (name) => ChoiceChip(
-                      label: Text(name),
-                      selected: _nameController.text == name,
-                      onSelected: (_) => _selectPredefined(name),
-                    ),
-                  ),
-                  ChoiceChip(
-                    label: Text(localizations.allergyCustom),
-                    selected: _showCustomInput,
-                    onSelected: (_) {
-                      setState(() {
-                        _showCustomInput = true;
-                        _nameController.clear();
-                      });
-                    },
-                  ),
-                ],
-              ),
-              if (_showCustomInput || nameError != null) ...[
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: '${localizations.conditionNameHint} *',
-                    errorText: nameError,
-                  ),
-                  textCapitalization: TextCapitalization.sentences,
-                  autofocus: _showCustomInput,
-                ),
-              ],
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _diagnosedDateController,
-                labelText: localizations.conditionDiagnosedDateHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(labelText: localizations.documentNotesHint),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.conditionEditTitle : localizations.conditionManualTitle,
+      children: [
+        Text(
+          localizations.conditionSelectFromList,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
-      ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...conditionList.map(
+              (name) => ChoiceChip(
+                label: Text(name),
+                selected: _nameController.text == name,
+                onSelected: (_) => _selectPredefined(name),
+              ),
+            ),
+            ChoiceChip(
+              label: Text(localizations.allergyCustom),
+              selected: _showCustomInput,
+              onSelected: (_) {
+                setState(() {
+                  _showCustomInput = true;
+                  _nameController.clear();
+                });
+              },
+            ),
+          ],
+        ),
+        if (_showCustomInput || nameError != null) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: '${localizations.conditionNameHint} *',
+              errorText: nameError,
+            ),
+            textCapitalization: TextCapitalization.sentences,
+            autofocus: _showCustomInput,
+          ),
+        ],
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _diagnosedDateController,
+          labelText: localizations.conditionDiagnosedDateHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(labelText: localizations.documentNotesHint),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

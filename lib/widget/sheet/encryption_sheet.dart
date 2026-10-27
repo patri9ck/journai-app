@@ -8,6 +8,7 @@ import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/storage.dart';
 import '../shared/loading_button.dart';
+import '../shared/form_sheet.dart';
 
 Future<bool> ensureEncryptionUnlocked(BuildContext context) async {
   final dataKey = await storage.read(key: 'dataKey');
@@ -119,62 +120,48 @@ class _EncryptionSetupSheetState extends State<EncryptionSetupSheet> {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+    return FormSheet(
+      title: localizations.encryptionSetupTitle,
+      subtitle: localizations.encryptionSetupBody,
+      children: [
+        Text(
+          localizations.encryptionSetupWarning,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.error,
+          ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(localizations.encryptionSetupTitle, style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            Text(localizations.encryptionSetupBody, style: theme.textTheme.bodySmall),
-            const SizedBox(height: 8),
-            Text(
-              localizations.encryptionSetupWarning,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.error,
-              ),
+        const SizedBox(height: 24),
+        TextField(
+          controller: _passwordController,
+          obscureText: _obscurePassword,
+          decoration: InputDecoration(
+            hintText: localizations.encryptionSetupHint,
+            suffixIcon: IconButton(
+              icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
             ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscurePassword,
-              decoration: InputDecoration(
-                hintText: localizations.encryptionSetupHint,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _confirmController,
-              obscureText: _obscureConfirm,
-              decoration: InputDecoration(
-                hintText: localizations.encryptionSetupConfirmHint,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                  onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
-                ),
-              ),
-              onSubmitted: (_) => _setup(),
-            ),
-            if (_error != null) ...[
-              const SizedBox(height: 8),
-              Text(_error!, style: TextStyle(color: theme.colorScheme.error, fontSize: 12)),
-            ],
-            const SizedBox(height: 16),
-            LoadingButton(loading: _loading, onPressed: _setup, label: localizations.encryptionSetupConfirm),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _confirmController,
+          obscureText: _obscureConfirm,
+          decoration: InputDecoration(
+            hintText: localizations.encryptionSetupConfirmHint,
+            suffixIcon: IconButton(
+              icon: Icon(_obscureConfirm ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+            ),
+          ),
+          onSubmitted: (_) => _setup(),
+        ),
+        if (_error != null) ...[
+          const SizedBox(height: 8),
+          Text(_error!, style: TextStyle(color: theme.colorScheme.error, fontSize: 12)),
+        ],
+        const SizedBox(height: 16),
+        LoadingButton(loading: _loading, onPressed: _setup, label: localizations.encryptionSetupConfirm),
+      ],
     );
   }
 
@@ -250,47 +237,33 @@ class _EncryptionUnlockSheetState extends State<EncryptionUnlockSheet> {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(localizations.encryptionUnlockTitle, style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            Text(localizations.encryptionUnlockBody, style: theme.textTheme.bodySmall),
-            const SizedBox(height: 24),
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscure,
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: localizations.encryptionUnlockHint,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              onSubmitted: (_) => _unlock(),
+    return FormSheet(
+      title: localizations.encryptionUnlockTitle,
+      subtitle: localizations.encryptionUnlockBody,
+      children: [
+        TextField(
+          controller: _passwordController,
+          obscureText: _obscure,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: localizations.encryptionUnlockHint,
+            suffixIcon: IconButton(
+              icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscure = !_obscure),
             ),
-            if (_wrong) ...[
-              const SizedBox(height: 8),
-              Text(
-                localizations.encryptionUnlockWrong,
-                style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
-              ),
-            ],
-            const SizedBox(height: 16),
-            LoadingButton(loading: _loading, onPressed: _unlock, label: localizations.encryptionUnlockConfirm),
-          ],
+          ),
+          onSubmitted: (_) => _unlock(),
         ),
-      ),
+        if (_wrong) ...[
+          const SizedBox(height: 8),
+          Text(
+            localizations.encryptionUnlockWrong,
+            style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
+          ),
+        ],
+        const SizedBox(height: 16),
+        LoadingButton(loading: _loading, onPressed: _unlock, label: localizations.encryptionUnlockConfirm),
+      ],
     );
   }
 

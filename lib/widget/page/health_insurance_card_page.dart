@@ -9,6 +9,7 @@ import '../../messages/app_localizations.dart';
 import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
+import '../shared/form_sheet.dart';
 import '../sheet/consent_sheet.dart';
 
 class HealthInsuranceCardPage extends StatelessWidget {
@@ -137,94 +138,73 @@ class _CardFormSheetState extends State<_CardFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final isEditing = widget.initialFields != null;
     final nameError = _submitted && _nameController.text.trim().isEmpty
         ? localizations.healthInsuranceNameRequired
         : null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+    return FormSheet(
+      title: isEditing ? localizations.healthInsuranceCardEditTitle : localizations.healthInsuranceCardManualTitle,
+      children: [
+        TextField(
+          controller: _nameController,
+          decoration: InputDecoration(
+            labelText: '${localizations.healthInsuranceNameHint} *',
+            errorText: nameError,
+          ),
+          textCapitalization: TextCapitalization.words,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.healthInsuranceCardEditTitle
-                    : localizations.healthInsuranceCardManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.healthInsuranceNameHint} *',
-                  errorText: nameError,
-                ),
-                textCapitalization: TextCapitalization.words,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _memberNumberController,
-                decoration: InputDecoration(
-                  labelText: localizations.healthInsuranceMemberNumberHint,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _cardNumberController,
-                decoration: InputDecoration(
-                  labelText: localizations.healthInsuranceCardNumberHint,
-                ),
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _validUntilController,
-                labelText: localizations.healthInsuranceValidUntilHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  labelText: localizations.documentNotesHint,
-                ),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 16),
-              DocumentPhotoSlot(
-                label: localizations.healthInsuranceFront,
-                imageBase64: _frontImageBase64,
-                onPick: () => _pickImage(isFront: true),
-                onRemove: _frontImageBase64 != null
-                    ? () => setState(() => _frontImageBase64 = null)
-                    : null,
-              ),
-              const SizedBox(height: 12),
-              DocumentPhotoSlot(
-                label: localizations.healthInsuranceBack,
-                imageBase64: _backImageBase64,
-                onPick: () => _pickImage(isFront: false),
-                onRemove: _backImageBase64 != null
-                    ? () => setState(() => _backImageBase64 = null)
-                    : null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+        const SizedBox(height: 12),
+        TextField(
+          controller: _memberNumberController,
+          decoration: InputDecoration(
+            labelText: localizations.healthInsuranceMemberNumberHint,
           ),
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _cardNumberController,
+          decoration: InputDecoration(
+            labelText: localizations.healthInsuranceCardNumberHint,
+          ),
+        ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _validUntilController,
+          labelText: localizations.healthInsuranceValidUntilHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(
+            labelText: localizations.documentNotesHint,
+          ),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 16),
+        DocumentPhotoSlot(
+          label: localizations.healthInsuranceFront,
+          imageBase64: _frontImageBase64,
+          onPick: () => _pickImage(isFront: true),
+          onRemove: _frontImageBase64 != null
+              ? () => setState(() => _frontImageBase64 = null)
+              : null,
+        ),
+        const SizedBox(height: 12),
+        DocumentPhotoSlot(
+          label: localizations.healthInsuranceBack,
+          imageBase64: _backImageBase64,
+          onPick: () => _pickImage(isFront: false),
+          onRemove: _backImageBase64 != null
+              ? () => setState(() => _backImageBase64 = null)
+              : null,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

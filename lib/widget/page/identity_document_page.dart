@@ -10,6 +10,7 @@ import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
 import '../sheet/consent_sheet.dart';
+import '../shared/form_sheet.dart';
 
 enum IdentityDocumentType { passport, idCard, driversLicense }
 
@@ -261,7 +262,6 @@ class _IdentityFormSheetState extends State<_IdentityFormSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final isEditing = widget.initialFields != null;
 
     final title = switch (widget.documentType) {
@@ -287,129 +287,114 @@ class _IdentityFormSheetState extends State<_IdentityFormSheet> {
     final isDriversLicense =
         widget.documentType == IdentityDocumentType.driversLicense;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+    return FormSheet(
+      title: title,
+      children: [
+        TextField(
+          controller: _numberController,
+          decoration: InputDecoration(labelText: numberHint),
+          textCapitalization: TextCapitalization.characters,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _numberController,
-                decoration: InputDecoration(labelText: numberHint),
-                textCapitalization: TextCapitalization.characters,
-              ),
-              const SizedBox(height: 12),
-              if (!isDriversLicense) ...[
-                TextField(
-                  controller: _surnameController,
-                  decoration: InputDecoration(
-                    labelText: localizations.passportSurnameHint,
-                  ),
-                  textCapitalization: TextCapitalization.words,
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _givenNamesController,
-                  decoration: InputDecoration(
-                    labelText: localizations.passportGivenNamesHint,
-                  ),
-                  textCapitalization: TextCapitalization.words,
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _nationalityController,
-                  decoration: InputDecoration(
-                    labelText: localizations.passportNationalityHint,
-                  ),
-                  textCapitalization: TextCapitalization.words,
-                ),
-                const SizedBox(height: 12),
-                DatePickerField(
-                  controller: _dateOfBirthController,
-                  labelText: localizations.passportDateOfBirthHint,
-                ),
-                const SizedBox(height: 12),
-              ],
-              if (isDriversLicense) ...[
-                TextField(
-                  controller: _categoriesController,
-                  decoration: InputDecoration(
-                    labelText: localizations.driversLicenseCategoriesHint,
-                  ),
-                  textCapitalization: TextCapitalization.characters,
-                ),
-                const SizedBox(height: 12),
-                DatePickerField(
-                  controller: _issueDateController,
-                  labelText: localizations.driversLicenseIssueDateHint,
-                ),
-                const SizedBox(height: 12),
-              ] else ...[
-                DatePickerField(
-                  controller: _issueDateController,
-                  labelText: localizations.passportIssueDateHint,
-                ),
-                const SizedBox(height: 12),
-              ],
-              DatePickerField(
-                controller: _expiryDateController,
-                labelText: isDriversLicense
-                    ? localizations.driversLicenseExpiryDateHint
-                    : localizations.passportExpiryDateHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  labelText: localizations.documentNotesHint,
-                ),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 16),
-              if (isPassport)
-                DocumentImageList(
-                  images: _passportImages,
-                  onAddImage: _addPassportImage,
-                  onRemoveImage: (index) =>
-                      setState(() => _passportImages.removeAt(index)),
-                )
-              else ...[
-                DocumentPhotoSlot(
-                  label: localizations.healthInsuranceFront,
-                  imageBase64: _frontImageBase64,
-                  onPick: () => _pickImage(slot: 'front'),
-                  onRemove: _frontImageBase64 != null
-                      ? () => setState(() => _frontImageBase64 = null)
-                      : null,
-                ),
-                const SizedBox(height: 12),
-                DocumentPhotoSlot(
-                  label: localizations.healthInsuranceBack,
-                  imageBase64: _backImageBase64,
-                  onPick: () => _pickImage(slot: 'back'),
-                  onRemove: _backImageBase64 != null
-                      ? () => setState(() => _backImageBase64 = null)
-                      : null,
-                ),
-              ],
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+        const SizedBox(height: 12),
+        if (!isDriversLicense) ...[
+          TextField(
+            controller: _surnameController,
+            decoration: InputDecoration(
+              labelText: localizations.passportSurnameHint,
+            ),
+            textCapitalization: TextCapitalization.words,
           ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _givenNamesController,
+            decoration: InputDecoration(
+              labelText: localizations.passportGivenNamesHint,
+            ),
+            textCapitalization: TextCapitalization.words,
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _nationalityController,
+            decoration: InputDecoration(
+              labelText: localizations.passportNationalityHint,
+            ),
+            textCapitalization: TextCapitalization.words,
+          ),
+          const SizedBox(height: 12),
+          DatePickerField(
+            controller: _dateOfBirthController,
+            labelText: localizations.passportDateOfBirthHint,
+          ),
+          const SizedBox(height: 12),
+        ],
+        if (isDriversLicense) ...[
+          TextField(
+            controller: _categoriesController,
+            decoration: InputDecoration(
+              labelText: localizations.driversLicenseCategoriesHint,
+            ),
+            textCapitalization: TextCapitalization.characters,
+          ),
+          const SizedBox(height: 12),
+          DatePickerField(
+            controller: _issueDateController,
+            labelText: localizations.driversLicenseIssueDateHint,
+          ),
+          const SizedBox(height: 12),
+        ] else ...[
+          DatePickerField(
+            controller: _issueDateController,
+            labelText: localizations.passportIssueDateHint,
+          ),
+          const SizedBox(height: 12),
+        ],
+        DatePickerField(
+          controller: _expiryDateController,
+          labelText: isDriversLicense
+              ? localizations.driversLicenseExpiryDateHint
+              : localizations.passportExpiryDateHint,
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(
+            labelText: localizations.documentNotesHint,
+          ),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 16),
+        if (isPassport)
+          DocumentImageList(
+            images: _passportImages,
+            onAddImage: _addPassportImage,
+            onRemoveImage: (index) =>
+                setState(() => _passportImages.removeAt(index)),
+          )
+        else ...[
+          DocumentPhotoSlot(
+            label: localizations.healthInsuranceFront,
+            imageBase64: _frontImageBase64,
+            onPick: () => _pickImage(slot: 'front'),
+            onRemove: _frontImageBase64 != null
+                ? () => setState(() => _frontImageBase64 = null)
+                : null,
+          ),
+          const SizedBox(height: 12),
+          DocumentPhotoSlot(
+            label: localizations.healthInsuranceBack,
+            imageBase64: _backImageBase64,
+            onPick: () => _pickImage(slot: 'back'),
+            onRemove: _backImageBase64 != null
+                ? () => setState(() => _backImageBase64 = null)
+                : null,
+          ),
+        ],
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

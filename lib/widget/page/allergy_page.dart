@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
 import '../shared/document_list_page.dart';
+import '../shared/form_sheet.dart';
 
 class AllergyPage extends StatelessWidget {
   const AllergyPage({super.key});
@@ -162,124 +163,104 @@ class _AllergyFormSheetState extends State<_AllergyFormSheet> {
         : null;
     final allergyList = _allergyList(localizations);
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing
-                    ? localizations.allergyEditTitle
-                    : localizations.allergyManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                localizations.allergySelectFromList,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  ...allergyList.map(
-                    (name) => ChoiceChip(
-                      label: Text(name),
-                      selected: _nameController.text == name,
-                      onSelected: (_) => _selectPredefined(name),
-                    ),
-                  ),
-                  ChoiceChip(
-                    label: Text(localizations.allergyCustom),
-                    selected: _showCustomInput,
-                    onSelected: (_) {
-                      setState(() {
-                        _showCustomInput = true;
-                        _nameController.clear();
-                      });
-                    },
-                  ),
-                ],
-              ),
-              if (_showCustomInput || nameError != null) ...[
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: '${localizations.allergyNameHint} *',
-                    errorText: nameError,
-                  ),
-                  textCapitalization: TextCapitalization.sentences,
-                  autofocus: _showCustomInput,
-                ),
-              ] else if (_submitted && _nameController.text.trim().isEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  localizations.allergyNameRequired,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 16),
-              InputDecorator(
-                decoration: InputDecoration(
-                  labelText: localizations.allergySeverity,
-                  suffixIcon: _severity != null
-                      ? IconButton(
-                          icon: const Icon(Icons.close, size: 18),
-                          onPressed: () => setState(() => _severity = null),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        )
-                      : null,
-                ),
-                isEmpty: _severity == null,
-                child: DropdownButton<String>(
-                  value: _severity,
-                  isExpanded: true,
-                  underline: const SizedBox(),
-                  items: _severityKeys.asMap().entries.map((entry) {
-                    final label = [
-                      localizations.severityMild,
-                      localizations.severityModerate,
-                      localizations.severitySevere,
-                      localizations.severityLifeThreatening,
-                    ][entry.key];
-
-                    return DropdownMenuItem(value: entry.value, child: Text(label));
-                  }).toList(),
-                  onChanged: (value) => setState(() => _severity = value),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _notesController,
-                decoration: InputDecoration(
-                  labelText: localizations.documentNotesHint,
-                ),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text(localizations.documentSave),
-              ),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.allergyEditTitle : localizations.allergyManualTitle,
+      children: [
+        Text(
+          localizations.allergySelectFromList,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
-      ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...allergyList.map(
+              (name) => ChoiceChip(
+                label: Text(name),
+                selected: _nameController.text == name,
+                onSelected: (_) => _selectPredefined(name),
+              ),
+            ),
+            ChoiceChip(
+              label: Text(localizations.allergyCustom),
+              selected: _showCustomInput,
+              onSelected: (_) {
+                setState(() {
+                  _showCustomInput = true;
+                  _nameController.clear();
+                });
+              },
+            ),
+          ],
+        ),
+        if (_showCustomInput || nameError != null) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: '${localizations.allergyNameHint} *',
+              errorText: nameError,
+            ),
+            textCapitalization: TextCapitalization.sentences,
+            autofocus: _showCustomInput,
+          ),
+        ] else if (_submitted && _nameController.text.trim().isEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            localizations.allergyNameRequired,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        InputDecorator(
+          decoration: InputDecoration(
+            labelText: localizations.allergySeverity,
+            suffixIcon: _severity != null
+                ? IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _severity = null),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  )
+                : null,
+          ),
+          isEmpty: _severity == null,
+          child: DropdownButton<String>(
+            value: _severity,
+            isExpanded: true,
+            underline: const SizedBox(),
+            items: _severityKeys.asMap().entries.map((entry) {
+              final label = [
+                localizations.severityMild,
+                localizations.severityModerate,
+                localizations.severitySevere,
+                localizations.severityLifeThreatening,
+              ][entry.key];
+
+              return DropdownMenuItem(value: entry.value, child: Text(label));
+            }).toList(),
+            onChanged: (value) => setState(() => _severity = value),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _notesController,
+          decoration: InputDecoration(
+            labelText: localizations.documentNotesHint,
+          ),
+          maxLines: 2,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _submit,
+          child: Text(localizations.documentSave),
+        ),
+      ],
     );
   }
 }

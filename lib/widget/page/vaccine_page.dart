@@ -19,6 +19,7 @@ import '../sheet/encryption_sheet.dart';
 import '../sheet/consent_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/loading_button.dart';
+import '../shared/form_sheet.dart';
 
 const _feature = 'VACCINE';
 
@@ -914,73 +915,55 @@ class _VaccineFormSheetState extends State<_VaccineFormSheet> {
         ? localizations.vaccineNameRequired
         : null;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                isEditing ? localizations.vaccineEditTitle : localizations.vaccineManualTitle,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: '${localizations.vaccineNameHint} *',
-                  errorText: nameError,
-                ),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _diseaseController,
-                decoration: InputDecoration(labelText: localizations.vaccineDiseaseHint),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _dateController,
-                labelText: localizations.vaccineDateHint,
-              ),
-              const SizedBox(height: 12),
-              DatePickerField(
-                controller: _nextDateController,
-                labelText: localizations.vaccineNextDateHint,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _manufacturerController,
-                decoration: InputDecoration(labelText: localizations.vaccineManufacturerHint),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _batchNumberController,
-                decoration: InputDecoration(labelText: localizations.vaccineBatchNumberHint),
-              ),
-              const SizedBox(height: 20),
-              if (_error != null) ...[
-                Text(
-                  _error!,
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-              ],
-              LoadingButton(loading: _saving, onPressed: _submit, label: localizations.vaccineSave),
-            ],
+    return FormSheet(
+      title: isEditing ? localizations.vaccineEditTitle : localizations.vaccineManualTitle,
+      children: [
+        TextField(
+          controller: _nameController,
+          decoration: InputDecoration(
+            labelText: '${localizations.vaccineNameHint} *',
+            errorText: nameError,
           ),
+          textCapitalization: TextCapitalization.sentences,
         ),
-      ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _diseaseController,
+          decoration: InputDecoration(labelText: localizations.vaccineDiseaseHint),
+          textCapitalization: TextCapitalization.sentences,
+        ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _dateController,
+          labelText: localizations.vaccineDateHint,
+        ),
+        const SizedBox(height: 12),
+        DatePickerField(
+          controller: _nextDateController,
+          labelText: localizations.vaccineNextDateHint,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _manufacturerController,
+          decoration: InputDecoration(labelText: localizations.vaccineManufacturerHint),
+          textCapitalization: TextCapitalization.sentences,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _batchNumberController,
+          decoration: InputDecoration(labelText: localizations.vaccineBatchNumberHint),
+        ),
+        const SizedBox(height: 20),
+        if (_error != null) ...[
+          Text(
+            _error!,
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+        ],
+        LoadingButton(loading: _saving, onPressed: _submit, label: localizations.vaccineSave),
+      ],
     );
   }
 }
