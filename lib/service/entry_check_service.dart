@@ -88,6 +88,7 @@ class EntryCheckService {
     final visaFreeDays = entryCheck.visaFreeDays;
 
     final visaStatus = switch (visaFreeDays) {
+      _ when entryCheck.unlimitedStay => VisaStatus.notRequired,
       null => VisaStatus.unknown,
       _ when tripDays > visaFreeDays => VisaStatus.stayTooLong,
       _ => VisaStatus.visaFree,

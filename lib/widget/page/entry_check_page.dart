@@ -13,6 +13,7 @@ import '../../model/result.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
 import '../../util/country_data.dart';
+import '../shared/status_row.dart';
 
 class EntryCheckPage extends StatefulWidget {
   final List<Data> data;
@@ -28,6 +29,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
   bool _loading = false;
   EntryCheck? _entryCheck;
   EntryCheckResult? _result;
+  Failure<EntryCheck>? _failure;
   Map<String, String> _translations = {};
 
   @override
@@ -44,13 +46,13 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
       return;
     }
 
-    final localizations = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).languageCode;
 
     setState(() {
       _loading = true;
       _entryCheck = null;
       _result = null;
+      _failure = null;
     });
 
     final entryCheckResult = await entryCheckService.getEntryCheck(countryCode);
@@ -60,8 +62,10 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
     }
 
     if (entryCheckResult is! Success<EntryCheck>) {
-      setState(() => _loading = false);
-      (entryCheckResult as Failure).show(localizations);
+      setState(() {
+        _loading = false;
+        _failure = entryCheckResult as Failure<EntryCheck>;
+      });
 
       return;
     }
@@ -107,6 +111,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final mutedColor = theme.colorScheme.onSurface.withValues(alpha: 0.5);
 
     return Scaffold(
       appBar: AppBar(title: Text(localizations.entryCheckTitle)),
@@ -122,13 +127,14 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
             subtitle: Text(_formatRange(DateTimeRange(start: widget.trip.start, end: widget.trip.end))),
           ),
           const SizedBox(height: 8),
-          if (_loading)
-            Row(
-              children: [
-                const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-                const SizedBox(width: 12),
-                Text(localizations.entryCheckLoading, style: theme.textTheme.bodySmall),
-              ],
+          if (_loading) LoadingRow(text: localizations.entryCheckLoading),
+          if (iso2ToIso3[widget.trip.countryCode] == null)
+            StatusRow(icon: Icons.info_outline, color: mutedColor, text: localizations.countryNoInformation),
+          if (_failure != null)
+            StatusRow(
+              icon: _failure is NetworkFailure ? Icons.wifi_off_outlined : Icons.info_outline,
+              color: mutedColor,
+              text: _failure!.localizedMessage(localizations),
             ),
           if (_entryCheck != null && _result != null) ..._buildResults(localizations, theme, _entryCheck!, _result!),
         ],
@@ -164,6 +170,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
       },
       _Section(title: localizations.entryCheckSectionVisa),
       switch (result.visaStatus) {
+        VisaStatus.notRequired => _ResultRow.ok(localizations.entryCheckVisaNotRequired),
         VisaStatus.visaFree => _ResultRow.ok(
           localizations.entryCheckVisaFree(entryCheck.visaFreeDays!, result.tripDays),
         ),
@@ -213,17 +220,25 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
         ],
       ],
       const SizedBox(height: 24),
-      Text(
-        localizations.entryCheckSource(dateFormat.format(entryCheck.sourceUpdatedAt)),
-        style: theme.textTheme.bodySmall,
-      ),
+      Text(switch (entryCheck.source) {
+        EntrySource.foreignOffice => localizations.entryCheckSource(dateFormat.format(entryCheck.sourceUpdatedAt)),
+        EntrySource.passportAct => localizations.entryCheckSourcePassportAct(
+          dateFormat.format(entryCheck.sourceUpdatedAt),
+        ),
+      }, style: theme.textTheme.bodySmall),
       const SizedBox(height: 4),
-      Text(localizations.entryCheckDisclaimer, style: theme.textTheme.bodySmall),
+      Text(switch (entryCheck.source) {
+        EntrySource.foreignOffice => localizations.entryCheckDisclaimer,
+        EntrySource.passportAct => localizations.entryCheckDisclaimerPassportAct,
+      }, style: theme.textTheme.bodySmall),
       const SizedBox(height: 12),
       OutlinedButton.icon(
         onPressed: () => launchUrl(Uri.parse(entryCheck.sourceUrl), mode: LaunchMode.externalApplication),
         icon: const Icon(Icons.open_in_new, size: 16),
-        label: Text(localizations.entryCheckOpenSource),
+        label: Text(switch (entryCheck.source) {
+          EntrySource.foreignOffice => localizations.entryCheckOpenSource,
+          EntrySource.passportAct => localizations.entryCheckOpenPassportAct,
+        }),
       ),
     ];
   }

@@ -95,6 +95,23 @@ void main() {
     expect(rabies.status, VaccineStatus.boosterDue);
   });
 
+  test('a trip home from the passport act needs no visa however long it is', () {
+    final germany = EntryCheck.fromJson({
+      'countryCode': 'DEU',
+      'countryName': 'Deutschland',
+      'sourceUrl': 'https://www.gesetze-im-internet.de/pa_g_1986/__1.html',
+      'sourceUpdatedAt': 1784160000,
+      'source': 'PASSPORT_ACT',
+      'requirements': {'passportValidityMonths': 0, 'unlimitedStay': true},
+    });
+
+    final result = entryCheckService.evaluate(germany, [], start, DateTime(2027, 12, 1));
+
+    expect(germany.source, EntrySource.passportAct);
+    expect(result.visaStatus, VisaStatus.notRequired);
+    expect(thailand.source, EntrySource.foreignOffice);
+  });
+
   test('entry check json from the server is parsed', () {
     final entryCheck = EntryCheck.fromJson({
       'countryCode': 'IDN',

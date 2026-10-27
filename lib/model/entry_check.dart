@@ -6,9 +6,11 @@ class EntryCheck {
   final String countryName;
   final String sourceUrl;
   final DateTime sourceUpdatedAt;
+  final EntrySource source;
   final int? passportValidityMonths;
   final int? visaFreeDays;
   final String? visaNote;
+  final bool unlimitedStay;
   final List<EntryForm> forms;
   final List<EntryFee> fees;
   final List<RequiredVaccine> requiredVaccines;
@@ -19,9 +21,11 @@ class EntryCheck {
     required this.countryName,
     required this.sourceUrl,
     required this.sourceUpdatedAt,
+    this.source = EntrySource.foreignOffice,
     this.passportValidityMonths,
     this.visaFreeDays,
     this.visaNote,
+    this.unlimitedStay = false,
     this.forms = const [],
     this.fees = const [],
     this.requiredVaccines = const [],
@@ -36,9 +40,11 @@ class EntryCheck {
       countryName: json['countryName'] as String,
       sourceUrl: json['sourceUrl'] as String,
       sourceUpdatedAt: DateTime.fromMillisecondsSinceEpoch((json['sourceUpdatedAt'] as int) * 1000),
+      source: json['source'] == 'PASSPORT_ACT' ? EntrySource.passportAct : EntrySource.foreignOffice,
       passportValidityMonths: requirements['passportValidityMonths'] as int?,
       visaFreeDays: requirements['visaFreeDays'] as int?,
       visaNote: requirements['visaNote'] as String?,
+      unlimitedStay: requirements['unlimitedStay'] as bool? ?? false,
       forms: [
         for (final form in requirements['forms'] as List? ?? [])
           EntryForm(
@@ -90,7 +96,9 @@ class RequiredVaccine {
 
 enum PassportStatus { missing, noExpiryDate, valid, expiresTooSoon }
 
-enum VisaStatus { visaFree, stayTooLong, unknown }
+enum EntrySource { foreignOffice, passportAct }
+
+enum VisaStatus { notRequired, visaFree, stayTooLong, unknown }
 
 enum VaccineStatus { recorded, boosterDue, missing }
 

@@ -369,7 +369,7 @@
   "dashboardTravelWarningActive": "Active travel warning",
   "dashboardTravelWarningPartial": "Partial security notice",
   "dashboardTravelWarningOpenMore": "Details at auswaertiges-amt.de",
-  "dashboardTravelWarningNoData": "No data available for this country",
+  "countryNoInformation": "No information available for this country",
   "fullMapPoiHospital": "Hospital",
   "fullMapPoiPharmacy": "Pharmacy",
   "fullMapPoiPolice": "Police",
@@ -676,6 +676,7 @@
     }
   },
   "entryCheckVisaUnknown": "No visa-free period is stated. Check the visa rules below.",
+  "entryCheckVisaNotRequired": "No visa needed and no limit on your stay.",
   "entryCheckSectionForms": "Before you travel",
   "entryCheckFormMandatory": "Required",
   "entryCheckFormOptional": "Optional",
@@ -697,6 +698,16 @@
   },
   "entryCheckDisclaimer": "Based on the travel advice of the German Foreign Office for German citizens. Rules can differ for other nationalities. Always check the official source before you travel.",
   "entryCheckOpenSource": "Open Foreign Office page",
+  "entryCheckSourcePassportAct": "Source: German Passport Act (§ 1 PassG), as of {date}",
+  "@entryCheckSourcePassportAct": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "entryCheckDisclaimerPassportAct": "Based on the German Passport Act for German citizens. Always check the official source before you travel.",
+  "entryCheckOpenPassportAct": "Open Passport Act",
   "entryCheckDiseaseYellowFever": "Yellow fever",
   "entryCheckDiseaseHepatitisA": "Hepatitis A",
   "entryCheckDiseaseHepatitisB": "Hepatitis B",
@@ -711,7 +722,6 @@
   "entryCheckDiseaseChikungunya": "Chikungunya",
   "entryCheckDiseaseTickBorneEncephalitis": "Tick-borne encephalitis",
   "entryCheckDiseaseInfluenza": "Influenza",
-  "failureCountryNotFound": "No information is available for this country.",
   "failureEntryCheckUnavailable": "The entry check is currently unavailable. Please try again later.",
   "failureInvalidAppleToken": "The Apple sign-in is invalid.",
   "failureAppleAccountNotExistent": "No Apple account can be found.",

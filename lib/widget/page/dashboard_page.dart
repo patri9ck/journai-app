@@ -32,6 +32,7 @@ import '../../util/profile_notifier.dart';
 import '../../util/units_notifier.dart';
 import '../shared/emergency_card_view.dart';
 import '../shared/share_image.dart';
+import '../shared/status_row.dart';
 import '../shared/tier_badge.dart';
 import '../sheet/encryption_sheet.dart';
 import 'memories_page.dart';
@@ -2031,11 +2032,11 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
                   _warningBadge(localizations, theme, warning, networkError),
                   if (_translating) ...[
                     const SizedBox(height: 16),
-                    _LoadingRow(text: localizations.emergencyCardTranslating),
+                    LoadingRow(text: localizations.emergencyCardTranslating),
                   ],
                   if (_translationFailed) ...[
                     const SizedBox(height: 16),
-                    _WarningStatusRow(
+                    StatusRow(
                       icon: Icons.translate,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       text: localizations.emergencyCardTranslationFailed,
@@ -2111,11 +2112,11 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
     bool networkError,
   ) {
     if (_loadingWarning) {
-      return _LoadingRow(text: localizations.dashboardTravelWarningLoading);
+      return LoadingRow(text: localizations.dashboardTravelWarningLoading);
     }
 
     if (networkError) {
-      return _WarningStatusRow(
+      return StatusRow(
         icon: Icons.wifi_off_outlined,
         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
         text: localizations.dashboardTravelWarningOffline,
@@ -2123,14 +2124,14 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
     }
 
     if (warning == null) {
-      return _WarningStatusRow(
+      return StatusRow(
         icon: Icons.info_outline,
         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-        text: localizations.dashboardTravelWarningNoData,
+        text: localizations.countryNoInformation,
       );
     }
 
-    return _WarningStatusRow(
+    return StatusRow(
       icon: warning.hasWarning
           ? Icons.warning_amber_rounded
           : warning.hasPartialWarning
@@ -2161,11 +2162,11 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
     }
 
     if (_loadingContent) {
-      return _LoadingRow(text: localizations.dashboardTravelWarningContentLoading);
+      return LoadingRow(text: localizations.dashboardTravelWarningContentLoading);
     }
 
     if (content == null || content.isEmpty) {
-      return _WarningStatusRow(
+      return StatusRow(
         icon: Icons.info_outline,
         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
         text: localizations.countryInfoUnavailableOffline,
@@ -2191,30 +2192,6 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
             child: Text(line, style: theme.textTheme.bodySmall?.copyWith(height: 1.4)),
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _LoadingRow extends StatelessWidget {
-  final String text;
-
-  const _LoadingRow({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 16,
-          height: 16,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(text, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -2263,44 +2240,6 @@ class _DisabledFeatureRow extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _WarningStatusRow extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String text;
-
-  const _WarningStatusRow({
-    required this.icon,
-    required this.color,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 22),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-          ),
-        ],
       ),
     );
   }
