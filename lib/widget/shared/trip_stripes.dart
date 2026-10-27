@@ -54,7 +54,9 @@ class TripStripes extends StatelessWidget {
                               ? Border.all(color: theme.colorScheme.onSurface, width: 2)
                               : null,
                         ),
-                        child: stripes[index].rainy ? const CustomPaint(painter: _RainPainter()) : null,
+                        child: stripes[index].rainy
+                            ? const CustomPaint(painter: _RainPainter(), child: SizedBox.expand())
+                            : null,
                       ),
                     ),
                     const SizedBox(height: 4),
