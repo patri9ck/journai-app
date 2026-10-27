@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/document_scan_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 class TicketPage extends StatelessWidget {
   const TicketPage({super.key});
@@ -23,7 +24,7 @@ class TicketPage extends StatelessWidget {
       emptyText: localizations.ticketEmpty,
       deleteConfirmText: (localizations) => localizations.ticketDeleteConfirm,
       icon: Icons.confirmation_number_outlined,
-      ensureConsent: ensureDocumentScanConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
         fields['title'] as String? ?? '-',

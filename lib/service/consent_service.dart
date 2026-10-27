@@ -1,19 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
+import '../model/consent_type.dart';
 import '../model/result.dart';
 import 'request_service.dart';
 
 class ConsentService {
   final RequestService _requestService;
 
-  ConsentService({required RequestService requestService})
-    : _requestService = requestService;
+  ConsentService({required RequestService requestService}) : _requestService = requestService;
 
-  Future<bool> hasHealthDataScanConsent() async {
-    final result = await _requestService.getAuthenticatedRequest(
-      'user/consent/HEALTH_DATA_SCAN',
-    );
+  Future<bool> hasConsent(ConsentType type) async {
+    final result = await _requestService.getAuthenticatedRequest('user/consent/${type.apiName}');
 
     if (result is! Success<Map<String, dynamic>>) {
       return false;
@@ -22,48 +20,14 @@ class ConsentService {
     return result.value?['hasConsent'] as bool? ?? false;
   }
 
-  Future<Result<void>> giveHealthDataScanConsent() async {
-    final result = await _requestService.postAuthenticatedRequest(
-      'user/consent/HEALTH_DATA_SCAN',
-      {},
-    );
+  Future<Result<void>> giveConsent(ConsentType type) async {
+    final result = await _requestService.postAuthenticatedRequest('user/consent/${type.apiName}', {});
 
     return voidResult(result);
   }
 
-  Future<bool> hasDocumentScanConsent() async {
-    final result = await _requestService.getAuthenticatedRequest(
-      'user/consent/DOCUMENT_SCAN',
-    );
-
-    if (result is! Success<Map<String, dynamic>>) {
-      return false;
-    }
-
-    return result.value?['hasConsent'] as bool? ?? false;
-  }
-
-  Future<Result<void>> giveDocumentScanConsent() async {
-    final result = await _requestService.postAuthenticatedRequest(
-      'user/consent/DOCUMENT_SCAN',
-      {},
-    );
-
-    return voidResult(result);
-  }
-
-  Future<Result<void>> revokeHealthDataScanConsent() async {
-    final result = await _requestService.deleteAuthenticatedRequest(
-      'user/consent/HEALTH_DATA_SCAN',
-    );
-
-    return voidResult(result);
-  }
-
-  Future<Result<void>> revokeDocumentScanConsent() async {
-    final result = await _requestService.deleteAuthenticatedRequest(
-      'user/consent/DOCUMENT_SCAN',
-    );
+  Future<Result<void>> revokeConsent(ConsentType type) async {
+    final result = await _requestService.deleteAuthenticatedRequest('user/consent/${type.apiName}');
 
     return voidResult(result);
   }

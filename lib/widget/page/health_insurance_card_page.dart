@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/document_scan_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 class HealthInsuranceCardPage extends StatelessWidget {
   const HealthInsuranceCardPage({super.key});
@@ -23,7 +24,7 @@ class HealthInsuranceCardPage extends StatelessWidget {
       emptyText: localizations.healthInsuranceCardEmpty,
       deleteConfirmText: (localizations) => localizations.healthInsuranceCardDeleteConfirm,
       icon: Icons.credit_card_outlined,
-      ensureConsent: ensureDocumentScanConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       pickImages: pickFrontAndBack,
       toScannedItems: mergeFrontAndBack,
       summarize: (fields, localizations) => (

@@ -10,12 +10,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../../model/data.dart';
 import '../../model/receipt.dart';
 import '../../service/services.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/health_data_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 const _categories = ['DOCTOR', 'PHARMACY', 'HOSPITAL', 'OTHER'];
 
@@ -39,7 +40,7 @@ class ReceiptPage extends StatelessWidget {
       emptyText: localizations.receiptEmpty,
       deleteConfirmText: (localizations) => localizations.receiptDeleteConfirm,
       icon: Icons.receipt_long_outlined,
-      ensureConsent: ensureHealthDataConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
         fields['merchant'] as String? ?? '-',

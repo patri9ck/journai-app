@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
+import '../shared/loading_button.dart';
 
-class DocumentScanConsentSheet extends StatefulWidget {
-  const DocumentScanConsentSheet({super.key});
+class ConsentSheet extends StatefulWidget {
+  final ConsentType type;
+
+  const ConsentSheet({required this.type, super.key});
 
   @override
-  State<DocumentScanConsentSheet> createState() =>
-      _DocumentScanConsentSheetState();
+  State<ConsentSheet> createState() => _ConsentSheetState();
 }
 
-class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
+class _ConsentSheetState extends State<ConsentSheet> {
   bool _checked = false;
   bool _loading = false;
   String? _error;
@@ -26,6 +29,7 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isHealthDataScan = widget.type == ConsentType.healthDataScan;
 
     return SafeArea(
       child: Padding(
@@ -35,12 +39,12 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              localizations.consentDocumentScanTitle,
+              isHealthDataScan ? localizations.consentHealthDataScanTitle : localizations.consentDocumentScanTitle,
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 16),
             Text(
-              localizations.consentDocumentScanBody,
+              isHealthDataScan ? localizations.consentHealthDataScanBody : localizations.consentDocumentScanBody,
               style: theme.textTheme.bodySmall,
             ),
             const SizedBox(height: 8),
@@ -48,19 +52,14 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
               text: TextSpan(
                 style: theme.textTheme.bodySmall,
                 children: [
-                  TextSpan(
-                    text: localizations.consentDocumentScanPrivacyHint,
-                  ),
+                  TextSpan(text: localizations.consentPrivacyHint),
                   const TextSpan(text: ' '),
                   TextSpan(
-                    text: localizations.consentDocumentScanPrivacyLink,
-                    style: TextStyle(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    text: localizations.consentPrivacyLink,
+                    style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w500),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(Uri.parse('${baseUrl}consent/document-scan/'));
+                        launchUrl(Uri.parse('${baseUrl}consent/${widget.type.pagePath}/'));
                       },
                   ),
                   const TextSpan(text: '.'),
@@ -76,7 +75,9 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
               title: Text(
-                localizations.consentDocumentScanCheckbox,
+                isHealthDataScan
+                    ? localizations.consentHealthDataScanCheckbox
+                    : localizations.consentDocumentScanCheckbox,
                 style: theme.textTheme.bodySmall,
               ),
             ),
@@ -89,25 +90,15 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
               ),
               const SizedBox(height: 8),
             ],
-            ElevatedButton(
-              onPressed: _checked && !_loading ? _giveConsent : null,
-              child: _loading
-                  ? const SizedBox(
-                      height: 18,
-                      width: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(localizations.consentDocumentScanConfirm),
+            LoadingButton(
+              loading: _loading,
+              onPressed: _checked ? _giveConsent : null,
+              label: localizations.consentConfirm,
             ),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: _loading
-                  ? null
-                  : () => Navigator.of(context).pop(false),
-              child: Text(localizations.consentDocumentScanDecline),
+              onPressed: _loading ? null : () => Navigator.of(context).pop(false),
+              child: Text(localizations.consentDecline),
             ),
           ],
         ),
@@ -121,7 +112,7 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
       _error = null;
     });
 
-    final result = await consentService.giveDocumentScanConsent();
+    final result = await consentService.giveConsent(widget.type);
 
     if (!mounted) {
       return;
@@ -140,8 +131,8 @@ class _DocumentScanConsentSheetState extends State<DocumentScanConsentSheet> {
   }
 }
 
-Future<bool> ensureDocumentScanConsent(BuildContext context) async {
-  final hasConsent = await consentService.hasDocumentScanConsent();
+Future<bool> ensureConsent(BuildContext context, ConsentType type) async {
+  final hasConsent = await consentService.hasConsent(type);
 
   if (hasConsent) {
     return true;
@@ -154,7 +145,7 @@ Future<bool> ensureDocumentScanConsent(BuildContext context) async {
   final result = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
-    builder: (_) => const DocumentScanConsentSheet(),
+    builder: (_) => ConsentSheet(type: type),
   );
 
   return result == true;

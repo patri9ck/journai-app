@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/health_data_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 class MedicalCertificatePage extends StatelessWidget {
   const MedicalCertificatePage({super.key});
@@ -23,7 +24,7 @@ class MedicalCertificatePage extends StatelessWidget {
       emptyText: localizations.medicalCertificateEmpty,
       deleteConfirmText: (localizations) => localizations.medicalCertificateDeleteConfirm,
       icon: Icons.description_outlined,
-      ensureConsent: ensureHealthDataConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
       toScannedItems: withAllImagesFallback,
       summarize: (fields, localizations) => (
         fields['title'] as String? ?? '-',

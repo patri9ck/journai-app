@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../../model/contact/contact_type.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
@@ -40,8 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = false;
   bool _newsNotificationsEnabled = false;
   bool _metricUnits = true;
-  bool? _healthScanConsent;
-  bool? _documentScanConsent;
+  Map<ConsentType, bool> _consents = {};
   bool _loadingConsents = true;
   UserInfo? _userInfo;
   bool _loadingUserInfo = true;
@@ -72,8 +72,6 @@ class _SettingsPageState extends State<SettingsPage> {
   static const _cacheKeyUserPhone = 'cache_user_info_phone';
   static const _cacheKeyUserGoogleLinked = 'cache_user_info_googleLinked';
   static const _cacheKeyUserAppleLinked = 'cache_user_info_appleLinked';
-  static const _cacheKeyConsentHealth = 'cache_consent_health';
-  static const _cacheKeyConsentDocument = 'cache_consent_document';
 
   Future<void> _loadPreferences() async {
     final (
@@ -81,16 +79,14 @@ class _SettingsPageState extends State<SettingsPage> {
       newsNotifications,
       units,
       cachedUserInfo,
-      cachedHealthConsent,
-      cachedDocumentConsent,
+      cachedConsents,
       cachedLimits,
     ) = await (
       storage.read(key: 'settings_notifications_enabled'),
       pushNotificationService.isEnabled(),
       storage.read(key: 'settings_units_metric'),
       _readCachedUserInfo(),
-      storage.read(key: _cacheKeyConsentHealth),
-      storage.read(key: _cacheKeyConsentDocument),
+      Future.wait([for (final type in ConsentType.values) storage.read(key: type.cacheKey)]),
       limitsService.getCachedLimits(),
     ).wait;
 
@@ -123,9 +119,10 @@ class _SettingsPageState extends State<SettingsPage> {
         _loadingUserInfo = false;
       }
 
-      if (cachedHealthConsent != null && cachedDocumentConsent != null) {
-        _healthScanConsent = cachedHealthConsent == 'true';
-        _documentScanConsent = cachedDocumentConsent == 'true';
+      if (!cachedConsents.contains(null)) {
+        _consents = {
+          for (final (index, type) in ConsentType.values.indexed) type: cachedConsents[index] == 'true',
+        };
         _loadingConsents = false;
       }
     });
@@ -198,21 +195,19 @@ class _SettingsPageState extends State<SettingsPage> {
       return;
     }
 
-    final healthConsent = await consentService.hasHealthDataScanConsent();
-    final documentConsent = await consentService.hasDocumentScanConsent();
+    final consents = {for (final type in ConsentType.values) type: await consentService.hasConsent(type)};
 
     if (!mounted) {
       return;
     }
 
     await Future.wait([
-      storage.write(key: _cacheKeyConsentHealth, value: healthConsent.toString()),
-      storage.write(key: _cacheKeyConsentDocument, value: documentConsent.toString()),
+      for (final MapEntry(key: type, value: granted) in consents.entries)
+        storage.write(key: type.cacheKey, value: granted.toString()),
     ]);
 
     setState(() {
-      _healthScanConsent = healthConsent;
-      _documentScanConsent = documentConsent;
+      _consents = consents;
       _loadingConsents = false;
     });
   }
@@ -401,25 +396,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ]),
                   _SectionLabel(localizations.settingsSectionPrivacy),
                   _SettingsCard(children: [
-                    _ConsentTile(
-                      icon: Icons.health_and_safety_outlined,
-                      iconColor: Colors.green,
-                      label: localizations.settingsConsentHealthScan,
-                      granted: _healthScanConsent,
-                      loading: _loadingConsents,
-                      localizations: localizations,
-                      onRevoke: () => _revokeConsent(context, localizations, isHealthScan: true),
-                    ),
+                    _consentTile(context, localizations, ConsentType.healthDataScan),
                     const _CardDivider(),
-                    _ConsentTile(
-                      icon: Icons.badge_outlined,
-                      iconColor: Colors.blueGrey,
-                      label: localizations.settingsConsentDocumentScan,
-                      granted: _documentScanConsent,
-                      loading: _loadingConsents,
-                      localizations: localizations,
-                      onRevoke: () => _revokeConsent(context, localizations, isHealthScan: false),
-                    ),
+                    _consentTile(context, localizations, ConsentType.documentScan),
                   ]),
                 ],
               ]),
@@ -839,11 +818,21 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Future<void> _revokeConsent(
-    BuildContext context,
-    AppLocalizations localizations, {
-    required bool isHealthScan,
-  }) async {
+  Widget _consentTile(BuildContext context, AppLocalizations localizations, ConsentType type) {
+    final isHealthDataScan = type == ConsentType.healthDataScan;
+
+    return _ConsentTile(
+      icon: isHealthDataScan ? Icons.health_and_safety_outlined : Icons.badge_outlined,
+      iconColor: isHealthDataScan ? Colors.green : Colors.blueGrey,
+      label: isHealthDataScan ? localizations.settingsConsentHealthScan : localizations.settingsConsentDocumentScan,
+      granted: _consents[type],
+      loading: _loadingConsents,
+      localizations: localizations,
+      onRevoke: () => _revokeConsent(context, localizations, type),
+    );
+  }
+
+  Future<void> _revokeConsent(BuildContext context, AppLocalizations localizations, ConsentType type) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -869,34 +858,21 @@ class _SettingsPageState extends State<SettingsPage> {
       return;
     }
 
-    final result = isHealthScan
-        ? await consentService.revokeHealthDataScanConsent()
-        : await consentService.revokeDocumentScanConsent();
+    final result = await consentService.revokeConsent(type);
 
     if (!context.mounted) {
       return;
     }
 
-    if (result is Failure) {
+    if (result is Failure<void>) {
       result.show(localizations);
+
       return;
     }
 
-    setState(() {
-      if (isHealthScan) {
-        _healthScanConsent = false;
-      } else {
-        _documentScanConsent = false;
-      }
-    });
+    setState(() => _consents = {..._consents, type: false});
 
-    final newHealth = _healthScanConsent ?? false;
-    final newDocument = _documentScanConsent ?? false;
-
-    await Future.wait([
-      storage.write(key: _cacheKeyConsentHealth, value: newHealth.toString()),
-      storage.write(key: _cacheKeyConsentDocument, value: newDocument.toString()),
-    ]);
+    await storage.write(key: type.cacheKey, value: 'false');
   }
 }
 

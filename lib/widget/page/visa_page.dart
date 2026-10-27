@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/document_scan_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 class VisaPage extends StatelessWidget {
   const VisaPage({super.key});
@@ -23,7 +24,7 @@ class VisaPage extends StatelessWidget {
       emptyText: localizations.visaEmpty,
       deleteConfirmText: (localizations) => localizations.visaDeleteConfirm,
       icon: Icons.travel_explore_outlined,
-      ensureConsent: ensureDocumentScanConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
         fields['country'] as String? ?? '-',

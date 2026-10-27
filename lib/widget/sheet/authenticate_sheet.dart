@@ -47,10 +47,7 @@ class _AuthenticateSheetState extends State<AuthenticateSheet> {
               width: 40,
               height: 4,
               margin: const EdgeInsets.only(top: 12, bottom: 24),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.outline,
-                borderRadius: BorderRadius.circular(2),
-              ),
+              decoration: BoxDecoration(color: theme.colorScheme.outline, borderRadius: BorderRadius.circular(2)),
             ),
           ),
           Padding(

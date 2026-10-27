@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource, XFile;
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../../model/data.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
@@ -15,7 +16,7 @@ import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../shared/scanning_dialog.dart';
 import '../sheet/encryption_sheet.dart';
-import '../sheet/health_data_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/loading_button.dart';
 
@@ -197,7 +198,7 @@ class _VaccinePageState extends State<VaccinePage> {
       return;
     }
 
-    final hasConsent = await ensureHealthDataConsent(context);
+    final hasConsent = await ensureConsent(context, ConsentType.healthDataScan);
 
     if (!hasConsent || !mounted) {
       return;

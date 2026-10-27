@@ -6,9 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
+import '../../model/consent_type.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
-import '../sheet/document_scan_consent_sheet.dart';
+import '../sheet/consent_sheet.dart';
 
 enum IdentityDocumentType { passport, idCard, driversLicense }
 
@@ -47,7 +48,7 @@ class IdentityDocumentPage extends StatelessWidget {
         IdentityDocumentType.idCard => Icons.badge_outlined,
         IdentityDocumentType.driversLicense => Icons.drive_eta_outlined,
       },
-      ensureConsent: ensureDocumentScanConsent,
+      ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       pickImages: pickFrontAndBack,
       toScannedItems: mergeFrontAndBack,
       summarize: _summarize,
