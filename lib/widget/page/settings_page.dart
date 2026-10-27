@@ -964,18 +964,10 @@ class _TileRow extends StatelessWidget {
       child: InkWell(
         onTap: enabled ? onTap : null,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          padding: _tilePadding,
           child: Row(
             children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, size: 16, color: iconColor),
-              ),
+              _TileIcon(icon: icon, color: iconColor),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
@@ -1028,18 +1020,10 @@ class _SwitchTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 11, 14, 11),
+      padding: _tilePadding,
       child: Row(
         children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 16, color: iconColor),
-          ),
+          _TileIcon(icon: icon, color: iconColor),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1076,7 +1060,7 @@ class _UnitsTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 13, 14, 13),
+      padding: _tilePadding,
       child: Row(
         children: [
           Container(
@@ -1139,18 +1123,10 @@ class _ConsentTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      padding: _tilePadding,
       child: Row(
         children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 16, color: iconColor),
-          ),
+          _TileIcon(icon: icon, color: iconColor),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1222,18 +1198,10 @@ class _LoginMethodTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        padding: _tilePadding,
         child: Row(
           children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, size: 16, color: iconColor),
-            ),
+            _TileIcon(icon: icon, color: iconColor),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -1463,18 +1431,10 @@ class _SubscriptionCard extends StatelessWidget {
       child: InkWell(
         onTap: onManage,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          padding: _tilePadding,
           child: Row(
             children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.workspace_premium_outlined, size: 16, color: primary),
-              ),
+              _TileIcon(icon: Icons.workspace_premium_outlined, color: primary),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -1642,6 +1602,25 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
 
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(content: Text(localizations.changeSuccess, textAlign: TextAlign.center)),
+    );
+  }
+}
+
+const _tilePadding = EdgeInsets.symmetric(horizontal: 14, vertical: 12);
+
+class _TileIcon extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  const _TileIcon({required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(8)),
+      child: Icon(icon, size: 16, color: color),
     );
   }
 }
