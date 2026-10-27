@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Karta alarmowa</string>
+    <string name="emergency_card_widget_description">Twoja karta alarmowa na ekranie głównym</string>
+    <string name="emergency_card_widget_placeholder">Otwórz Journai, aby wyświetlić tu swoją kartę alarmową.</string>
+</resources>

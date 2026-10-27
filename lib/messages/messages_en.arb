@@ -1,0 +1,926 @@
+{
+  "or": "or",
+  "confirm": "Confirm",
+  "verify": "Verify",
+  "back": "Back",
+  "emailCodeSubtitle": "We'll send you a verification code.",
+  "checkInbox": "Check your inbox",
+  "enterCodeFromInbox": "Enter the code we sent to your inbox.",
+  "slogan1": "Vaccination records, documents, emergencies - one app.",
+  "slogan2": "End-to-end encrypted. Only you have access.",
+  "slogan3": "Never miss an expiring document again.",
+  "register": "Register",
+  "login": "Log in",
+  "withoutLogin": "Continue without logging in",
+  "appleAccountLogin": "Sign in with Apple",
+  "googleAccountLogin": "Sign in with Google",
+  "emailAddressLogin": "Sign in with your email address",
+  "phoneNumberLogin": "Sign in with your phone number",
+  "appleAccountRegister": "Sign up with Apple",
+  "googleAccountRegister": "Sign up with Google",
+  "emailAddressRegister": "Sign up with your email address",
+  "phoneNumberRegister": "Sign up with your phone number",
+  "invalidPhoneNumber": "The phone number is invalid.",
+  "invalidEmailAddress": "The email address is invalid.",
+  "emailAddressHint": "Your Email Address",
+  "loginCaption": "Do you need",
+  "help": "help",
+  "registerCaption": "By registering, you agree to our",
+  "legalNotice": "Legal Notice",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "and": "and",
+  "requestSms": "Request code via SMS",
+  "requestEmail": "Request code via email",
+  "failure": "An error has occured.",
+  "failureNoInternet": "No internet connection.",
+  "failureMissingGoogleEmailAddress": "The email address belonging to this Google account does not end with gmail.com.",
+  "failureInvalidRefreshToken": "The refresh token is invalid or has expired.",
+  "failureLogoutAllFailed": "Failed to logout from all devices.",
+  "failureUserAlreadyRegistered": "The user is already registered.",
+  "failureEmailAddressesAreEqual": "The new and old email addresses are equal.",
+  "failurePhoneNumbersAreEqual": "The new and old phone numbers are equal.",
+  "failureInvalidEmailAddress": "The email address is invalid.",
+  "failureInvalidPhoneNumber": "The phone number is invalid.",
+  "failureInvalidGoogleToken": "The Google token is invalid.",
+  "failureEmailAddressNotExistent": "No email address can be found.",
+  "failurePhoneNumberNotExistent": "No phone number can be found.",
+  "failureGoogleAccountNotExistent": "No Google account can be found.",
+  "failureUserNotExistent": "No user can be found.",
+  "failurePendingVerification": "There is already a pending verification.",
+  "failureInvalidVerificationCode": "The verification code is invalid.",
+  "failureMaximumVerificationAttemptsReached": "The maximum number of verification attempts has been reached.",
+  "failureLimitExceeded": "You have reached the limit for your plan.",
+  "failureSaveLimitExcess": "You can only save {remaining} {categoryName}, but selected {attempted}. Remove {excess}.",
+  "@failureSaveLimitExcess": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "categoryName": {
+        "type": "String"
+      },
+      "attempted": {
+        "type": "int"
+      },
+      "excess": {
+        "type": "int"
+      }
+    }
+  },
+  "failureSaveLimitFull": "You have reached your limit of {limit} {categoryName}.",
+  "@failureSaveLimitFull": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      },
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "failureScanLimitResetsAt": "Scan limit reached. You can scan again from {date}.",
+  "@failureScanLimitResetsAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "failureScanLimitAlltime": "You have permanently reached your scan limit.",
+  "failureScanLimitPartial": "You can only scan {remaining} more {remaining, plural, one{image} other{images}}, but selected {attempted}.",
+  "@failureScanLimitPartial": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "attempted": {
+        "type": "int"
+      }
+    }
+  },
+  "failureScanLimitPartialResetsAt": "You can only scan {remaining} more {remaining, plural, one{image} other{images}}, but selected {attempted}. Resets at {date}.",
+  "@failureScanLimitPartialResetsAt": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "attempted": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "failureConsentRequired": "Your consent is required before analysing health documents.",
+  "failureTermsNotAccepted": "You must accept the Terms of Service and Privacy Policy to register.",
+  "failureInternalError": "An internal error occurred.",
+  "failureEncryptionAlreadySet": "Encryption has already been set up. Please unlock your vault instead.",
+  "failureLastLoginMethod": "This is your only login method and cannot be removed.",
+  "consentHealthDataScanTitle": "Scan consent",
+  "consentHealthDataScanBody": "To scan a health document, Journai briefly decrypts it on the server and sends it to Google Gemini for text recognition. The result is then encrypted again and only you can access it.\n\nThis processing is done solely to provide the scan feature and is based on your explicit consent (Art. 9 para. 2 lit. a GDPR). You can withdraw this consent at any time in the app settings.",
+  "consentHealthDataScanCheckbox": "I agree that my health data is briefly decrypted server-side for the scan and then stored end-to-end encrypted.",
+  "consentHealthDataScanPrivacyHint": "More information in our",
+  "consentHealthDataScanPrivacyLink": "Privacy Policy",
+  "consentHealthDataScanConfirm": "Give consent and scan",
+  "consentHealthDataScanDecline": "Decline",
+  "vaccinesTitle": "Vaccinations",
+  "vaccinesEmpty": "No vaccination records yet.\nTap the button below to add one.",
+  "vaccineScan": "Scan",
+  "vaccineScanning": "Scanning...",
+  "vaccineScanResult": "Scan result",
+  "vaccineScanResultSubtitle": "Review the extracted data and save.",
+  "vaccineSave": "Save",
+  "vaccineDeleteConfirm": "Delete this vaccination record?",
+  "vaccineDeleteConfirmYes": "Delete",
+  "vaccineDate": "Date",
+  "vaccineNextDate": "Next dose",
+  "vaccineScanNextDateNote": "This is an estimated recommendation based on standard vaccination schedules. Please verify the date with your doctor.",
+  "vaccineManufacturer": "Manufacturer",
+  "vaccineBatchNumber": "Batch number",
+  "vaccinePickCamera": "Take photo",
+  "vaccinePickGallery": "Choose from gallery",
+  "vaccineAddManually": "Enter",
+  "vaccineManualTitle": "Add",
+  "vaccineEditTitle": "Edit vaccination record",
+  "vaccineAddAnother": "Add vaccination",
+  "vaccinePhotosTitle": "Photos",
+  "vaccineNameHint": "Vaccine name",
+  "vaccineNameRequired": "Name is required.",
+  "vaccineDiseaseHint": "Disease",
+  "vaccineDateHint": "Date",
+  "vaccineNextDateHint": "Next dose",
+  "vaccineManufacturerHint": "Manufacturer",
+  "vaccineBatchNumberHint": "Batch number",
+  "encryptionSetupTitle": "Set up encryption",
+  "encryptionSetupBody": "Choose a password to protect your data. Your documents are encrypted with this password before being stored. The password is never sent to our servers.",
+  "encryptionSetupHint": "Password",
+  "encryptionSetupConfirmHint": "Confirm password",
+  "encryptionSetupPasswordMismatch": "Passwords do not match.",
+  "encryptionSetupPasswordTooShort": "Password must be at least 8 characters long.",
+  "encryptionSetupWarning": "Warning: If you forget your password, you will no longer be able to access your data. There is no way to recover it.",
+  "encryptionSetupConfirm": "Set up",
+  "encryptionUnlockTitle": "Decrypt",
+  "encryptionUnlockBody": "Enter your encryption password to access your data.",
+  "encryptionUnlockHint": "Password",
+  "encryptionUnlockConfirm": "Unlock",
+  "encryptionUnlockWrong": "Incorrect password.",
+  "tabData": "Data",
+  "tabSettings": "Settings",
+  "dataSectionHealthHeader": "HEALTH",
+  "dataSectionDocumentsHeader": "DOCUMENTS",
+  "dataSectionVaccines": "Vaccinations",
+  "dataSectionVaccinesSubtitle": "Immunisations & booster dates",
+  "dataSectionMedicalCertificates": "Medical Certificates",
+  "dataSectionMedicalCertificatesSubtitle": "Attestations & sick notes",
+  "dataSectionAllergies": "Allergies",
+  "dataSectionAllergiesSubtitle": "Allergies & intolerances",
+  "dataSectionConditions": "Conditions",
+  "dataSectionConditionsSubtitle": "Diagnoses & chronic conditions",
+  "dataSectionHealthValues": "Health Values",
+  "dataSectionHealthValuesSubtitle": "Blood type, height, weight & more",
+  "dataSectionHealthInsuranceCards": "Health Insurance Cards",
+  "dataSectionHealthInsuranceCardsSubtitle": "Insurance cards & member info",
+  "dataSectionIdCards": "ID Cards",
+  "dataSectionIdCardsSubtitle": "Personal identification",
+  "dataSectionPassports": "Passports",
+  "dataSectionPassportsSubtitle": "Travel documents & validity",
+  "dataSectionDriversLicenses": "Driver's Licenses",
+  "dataSectionDriversLicensesSubtitle": "Vehicle categories & validity",
+  "dataSectionVisas": "Visas",
+  "dataSectionVisasSubtitle": "Entry permits & validity",
+  "dataSectionTickets": "Tickets & Other",
+  "dataSectionTicketsSubtitle": "Documents, tickets & more",
+  "recordCount": "{count, plural, =0{No records} =1{1 record} other{{count} records}}",
+  "vaccineScanEmpty": "No vaccination records could be extracted from this image.",
+  "failureScanUnavailable": "Scan is currently unavailable. Please try again later.",
+  "documentSave": "Save",
+  "documentDeleteConfirmYes": "Delete",
+  "documentAddManually": "Enter",
+  "documentScan": "Scan",
+  "documentScanning": "Scanning...",
+  "documentScanResult": "Scan result",
+  "documentScanResultSubtitle": "Review the extracted data and save.",
+  "documentPhotosTitle": "Photos",
+  "documentPickCamera": "Take photo",
+  "documentPickGallery": "Choose from gallery",
+  "documentNotesHint": "Notes",
+  "documentScanFront": "Front",
+  "documentScanBack": "Back",
+  "documentScanSetupTitle": "Scan document",
+  "documentScanSetupSubtitle": "Take a photo of the front and/or back side.",
+  "consentDocumentScanTitle": "Document scan consent",
+  "consentDocumentScanBody": "To scan a document, Journai briefly decrypts it on the server and sends it to Google Gemini for text recognition. The result is then encrypted again and only you can access it.\n\nThis processing is done solely to provide the scan feature and is based on your consent (Art. 6(1)(a) GDPR). You can withdraw this consent at any time in the app settings.",
+  "consentDocumentScanCheckbox": "I agree that my document is briefly decrypted server-side for the scan and then stored end-to-end encrypted.",
+  "consentDocumentScanPrivacyHint": "More information in our",
+  "consentDocumentScanPrivacyLink": "Privacy Policy",
+  "consentDocumentScanConfirm": "Give consent and scan",
+  "consentDocumentScanDecline": "Decline",
+  "healthInsuranceCardTitle": "Health Insurance Cards",
+  "healthInsuranceCardEmpty": "No health insurance cards yet.\nTap the button below to add one.",
+  "healthInsuranceCardManualTitle": "Add card",
+  "healthInsuranceCardEditTitle": "Edit card",
+  "healthInsuranceCardDeleteConfirm": "Delete this insurance card?",
+  "healthInsuranceNameHint": "Insurance name",
+  "healthInsuranceNameRequired": "Insurance name is required.",
+  "healthInsuranceMemberNumber": "Member no.",
+  "healthInsuranceMemberNumberHint": "Member number",
+  "healthInsuranceCardNumberHint": "Card number",
+  "healthInsuranceValidUntil": "Valid until",
+  "healthInsuranceValidUntilHint": "Valid until",
+  "healthInsuranceFront": "Front",
+  "healthInsuranceBack": "Back",
+  "passportTitle": "Passports",
+  "passportEmpty": "No passports yet.\nTap the button below to add one.",
+  "passportManualTitle": "Add passport",
+  "passportEditTitle": "Edit passport",
+  "passportDeleteConfirm": "Delete this passport?",
+  "passportNumber": "Passport no.",
+  "passportNumberHint": "Passport number",
+  "passportSurnameHint": "Surname",
+  "passportGivenNamesHint": "Given names",
+  "passportNationalityHint": "Nationality",
+  "passportDateOfBirthHint": "Date of birth",
+  "passportIssueDateHint": "Issue date",
+  "passportExpiryDate": "Expiry",
+  "passportExpiryDateHint": "Expiry date",
+  "idCardTitle": "ID Cards",
+  "idCardEmpty": "No ID cards yet.\nTap the button below to add one.",
+  "idCardManualTitle": "Add ID card",
+  "idCardEditTitle": "Edit ID card",
+  "idCardDeleteConfirm": "Delete this ID card?",
+  "idCardNumber": "ID no.",
+  "idCardNumberHint": "ID number",
+  "driversLicenseTitle": "Driver's Licenses",
+  "driversLicenseEmpty": "No driver's licenses yet.\nTap the button below to add one.",
+  "driversLicenseManualTitle": "Add license",
+  "driversLicenseEditTitle": "Edit license",
+  "driversLicenseDeleteConfirm": "Delete this driver's license?",
+  "driversLicenseNumber": "License no.",
+  "driversLicenseNumberHint": "License number",
+  "driversLicenseCategories": "Categories",
+  "driversLicenseCategoriesHint": "e.g. A, B, BE",
+  "driversLicenseExpiryDate": "Expiry",
+  "driversLicenseExpiryDateHint": "Expiry date",
+  "driversLicenseIssueDateHint": "Issue date",
+  "medicalCertificateTitle": "Medical Certificates",
+  "medicalCertificateEmpty": "No medical certificates yet.\nTap the button below to add one.",
+  "medicalCertificateManualTitle": "Add certificate",
+  "medicalCertificateEditTitle": "Edit certificate",
+  "medicalCertificateDeleteConfirm": "Delete this certificate?",
+  "medicalCertificateTitleHint": "Certificate title",
+  "medicalCertificateTitleRequired": "Title is required.",
+  "medicalCertificateDate": "Date",
+  "medicalCertificateDateHint": "Date",
+  "medicalCertificateIssuer": "Issued by",
+  "medicalCertificateIssuerHint": "Doctor / Institution",
+  "allergyTitle": "Allergies",
+  "allergyEmpty": "No allergies recorded yet.\nTap the button below to add one.",
+  "allergyManualTitle": "Add allergy",
+  "allergyEditTitle": "Edit allergy",
+  "allergyDeleteConfirm": "Delete this allergy?",
+  "allergyNameHint": "Allergy name",
+  "allergyNameRequired": "Allergy name is required.",
+  "allergySeverity": "Severity",
+  "allergySelectFromList": "Select from list",
+  "allergyCustom": "Custom",
+  "visaTitle": "Visas",
+  "visaEmpty": "No visas yet.\nTap the button below to add one.",
+  "visaManualTitle": "Add visa",
+  "visaEditTitle": "Edit visa",
+  "visaDeleteConfirm": "Delete this visa?",
+  "visaCountryHint": "Country",
+  "visaCountryRequired": "Country is required.",
+  "visaType": "Type",
+  "visaTypeHint": "e.g. Tourist, Business",
+  "visaValidFromHint": "Valid from",
+  "visaValidUntil": "Valid until",
+  "visaValidUntilHint": "Valid until",
+  "visaNumber": "Visa no.",
+  "visaNumberHint": "Visa number",
+  "ticketTitle": "Tickets & Other",
+  "ticketEmpty": "No documents yet.\nTap the button below to add one.",
+  "ticketManualTitle": "Add document",
+  "ticketEditTitle": "Edit document",
+  "ticketDeleteConfirm": "Delete this document?",
+  "ticketTitleHint": "Document title",
+  "ticketTitleRequired": "Title is required.",
+  "ticketDate": "Date",
+  "ticketDateHint": "Date",
+  "ticketAddField": "Add field",
+  "ticketFieldName": "Field name",
+  "ticketFieldValue": "Value",
+  "conditionTitle": "Conditions",
+  "conditionEmpty": "No conditions recorded yet.\nTap the button below to add one.",
+  "conditionManualTitle": "Add condition",
+  "conditionEditTitle": "Edit condition",
+  "conditionDeleteConfirm": "Delete this condition?",
+  "conditionNameHint": "Condition name",
+  "conditionNameRequired": "Condition name is required.",
+  "conditionDiagnosedDate": "Diagnosed",
+  "conditionDiagnosedDateHint": "Date of diagnosis",
+  "conditionSelectFromList": "Select from list",
+  "healthValueTitle": "Health Values",
+  "healthValueEmpty": "No health values yet.\nTap the button below to add one.",
+  "healthValueManualTitle": "Add value",
+  "healthValueEditTitle": "Edit value",
+  "healthValueDeleteConfirm": "Delete this value?",
+  "healthValueKeyHint": "Name",
+  "healthValueKeyRequired": "Name is required.",
+  "healthValueValue": "Value",
+  "healthValueValueHint": "Value",
+  "healthValueValueRequired": "Value is required.",
+  "healthValueSelectKey": "Select from list",
+  "featureNotAvailableInPlan": "Not available in your current plan.",
+  "loginRequiredForFeature": "Log in to use this feature.",
+  "tabHome": "Home",
+  "dashboardLocationUnknown": "Location unknown",
+  "dashboardLoadingLocation": "Locating ...",
+  "dashboardLocationPermissionDenied": "Location access denied",
+  "dashboardEmergencyCardTitle": "Emergency Card",
+  "dashboardEmergencyCardSubtitle": "Show to emergency responders",
+  "dashboardEmergencyAllergies": "Allergies",
+  "dashboardEmergencyConditions": "Conditions",
+  "dashboardEmergencyVitals": "Vital Signs",
+  "dashboardEmergencyHealthValues": "Health Values",
+  "dashboardEmergencyVaccines": "Vaccinations",
+  "dashboardEmergencyNoAllergies": "No known allergies.",
+  "dashboardEmergencyNoConditions": "No known conditions.",
+  "dashboardEmergencyNoVitals": "No vital signs recorded.",
+  "dashboardEmergencyNoVaccines": "No vaccinations recorded.",
+  "dashboardEmergencyShowHint": "Show this card to doctors or emergency responders",
+  "dashboardEmergencyNumbersTitle": "Emergency Numbers",
+  "dashboardEmergencyPolice": "Police",
+  "dashboardEmergencyFire": "Fire",
+  "dashboardEmergencyAmbulance": "Ambulance",
+  "dashboardTravelWarningTitle": "Country Info",
+  "dashboardTravelWarningContentLoading": "Loading advice ...",
+  "countryInfoSafety": "Safety",
+  "countryInfoTravel": "Travel Info",
+  "countryInfoEntry": "Entry & Customs",
+  "countryInfoHealth": "Health",
+  "countryInfoLegal": "Legal Notes",
+  "countryInfoLgbtq": "LGBTIQ",
+  "countryInfoUnavailableOffline": "Unavailable offline.",
+  "dashboardTravelWarningLoading": "Loading travel advice ...",
+  "dashboardTravelWarningOffline": "Unavailable offline",
+  "dashboardTravelWarningNone": "No travel warning",
+  "dashboardTravelWarningActive": "Active travel warning",
+  "dashboardTravelWarningPartial": "Partial security notice",
+  "dashboardTravelWarningOpenMore": "Details at auswaertiges-amt.de",
+  "dashboardTravelWarningNoData": "No data available for this country",
+  "fullMapPoiHospital": "Hospital",
+  "fullMapPoiPharmacy": "Pharmacy",
+  "fullMapPoiPolice": "Police",
+  "fullMapPoiFireStation": "Fire Station",
+  "fullMapPoiDoctor": "Doctor",
+  "fullMapLoadingPois": "Loading nearby places ...",
+  "fullMapPoisUnavailable": "Nearby places couldn't be loaded.",
+  "fullMapRetry": "Try again",
+  "dashboardEmergencyCardPreviewSummary": "{allergies} allergies - {conditions} conditions - {vaccines} vaccinations",
+  "@dashboardEmergencyCardPreviewSummary": {
+    "placeholders": {
+      "allergies": {
+        "type": "int"
+      },
+      "conditions": {
+        "type": "int"
+      },
+      "vaccines": {
+        "type": "int"
+      }
+    }
+  },
+  "emergencyCardOriginal": "Original",
+  "emergencyCardTranslating": "Translating ...",
+  "emergencyCardTranslationStale": "Translation outdated - data has changed.",
+  "emergencyCardTranslationUpdate": "Update",
+  "emergencyCardTranslationFailed": "Translation failed.",
+  "allergyPredefinedPeanuts": "Peanuts",
+  "allergyPredefinedTreeNuts": "Tree nuts",
+  "allergyPredefinedMilk": "Milk",
+  "allergyPredefinedEggs": "Eggs",
+  "allergyPredefinedWheat": "Wheat",
+  "allergyPredefinedSoy": "Soy",
+  "allergyPredefinedFish": "Fish",
+  "allergyPredefinedShellfish": "Shellfish",
+  "allergyPredefinedSesame": "Sesame",
+  "allergyPredefinedPenicillin": "Penicillin",
+  "allergyPredefinedAspirin": "Aspirin",
+  "allergyPredefinedIbuprofen": "Ibuprofen",
+  "allergyPredefinedNsaids": "NSAIDs",
+  "allergyPredefinedLatex": "Latex",
+  "allergyPredefinedPollen": "Pollen",
+  "allergyPredefinedDustMites": "Dust mites",
+  "allergyPredefinedCatHair": "Cat hair",
+  "allergyPredefinedDogHair": "Dog hair",
+  "allergyPredefinedBeeWasp": "Bee / Wasp sting",
+  "allergyPredefinedNickel": "Nickel",
+  "allergyPredefinedFragrance": "Fragrance",
+  "allergyPredefinedMold": "Mold",
+  "allergyPredefinedSulphites": "Sulphites",
+  "conditionPredefinedAsthma": "Asthma",
+  "conditionPredefinedDiabetesType1": "Diabetes Type 1",
+  "conditionPredefinedDiabetesType2": "Diabetes Type 2",
+  "conditionPredefinedHypertension": "Hypertension",
+  "conditionPredefinedCoronaryArteryDisease": "Coronary artery disease",
+  "conditionPredefinedHeartFailure": "Heart failure",
+  "conditionPredefinedAtrialFibrillation": "Atrial fibrillation",
+  "conditionPredefinedHypothyroidism": "Hypothyroidism",
+  "conditionPredefinedHyperthyroidism": "Hyperthyroidism",
+  "conditionPredefinedEpilepsy": "Epilepsy",
+  "conditionPredefinedDepression": "Depression",
+  "conditionPredefinedAnxietyDisorder": "Anxiety disorder",
+  "conditionPredefinedAdhd": "ADHD",
+  "conditionPredefinedCeliacDisease": "Celiac disease",
+  "conditionPredefinedCrohnsDisease": "Crohn's disease",
+  "conditionPredefinedUlcerativeColitis": "Ulcerative colitis",
+  "conditionPredefinedRheumatoidArthritis": "Rheumatoid arthritis",
+  "conditionPredefinedOsteoporosis": "Osteoporosis",
+  "conditionPredefinedPsoriasis": "Psoriasis",
+  "conditionPredefinedMultipleSclerosis": "Multiple sclerosis",
+  "conditionPredefinedParkinsonsDisease": "Parkinson's disease",
+  "conditionPredefinedCopd": "COPD",
+  "conditionPredefinedSleepApnea": "Sleep apnea",
+  "conditionPredefinedMigraine": "Migraine",
+  "conditionPredefinedKidneyDisease": "Kidney disease",
+  "conditionPredefinedLiverDisease": "Liver disease",
+  "conditionPredefinedCancer": "Cancer",
+  "healthKeyBloodType": "Blood type",
+  "healthKeyHeight": "Height",
+  "healthKeyWeight": "Weight",
+  "healthKeyBmi": "BMI",
+  "healthKeyEyeColor": "Eye color",
+  "healthKeyHairColor": "Hair color",
+  "healthKeyOrganDonor": "Organ donor",
+  "healthKeyRhFactor": "Rh factor",
+  "healthKeyAge": "Age",
+  "severityMild": "Mild",
+  "severityModerate": "Moderate",
+  "severitySevere": "Severe",
+  "severityLifeThreatening": "Life-threatening",
+  "eyeColorBrown": "Brown",
+  "eyeColorBlue": "Blue",
+  "eyeColorGreen": "Green",
+  "eyeColorHazel": "Hazel",
+  "eyeColorGray": "Gray",
+  "eyeColorTeal": "Teal",
+  "hairColorBlack": "Black",
+  "hairColorDarkBrown": "Dark brown",
+  "hairColorBrown": "Brown",
+  "hairColorLightBrown": "Light brown",
+  "hairColorBlonde": "Blonde",
+  "hairColorRed": "Red",
+  "hairColorGray": "Gray",
+  "hairColorWhite": "White",
+  "healthValueYes": "Yes",
+  "healthValueNo": "No",
+  "healthValueOther": "Other ...",
+  "settingsTitle": "Settings",
+  "settingsSectionUnits": "UNITS",
+  "settingsUnitsMetric": "Metric",
+  "settingsUnitsImperial": "Imperial",
+  "settingsSectionNotifications": "NOTIFICATIONS",
+  "settingsExpiryReminders": "Expiry reminders",
+  "settingsExpiryRemindersHint": "Get notified 30, 7, and 1 day before items expire",
+  "settingsNotificationPermissionDenied": "Notification permission was denied. Enable it in system settings.",
+  "settingsSectionAccount": "ACCOUNT",
+  "settingsSignIn": "Sign in",
+  "settingsSignOut": "Sign out",
+  "settingsSignOutConfirm": "Sign out?",
+  "settingsSignOutConfirmBody": "You will be logged out of this device.",
+  "settingsSignOutConfirmYes": "Sign out",
+  "settingsSectionEncryption": "ENCRYPTION",
+  "settingsChangePassword": "Change encryption password",
+  "settingsResetEncryption": "Reset encryption & delete data",
+  "settingsResetEncryptionBody": "This will permanently delete all your documents and health data. You will lose access to everything stored in your vault. This cannot be undone.",
+  "settingsResetEncryptionConfirm": "Delete all data",
+  "settingsSectionPrivacy": "PRIVACY",
+  "settingsConsentHealthScan": "Health document scan",
+  "settingsConsentDocumentScan": "Identity document scan",
+  "settingsConsentGranted": "Granted",
+  "settingsConsentNotGranted": "Not granted",
+  "settingsConsentRevoke": "Revoke",
+  "settingsConsentRevokeConfirmTitle": "Revoke consent?",
+  "settingsConsentRevokeConfirmBody": "Revoking this consent does not delete your existing data, but disables the scan feature.",
+  "settingsConsentRevokeConfirmYes": "Revoke",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "changeEmailTitle": "Change email address",
+  "removeEmail": "Remove",
+  "changePhoneTitle": "Change phone number",
+  "removePhone": "Remove",
+  "settingsLoginMethodEmail": "Email",
+  "settingsLoginMethodPhone": "Phone",
+  "settingsLoginMethodGoogle": "Google",
+  "settingsLoginMethodApple": "Apple",
+  "settingsLoginMethodLinked": "Linked",
+  "settingsLoginMethodNotLinked": "Not linked",
+  "settingsRemoveConfirm": "Remove?",
+  "settingsRemoveConfirmBody": "This login method will be removed from your account.",
+  "settingsRemoveConfirmYes": "Remove",
+  "changePasswordTitle": "Change encryption password",
+  "changePasswordNewHint": "New password",
+  "changePasswordConfirmHint": "Confirm new password",
+  "changeSuccess": "Saved successfully.",
+  "currencyConverterTitle": "Currency",
+  "currencyConverterLastUpdated": "Updated {time}",
+  "@currencyConverterLastUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "currencyConverterOffline": "Offline - last saved rates",
+  "currencyConverterSelectFrom": "From",
+  "currencyConverterSelectTo": "To",
+  "currencyConverterSelectCurrency": "Select currency",
+  "currencyConverterNoRates": "Exchange rates unavailable offline.",
+  "currencyConverterJustNow": "just now",
+  "currencyConverterMinutesAgo": "{m}m ago",
+  "@currencyConverterMinutesAgo": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "currencyConverterHoursAgo": "{h}h ago",
+  "@currencyConverterHoursAgo": {
+    "placeholders": {
+      "h": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "Share",
+  "pushNotificationPromptTitle": "Stay up to date",
+  "pushNotificationPromptBody": "Would you like to receive notifications about news and updates?",
+  "pushNotificationPromptAccept": "Yes, notify me",
+  "pushNotificationPromptDecline": "No thanks",
+  "settingsNewsNotifications": "News notifications",
+  "settingsNewsNotificationsHint": "Receive notifications about news and updates",
+  "settingsSignOutAll": "Sign out of all devices",
+  "settingsSignOutAllConfirm": "Sign out of all devices?",
+  "settingsSignOutAllConfirmBody": "You will be signed out of all your devices.",
+  "settingsSignOutAllConfirmYes": "Sign out",
+  "settingsDeleteAccount": "Delete account",
+  "settingsDeleteAccountConfirm": "Delete account?",
+  "settingsDeleteAccountConfirmBody": "Your account and all your data will be permanently deleted in 30 days. You can cancel the deletion at any time by signing in again.",
+  "settingsDeleteAccountConfirmYes": "Schedule deletion",
+  "settingsDeleteAccountScheduled": "Account deletion scheduled.",
+  "accountDeletionCancelled": "Account deletion cancelled.",
+  "subscriptionTitle": "Upgrade Journai",
+  "subscriptionTrialHint": "7-day free trial - cancel anytime",
+  "subscriptionBillingMonthly": "Monthly",
+  "subscriptionBillingYearly": "Yearly",
+  "subscriptionBillingSave": "~11% off",
+  "subscriptionCurrentPlan": "Current",
+  "subscriptionTryFree": "Try free",
+  "subscriptionPricingPage": "See all plan features",
+  "subscriptionRestore": "Restore purchases",
+  "subscriptionRestoreNone": "No active subscription found.",
+  "subscriptionManage": "Manage or cancel subscription",
+  "subscriptionPlanFree": "Free",
+  "subscriptionPlanPro": "Pro",
+  "subscriptionFeatureFree1": "Emergency card with health info",
+  "subscriptionFeatureFree2": "5 vaccines, 3 allergies & 3 conditions",
+  "subscriptionFeatureFree3": "1 insurance card & 1 ID doc per type",
+  "subscriptionFeaturePro1": "Up to 40 vaccines, allergies & conditions",
+  "subscriptionFeaturePro2": "Up to 4 passports, IDs, insurance cards & visas",
+  "subscriptionFeaturePro3": "20 AI scans / week + 7-day free trial",
+  "subscriptionFeaturePro4": "Entry check: passport, visa & vaccinations",
+  "settingsSectionSubscription": "SUBSCRIPTION",
+  "settingsSubscriptionManage": "Manage subscription",
+  "settingsSubscriptionUpgrade": "Upgrade plan",
+  "settingsSubscriptionTierFree": "Free",
+  "settingsSubscriptionTierPro": "Pro",
+  "trialPopupTitle": "Try Pro free for 7 days",
+  "trialPopupBody": "Unlock passports, visas, insurance cards, conditions, and full country info.",
+  "trialPopupCta": "Start free trial",
+  "trialPopupDismiss": "Maybe later",
+  "overLimitBanner": "You have more {feature} stored than your current plan allows. Delete some entries or upgrade to keep all your data.",
+  "@overLimitBanner": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "@subscriptionBillingSave": {},
+  "@subscriptionFeatureFree1": {},
+  "@subscriptionFeatureFree2": {},
+  "@subscriptionFeatureFree3": {},
+  "@subscriptionFeaturePro3": {},
+  "subscriptionProPriceMonthly": "€4.49 / mo",
+  "@subscriptionProPriceMonthly": {},
+  "subscriptionProPriceYearly": "€3.99 / mo",
+  "@subscriptionProPriceYearly": {},
+  "entryCheckTitle": "Entry check",
+  "entryCheckSubtitle": "Passport, visa and vaccinations for your destination",
+  "entryCheckLoading": "Checking entry requirements...",
+  "entryCheckSectionPassport": "Passport",
+  "entryCheckPassportMissing": "No passport saved. Add your passport to check its validity.",
+  "entryCheckPassportNoExpiry": "Your passport has no expiry date saved.",
+  "entryCheckPassportValid": "Valid until {expiry}. Required: until {required}.",
+  "@entryCheckPassportValid": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      },
+      "required": {
+        "type": "String"
+      }
+    }
+  },
+  "entryCheckPassportTooShort": "Expires on {expiry}, but must be valid until {required}.",
+  "@entryCheckPassportTooShort": {
+    "placeholders": {
+      "expiry": {
+        "type": "String"
+      },
+      "required": {
+        "type": "String"
+      }
+    }
+  },
+  "entryCheckSectionVisa": "Visa",
+  "entryCheckVisaFree": "Visa-free for up to {days} days. Your trip: {tripDays} days.",
+  "@entryCheckVisaFree": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "tripDays": {
+        "type": "int"
+      }
+    }
+  },
+  "entryCheckVisaTooLong": "Visa-free only for up to {days} days. Your trip has {tripDays} days, so you need a visa.",
+  "@entryCheckVisaTooLong": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "tripDays": {
+        "type": "int"
+      }
+    }
+  },
+  "entryCheckVisaUnknown": "No visa-free period is stated. Check the visa rules below.",
+  "entryCheckSectionForms": "Before you travel",
+  "entryCheckFormMandatory": "Required",
+  "entryCheckFormOptional": "Optional",
+  "entryCheckSectionFees": "Fees",
+  "entryCheckSectionVaccines": "Vaccinations",
+  "entryCheckVaccineRequired": "Required",
+  "entryCheckVaccineRequiredFromRiskArea": "Required when arriving from a risk area",
+  "entryCheckVaccineRecommended": "Recommended",
+  "entryCheckVaccineRecorded": "Saved",
+  "entryCheckVaccineBoosterDue": "Booster due",
+  "entryCheckVaccineMissing": "Not saved",
+  "entryCheckSource": "Source: German Foreign Office, as of {date}",
+  "@entryCheckSource": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "entryCheckDisclaimer": "Based on the travel advice of the German Foreign Office for German citizens. Rules can differ for other nationalities. Always check the official source before you travel.",
+  "entryCheckOpenSource": "Open Foreign Office page",
+  "entryCheckDiseaseYellowFever": "Yellow fever",
+  "entryCheckDiseaseHepatitisA": "Hepatitis A",
+  "entryCheckDiseaseHepatitisB": "Hepatitis B",
+  "entryCheckDiseaseTyphoid": "Typhoid",
+  "entryCheckDiseaseRabies": "Rabies",
+  "entryCheckDiseaseJapaneseEncephalitis": "Japanese encephalitis",
+  "entryCheckDiseasePolio": "Polio",
+  "entryCheckDiseaseMeasles": "Measles",
+  "entryCheckDiseaseCholera": "Cholera",
+  "entryCheckDiseaseMeningococcal": "Meningococcal disease",
+  "entryCheckDiseaseDengue": "Dengue",
+  "entryCheckDiseaseChikungunya": "Chikungunya",
+  "entryCheckDiseaseTickBorneEncephalitis": "Tick-borne encephalitis",
+  "entryCheckDiseaseInfluenza": "Influenza",
+  "failureCountryNotFound": "No information is available for this country.",
+  "failureEntryCheckUnavailable": "The entry check is currently unavailable. Please try again later.",
+  "failureInvalidAppleToken": "The Apple sign-in is invalid.",
+  "failureAppleAccountNotExistent": "No Apple account can be found.",
+  "failureConsentAlreadyGiven": "Consent has already been given.",
+  "failureInvalidRequest": "The request is invalid.",
+  "failureSubscriptionUnavailable": "The subscription status is currently unavailable. Please try again later.",
+  "failureVerificationUnavailable": "The verification code could not be sent. Please try again later.",
+  "failureDataNotExistent": "This entry no longer exists.",
+  "travelWarningAlertsTitle": "Travel warning alerts",
+  "travelWarningAlertsHint": "Get a notification when the official travel advice or warning level for one of these countries changes.",
+  "travelWarningAlertsAdd": "Add country",
+  "travelWarningAlertsRemove": "Remove",
+  "travelWarningAlertsEmpty": "You are not watching any countries yet.",
+  "travelWarningAlertsLocked": "Pro",
+  "subscriptionFeaturePro5": "Travel warning alerts",
+  "subscriptionPlanFamily": "Family",
+  "subscriptionFeatureFamily1": "Everything in Pro for up to 5 people",
+  "subscriptionFeatureFamily2": "A separate profile for every family member",
+  "subscriptionFeatureFamily3": "Pro limits for each profile",
+  "settingsSubscriptionTierFamily": "Family",
+  "profileMe": "Me",
+  "profileAdd": "Add profile",
+  "profileName": "Name",
+  "profileSave": "Save",
+  "profileRename": "Rename",
+  "profileDelete": "Delete profile",
+  "profileDeleteBody": "Delete {name} and all of their data? This cannot be undone.",
+  "@profileDeleteBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionFamilyPriceMonthly": "€7.99 / mo",
+  "subscriptionFamilyPriceYearly": "€6.99 / mo",
+  "entryCheckSectionPlan": "Vaccination plan",
+  "entryCheckPlanStartBy": "Get the first dose by {date} at the latest",
+  "entryCheckPlanTooLate": "Too late for the usual schedule. Ask a travel clinic about faster options.",
+  "entryCheckPlanAsap": "Get vaccinated as soon as possible",
+  "entryCheckPlanAskEarly": "Ask your doctor early, some vaccines need several doses",
+  "entryCheckPlanNote": "Guide values for the fastest common schedules (CDC, EMA). Whether and when you get vaccinated is up to you and your travel clinic.",
+  "entryCheckPlanRemind": "Remind me in time",
+  "entryCheckPlanReminderSet": "We will remind you on {date}.",
+  "entryCheckPlanReminderTitle": "Vaccinations for {country}",
+  "entryCheckPlanReminderBody": "Time to book an appointment for your travel vaccinations.",
+  "@entryCheckPlanStartBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@entryCheckPlanReminderSet": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@entryCheckPlanReminderTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "receiptTitle": "Medical receipts",
+  "receiptSubtitle": "Doctor and pharmacy costs abroad",
+  "receiptEmpty": "No receipts yet.\nTap the button below to add one.",
+  "receiptDeleteConfirm": "Delete this receipt?",
+  "receiptDate": "Date",
+  "receiptAmount": "Amount",
+  "receiptCategory": "Type",
+  "receiptCategoryDoctor": "Doctor",
+  "receiptCategoryPharmacy": "Pharmacy",
+  "receiptCategoryHospital": "Hospital",
+  "receiptCategoryOther": "Other",
+  "receiptTotal": "Total in euros",
+  "receiptTotalIncomplete": "Some amounts could not be converted.",
+  "receiptExport": "Export",
+  "receiptEditTitle": "Edit receipt",
+  "receiptManualTitle": "Add receipt",
+  "receiptMerchant": "Doctor, pharmacy or hospital",
+  "receiptRequired": "Required",
+  "receiptCurrency": "Currency",
+  "tripsTitle": "Trips",
+  "tripsSubtitle": "Plan your next trip",
+  "tripsHint": "Add your trips and Journai checks entry requirements and vaccinations, watches the travel warnings and reminds you before you leave. Hold a trip to delete it.",
+  "tripsEmpty": "No trips planned yet.",
+  "tripAdd": "Add trip",
+  "tripDeleteConfirm": "Delete this trip?",
+  "tripChangeDates": "Change dates",
+  "tripDelete": "Delete trip",
+  "tripPassportExpires": "Your passport expires before the end of the trip.",
+  "tripReminderTitle": "Trip to {country}",
+  "tripReminderBody": "Your trip starts in {days} days. Check the entry requirements and vaccinations now.",
+  "@tripReminderTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "@tripReminderBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionFeaturePro6": "Trip planning & medical receipts",
+  "tabMemories": "Memories",
+  "memoriesTitle": "Memories",
+  "memoriesEmpty": "No trips yet",
+  "memoriesHint": "Add a trip to travel more safely and keep it as a memory afterwards.",
+  "memoriesLifeBand": "Your life band",
+  "memoriesLifeBandHint": "Every stripe is a day abroad, coloured by its temperature.",
+  "memoriesStampBook": "Stamp book",
+  "stampBookEmpty": "Your stamps appear here once your trips have started.",
+  "tripDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@tripDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tripStripesTitle": "Travel stripes",
+  "tripStripesLegend": "Each stripe is a day: its colour shows the temperature, dots show rain.",
+  "tripDayTitle": "Day {number} · {date}",
+  "@tripDayTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tripDayWeather": "{temperature} °C",
+  "@tripDayWeather": {
+    "placeholders": {
+      "temperature": {
+        "type": "int"
+      }
+    }
+  },
+  "tripDayWeatherRainy": "{temperature} °C · rain",
+  "@tripDayWeatherRainy": {
+    "placeholders": {
+      "temperature": {
+        "type": "int"
+      }
+    }
+  },
+  "tripDayNoEntry": "No journal entry for this day yet.",
+  "tripDayWrite": "Write entry",
+  "tripDayEdit": "Edit entry",
+  "journalEntryTextHint": "What did you experience today?",
+  "journalEntryRecordSound": "Record sound",
+  "journalEntryRecording": "Stop recording",
+  "journalEntryPlaySound": "Sound of the day",
+  "journalEntryDeleteSound": "Delete sound",
+  "journalEntryMicrophoneDenied": "Journai needs microphone access to record sounds.",
+  "tripAlbumTitle": "Scrapbook",
+  "tripAlbumEmpty": "Tickets and receipts from this trip appear here automatically.",
+  "tripTimeCapsuleTitle": "Time capsule",
+  "tripTimeCapsuleWrite": "Write a postcard to yourself in one year",
+  "tripTimeCapsuleOpensOn": "Opens on {date}",
+  "@tripTimeCapsuleOpensOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "timeCapsuleHint": "Write a postcard to your future self. It stays sealed for one year and opens on the same day next year.",
+  "timeCapsuleTextHint": "Dear me, …",
+  "timeCapsuleSeal": "Seal postcard",
+  "timeCapsuleDaysLeft": "{count, plural, =1{1 day to go} other{{count} days to go}}",
+  "@timeCapsuleDaysLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeCapsuleFrom": "{country}, {date}",
+  "@timeCapsuleFrom": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "timeCapsuleNotificationTitle": "Post from {country}",
+  "@timeCapsuleNotificationTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "timeCapsuleNotificationBody": "Your postcard from one year ago can now be opened.",
+  "subscriptionFeatureFree4": "1 trip with stamp & travel stripes",
+  "subscriptionFeaturePro7": "Travel journal with sounds & time capsule"
+}

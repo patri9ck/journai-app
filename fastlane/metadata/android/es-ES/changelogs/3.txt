@@ -1,0 +1,1 @@
+Primera versión. Guarda vacunas, documentos de viaje y datos de salud cifrados en tu dispositivo. Tarjeta de emergencia y mapas sin conexión disponibles en cualquier parte del mundo.

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Notfallausweis</string>
+    <string name="emergency_card_widget_description">Dein Notfallausweis auf dem Startbildschirm</string>
+    <string name="emergency_card_widget_placeholder">Öffne Journai, um deinen Notfallausweis hier anzuzeigen.</string>
+</resources>

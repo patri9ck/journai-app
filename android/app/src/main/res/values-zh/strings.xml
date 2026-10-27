@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">紧急救援卡</string>
+    <string name="emergency_card_widget_description">主屏幕上的紧急卡片</string>
+    <string name="emergency_card_widget_placeholder">打开 Journai 即可在此显示你的紧急卡片。</string>
+</resources>

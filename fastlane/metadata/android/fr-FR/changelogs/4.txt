@@ -1,0 +1,1 @@
+Première version. Stockez vaccinations, documents de voyage et données de santé chiffrés sur votre appareil. Carte d'urgence et cartes hors ligne accessibles partout dans le monde.

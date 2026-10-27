@@ -1,0 +1,31 @@
+Journai is your travel health companion - everything you need to be prepared, safe, and informed on every trip.
+
+<b>All your documents, encrypted and offline</b>
+
+Vaccination records, insurance cards, passport copies, visa documents, allergies, and medical certificates - stored in one place, end-to-end encrypted directly on your device. Only you have access to your data. Even without an internet connection, everything is available when you need it most.
+
+<b>Emergency card for the unexpected</b>
+
+Your personal emergency card contains your blood type, allergies, medications, and emergency contacts - clearly formatted so that doctors and first responders anywhere in the world can help you quickly. The integrated map shows the nearest hospitals and pharmacies, even offline.
+
+<b>Country information before you arrive</b>
+
+Know what to expect before you land. Journai provides destination-specific information: local customs, tipping practices, LGBTQ+ rights, and official travel advisories. Well informed from the moment you pack.
+
+<b>Entry check (Pro)</b>
+
+Pick your destination and travel dates, and Journai checks whether your passport is valid long enough, how long you can stay without a visa, which online forms and fees are due before arrival and which required or recommended vaccinations are missing - based on official travel advice, with a link to the source.
+
+<b>Travel warning alerts (Pro)</b>
+
+Pick the countries you travel to and get a notification as soon as the official travel advice or warning level changes.
+
+<b>Never miss an expiry date</b>
+
+Vaccination boosters, passport renewals, visa deadlines - Journai tracks all your documents and notifies you well before anything expires. No more surprises at the check-in counter or the border crossing.
+
+<b>Privacy by design</b>
+
+End-to-end encryption means your documents are encrypted on your device before they ever leave it. The Journai team cannot read your data. Your health information stays yours - private, secure, and always accessible.
+
+Travel safe, wherever you go.

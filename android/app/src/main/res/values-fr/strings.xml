@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Carte d\'urgence</string>
+    <string name="emergency_card_widget_description">Votre carte d\'urgence sur l\'écran d\'accueil</string>
+    <string name="emergency_card_widget_placeholder">Ouvrez Journai pour afficher votre carte d\'urgence ici.</string>
+</resources>

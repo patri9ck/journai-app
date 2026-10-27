@@ -1,0 +1,24 @@
+default_platform(:android)
+
+platform :android do
+  lane :google_play_store do |options|
+    aab = options[:aab]
+
+    if aab
+      sh("flutter build appbundle --release --dart-define-from-file=config.json")
+    end
+
+    version_code = sh("grep '^version:' ../pubspec.yaml | sed 's/.*+//'").strip.to_i
+
+    upload_to_play_store(
+      json_key: options[:json_key],
+      aab: "build/app/outputs/bundle/release/app-release.aab",
+      track: options[:track],
+      release_status: options[:draft] ? "draft" : "completed",
+      skip_upload_aab: !aab,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+      version_code: version_code,
+    )
+  end
+end

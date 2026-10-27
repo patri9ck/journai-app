@@ -1,0 +1,1 @@
+Initial release. Store vaccinations, travel documents, and health data encrypted on your device. Access your emergency card and offline maps anywhere in the world.
