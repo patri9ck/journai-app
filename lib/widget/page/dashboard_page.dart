@@ -468,7 +468,7 @@ class _DashboardPageState extends State<DashboardPage>
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(child: _buildHeader(localizations, theme, context)),
-            SliverToBoxAdapter(child: _buildMap(theme)),
+            SliverToBoxAdapter(child: RepaintBoundary(child: _buildMap(theme))),
             SliverToBoxAdapter(child: _buildEmergencyCardPreview(localizations, theme, context)),
             SliverToBoxAdapter(child: _buildTripsCard(localizations, theme, context)),
             SliverToBoxAdapter(

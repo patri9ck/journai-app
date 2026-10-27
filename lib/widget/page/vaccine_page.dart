@@ -173,7 +173,7 @@ class _VaccinePageState extends State<VaccinePage> {
     final initialPhotos = <XFile>[];
 
     if (source == ImageSource.camera) {
-      final photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 85);
+      final photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 85, maxWidth: 1600);
 
       if (photo == null || !mounted) {
         return;
@@ -181,7 +181,7 @@ class _VaccinePageState extends State<VaccinePage> {
 
       initialPhotos.add(photo);
     } else {
-      initialPhotos.addAll(await picker.pickMultiImage(imageQuality: 85));
+      initialPhotos.addAll(await picker.pickMultiImage(imageQuality: 85, maxWidth: 1600));
     }
 
     if (initialPhotos.isEmpty || !mounted) {
@@ -999,7 +999,7 @@ class _PhotoPreviewSheetState extends State<_PhotoPreviewSheet> {
     final picker = ImagePicker();
 
     if (source == ImageSource.camera) {
-      final photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 85);
+      final photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 85, maxWidth: 1600);
 
       if (photo == null || !mounted) {
         return;
@@ -1007,7 +1007,7 @@ class _PhotoPreviewSheetState extends State<_PhotoPreviewSheet> {
 
       setState(() => _photos.add(photo));
     } else {
-      final photos = await picker.pickMultiImage(imageQuality: 85);
+      final photos = await picker.pickMultiImage(imageQuality: 85, maxWidth: 1600);
 
       if (!mounted) {
         return;
@@ -1092,6 +1092,7 @@ class _PhotoThumbnail extends StatelessWidget {
                 File(photo.path),
                 width: 96,
                 height: 96,
+                cacheWidth: (96 * MediaQuery.devicePixelRatioOf(context)).round(),
                 fit: BoxFit.cover,
               ),
             ),

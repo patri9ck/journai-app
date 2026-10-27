@@ -80,6 +80,36 @@ Uint8List? tryDecodeBase64(String? value) {
   }
 }
 
+final _decodedImages = <String, Uint8List>{};
+
+Uint8List? _decodeImage(String imageBase64) {
+  final cachedBytes = _decodedImages.remove(imageBase64);
+
+  if (cachedBytes != null) {
+    _decodedImages[imageBase64] = cachedBytes;
+
+    return cachedBytes;
+  }
+
+  final bytes = tryDecodeBase64(imageBase64);
+
+  if (bytes == null) {
+    return null;
+  }
+
+  if (_decodedImages.length >= 30) {
+    _decodedImages.remove(_decodedImages.keys.first);
+  }
+
+  _decodedImages[imageBase64] = bytes;
+
+  return bytes;
+}
+
+int _cacheSize(BuildContext context, double size) {
+  return (size * MediaQuery.devicePixelRatioOf(context)).round();
+}
+
 class DocumentPhotoSlot extends StatelessWidget {
   final String label;
   final String? imageBase64;
@@ -132,7 +162,7 @@ class _ImagePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bytes = tryDecodeBase64(imageBase64);
+    final bytes = _decodeImage(imageBase64);
 
     return Stack(
       children: [
@@ -278,7 +308,7 @@ class _ThumbnailChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bytes = tryDecodeBase64(imageBase64);
+    final bytes = _decodeImage(imageBase64);
 
     return SizedBox(
       width: 80,
@@ -288,7 +318,13 @@ class _ThumbnailChip extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: bytes != null
-                ? Image.memory(bytes, width: 80, height: 80, fit: BoxFit.cover)
+                ? Image.memory(
+                    bytes,
+                    width: 80,
+                    height: 80,
+                    cacheWidth: _cacheSize(context, 80),
+                    fit: BoxFit.cover,
+                  )
                 : Container(
                     width: 80,
                     height: 80,
@@ -372,7 +408,7 @@ class InfoRow extends StatelessWidget {
 }
 
 void _openFullscreen(BuildContext context, String imageBase64) {
-  final bytes = tryDecodeBase64(imageBase64);
+  final bytes = _decodeImage(imageBase64);
 
   if (bytes == null) {
     return;
@@ -492,7 +528,7 @@ class DocumentCard extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: images!.map((imageBase64) {
-                      final bytes = tryDecodeBase64(imageBase64);
+                      final bytes = _decodeImage(imageBase64);
 
                       return Padding(
                         padding: const EdgeInsets.only(right: 6),
@@ -505,6 +541,7 @@ class DocumentCard extends StatelessWidget {
                                     bytes,
                                     width: 80,
                                     height: 52,
+                                    cacheWidth: _cacheSize(context, 80),
                                     fit: BoxFit.cover,
                                   )
                                 : Container(

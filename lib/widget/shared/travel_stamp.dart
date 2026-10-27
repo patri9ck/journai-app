@@ -25,14 +25,16 @@ class TravelStamp extends StatelessWidget {
 
     return Semantics(
       label: '${trip.countryName}, $dateLabel, $daysLabel',
-      child: CustomPaint(
-        size: Size.square(size),
-        painter: _StampPainter(
-          seed: trip.countryCode.codeUnits.fold(0, (sum, unit) => sum * 31 + unit),
-          countryName: trip.countryName.toUpperCase(),
-          dateLabel: dateLabel.toUpperCase(),
-          daysLabel: daysLabel.toUpperCase(),
-          color: stampInkColor(temperature),
+      child: RepaintBoundary(
+        child: CustomPaint(
+          size: Size.square(size),
+          painter: _StampPainter(
+            seed: trip.countryCode.codeUnits.fold(0, (sum, unit) => sum * 31 + unit),
+            countryName: trip.countryName.toUpperCase(),
+            dateLabel: dateLabel.toUpperCase(),
+            daysLabel: daysLabel.toUpperCase(),
+            color: stampInkColor(temperature),
+          ),
         ),
       ),
     );

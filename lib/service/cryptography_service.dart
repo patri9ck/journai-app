@@ -50,21 +50,12 @@ class CryptographyService {
 
   Future<String> encryptForTransfer(Uint8List data, SecretKey key) async {
     final secretBox = await _aesGcm.encrypt(data, secretKey: key);
-    return base64Encode([
-      ...secretBox.nonce,
-      ...secretBox.cipherText,
-      ...secretBox.mac.bytes,
-    ]);
+    return base64Encode(secretBox.concatenation());
   }
 
   Future<Uint8List> decryptFromTransfer(
       String encryptedBase64, SecretKey key) async {
-    final bytes = base64Decode(encryptedBase64);
-    final nonce = bytes.sublist(0, 12);
-    final cipherText = bytes.sublist(12, bytes.length - 16);
-    final mac = bytes.sublist(bytes.length - 16);
-    final secretBox = SecretBox(cipherText, nonce: nonce, mac: Mac(mac));
-    return Uint8List.fromList(await _aesGcm.decrypt(secretBox, secretKey: key));
+    return Uint8List.fromList(await _decrypt(encryptedBase64, key));
   }
 
   Future<String> setupEncryption(String password) async {
@@ -103,29 +94,34 @@ class CryptographyService {
   }
 
   Future<String> encryptData(String jsonData) async {
-    final dataKeyBytes =
-        base64Decode((await storage.read(key: 'dataKey'))!);
-    final dataKey = SecretKey(dataKeyBytes);
+    final dataKey = (await readDataKey())!;
     final secretBox =
         await _aesGcm.encrypt(utf8.encode(jsonData), secretKey: dataKey);
-    return base64Encode([
-      ...secretBox.nonce,
-      ...secretBox.cipherText,
-      ...secretBox.mac.bytes,
-    ]);
+    return base64Encode(secretBox.concatenation());
   }
 
-  Future<String> decryptData(String encryptedBase64) async {
-    final dataKeyBytes =
-        base64Decode((await storage.read(key: 'dataKey'))!);
-    final dataKey = SecretKey(dataKeyBytes);
-    final bytes = base64Decode(encryptedBase64);
-    final nonce = bytes.sublist(0, 12);
-    final cipherText = bytes.sublist(12, bytes.length - 16);
-    final mac = bytes.sublist(bytes.length - 16);
-    final secretBox = SecretBox(cipherText, nonce: nonce, mac: Mac(mac));
-    return utf8
-        .decode(await _aesGcm.decrypt(secretBox, secretKey: dataKey));
+  Future<SecretKey?> readDataKey() async {
+    final dataKeyBase64 = await storage.read(key: 'dataKey');
+
+    if (dataKeyBase64 == null) {
+      return null;
+    }
+
+    return SecretKey(base64Decode(dataKeyBase64));
+  }
+
+  Future<String> decryptData(String encryptedBase64, SecretKey dataKey) async {
+    return utf8.decode(await _decrypt(encryptedBase64, dataKey));
+  }
+
+  Future<List<int>> _decrypt(String encryptedBase64, SecretKey key) {
+    final secretBox = SecretBox.fromConcatenation(
+      base64Decode(encryptedBase64),
+      nonceLength: 12,
+      macLength: 16,
+      copy: false,
+    );
+    return _aesGcm.decrypt(secretBox, secretKey: key);
   }
 
   Future<SecretKey> _deriveKeyFromPassword(

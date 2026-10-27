@@ -128,6 +128,11 @@ class DataService {
 
   Future<List<Data>> _decrypt(List<Map<String, dynamic>> rawItems, List<String>? features) async {
     final entries = <Data>[];
+    final dataKey = await _cryptographyService.readDataKey();
+
+    if (dataKey == null) {
+      return entries;
+    }
 
     for (final map in rawItems) {
       final serverFeature = (map['feature'] ?? map['category']) as String? ?? '';
@@ -137,7 +142,7 @@ class DataService {
       }
 
       try {
-        final decrypted = await _cryptographyService.decryptData(map['data'] as String);
+        final decrypted = await _cryptographyService.decryptData(map['data'] as String, dataKey);
         final dataJson = jsonDecode(decrypted) as Map<String, dynamic>;
 
         entries.add(

@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'storage.dart';
 
@@ -17,8 +18,9 @@ Future<List<Map<String, dynamic>>?> readListCache(String key) async {
   }
 
   try {
-    final list = jsonDecode(raw) as List;
-    return list.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+    return await Isolate.run(
+      () => (jsonDecode(raw) as List).map((item) => Map<String, dynamic>.from(item as Map)).toList(),
+    );
   } on FormatException {
     return null;
   } on TypeError {

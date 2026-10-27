@@ -19,7 +19,7 @@ void main() {
 
     expect(await cryptographyService.unlockEncryption(encryptedDataKey, 'wrong password'), isFalse);
     expect(await cryptographyService.unlockEncryption(encryptedDataKey, 'correct horse'), isTrue);
-    expect(await cryptographyService.decryptData(encrypted), '{"name":"Hepatitis A"}');
+    expect(await cryptographyService.decryptData(encrypted, (await cryptographyService.readDataKey())!), '{"name":"Hepatitis A"}');
   });
 
   test('changing the password keeps existing data readable', () async {
@@ -31,7 +31,7 @@ void main() {
 
     expect(await cryptographyService.unlockEncryption(newEncryptedDataKey!, 'old password'), isFalse);
     expect(await cryptographyService.unlockEncryption(newEncryptedDataKey, 'new password'), isTrue);
-    expect(await cryptographyService.decryptData(encrypted), 'passport');
+    expect(await cryptographyService.decryptData(encrypted, (await cryptographyService.readDataKey())!), 'passport');
   });
 
   test('every encryption uses a fresh nonce', () async {
