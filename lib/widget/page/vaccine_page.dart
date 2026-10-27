@@ -12,6 +12,7 @@ import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
 import '../shared/document_shared.dart';
+import '../shared/empty_state.dart';
 import '../shared/scanning_dialog.dart';
 import '../sheet/encryption_sheet.dart';
 import '../sheet/health_data_consent_sheet.dart';
@@ -210,7 +211,7 @@ class _VaccinePageState extends State<VaccinePage> {
       return;
     }
 
-    showScanningDialog(context, localizations.vaccineScanning);
+    showScanningDialog(context, localizations.documentScanning);
 
     final result = await dataService.scanImages(_feature, imageBytesList);
 
@@ -255,7 +256,6 @@ class _VaccinePageState extends State<VaccinePage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -270,38 +270,21 @@ class _VaccinePageState extends State<VaccinePage> {
                   ),
                   if (_vaccines.isEmpty)
                     SliverFillRemaining(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.vaccines_outlined,
-                              size: 56,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              localizations.vaccinesEmpty,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 24),
-                            OutlinedButton.icon(
-                              onPressed: _pickAndScan,
-                              icon: const Icon(Icons.document_scanner_outlined, size: 18),
-                              label: Text(localizations.vaccineScan),
-                            ),
-                            const SizedBox(height: 8),
-                            OutlinedButton.icon(
-                              onPressed: _addManually,
-                              icon: const Icon(Icons.edit_outlined, size: 18),
-                              label: Text(localizations.vaccineAddManually),
-                            ),
-                          ],
-                        ),
+                      child: EmptyState(
+                        icon: Icons.vaccines_outlined,
+                        text: localizations.vaccinesEmpty,
+                        actions: [
+                          OutlinedButton.icon(
+                            onPressed: _pickAndScan,
+                            icon: const Icon(Icons.document_scanner_outlined, size: 18),
+                            label: Text(localizations.documentScan),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: _addManually,
+                            icon: const Icon(Icons.edit_outlined, size: 18),
+                            label: Text(localizations.documentAddManually),
+                          ),
+                        ],
                       ),
                     )
                   else
@@ -336,7 +319,7 @@ class _VaccinePageState extends State<VaccinePage> {
                 FloatingActionButton.small(
                   heroTag: 'manual',
                   onPressed: _addManually,
-                  tooltip: localizations.vaccineAddManually,
+                  tooltip: localizations.documentAddManually,
                   child: const Icon(Icons.edit_outlined),
                 ),
                 const SizedBox(height: 8),
@@ -344,7 +327,7 @@ class _VaccinePageState extends State<VaccinePage> {
                   heroTag: 'analyse',
                   onPressed: _pickAndScan,
                   icon: const Icon(Icons.document_scanner_outlined),
-                  label: Text(localizations.vaccineScan),
+                  label: Text(localizations.documentScan),
                 ),
               ],
             ),
@@ -695,9 +678,9 @@ class _ScanResultSheetState extends State<_ScanResultSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(localizations.vaccineScanResult, style: theme.textTheme.headlineSmall),
+            Text(localizations.documentScanResult, style: theme.textTheme.headlineSmall),
             const SizedBox(height: 4),
-            Text(localizations.vaccineScanResultSubtitle, style: theme.textTheme.bodySmall),
+            Text(localizations.documentScanResultSubtitle, style: theme.textTheme.bodySmall),
             const SizedBox(height: 16),
             Flexible(
               child: SingleChildScrollView(
@@ -1094,7 +1077,7 @@ class _PhotoPreviewSheetState extends State<_PhotoPreviewSheet> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _photos.isEmpty ? null : () => Navigator.of(context).pop(_photos),
-              child: Text(localizations.vaccineScan),
+              child: Text(localizations.documentScan),
             ),
           ],
         ),

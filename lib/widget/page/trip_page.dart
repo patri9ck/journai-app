@@ -15,7 +15,9 @@ import '../../model/result.dart';
 import '../../model/time_capsule.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
+import '../../util/temperature_format.dart';
 import '../../util/trip_memories.dart';
+import '../../util/units_notifier.dart';
 import '../sheet/journal_entry_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/document_shared.dart';
@@ -102,6 +104,9 @@ class _TripPageState extends State<TripPage> {
 
   TimeCapsule? get _timeCapsule =>
       TimeCapsule.fromDataList(_data).where((timeCapsule) => timeCapsule.tripId == _trip.id).firstOrNull;
+
+  String _temperature(AppLocalizations localizations, DayWeather dayWeather) =>
+      formatTemperature(localizations, dayWeather.temperature, metricUnits: metricUnitsNotifier.value);
 
   JournalEntry? _entryOn(DateTime day) => _entries.where((entry) => entry.date == day).firstOrNull;
 
@@ -330,8 +335,8 @@ class _TripPageState extends State<TripPage> {
                   if (dayWeather != null)
                     Text(
                       dayWeather.isRainy
-                          ? localizations.tripDayWeatherRainy(dayWeather.temperature.round())
-                          : localizations.tripDayWeather(dayWeather.temperature.round()),
+                          ? localizations.tripDayWeatherRainy(_temperature(localizations, dayWeather))
+                          : _temperature(localizations, dayWeather),
                       style: theme.textTheme.bodySmall?.copyWith(color: mutedColor),
                     ),
                   const SizedBox(height: 12),

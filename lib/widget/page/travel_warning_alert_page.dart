@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../messages/app_localizations.dart';
 import '../../service/services.dart';
 import '../../util/country_data.dart';
+import '../shared/empty_state.dart';
 
 class TravelWarningAlertPage extends StatefulWidget {
   const TravelWarningAlertPage({super.key});
@@ -95,36 +96,35 @@ class _TravelWarningAlertPageState extends State<TravelWarningAlertPage> {
         icon: const Icon(Icons.add),
         label: Text(localizations.travelWarningAlertsAdd),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-        children: [
-          Text(
-            localizations.travelWarningAlertsHint,
-            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
-          ),
-          const SizedBox(height: 16),
-          if (_countries.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 32),
-              child: Text(
-                localizations.travelWarningAlertsEmpty,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
+      body: _countries.isEmpty
+          ? EmptyState(
+              icon: Icons.notifications_none_outlined,
+              title: localizations.travelWarningAlertsEmpty,
+              text: localizations.travelWarningAlertsHint,
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+              children: [
+                Text(
+                  localizations.travelWarningAlertsHint,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                for (final countryCode in _countries)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.notifications_active_outlined),
+                    title: Text(_countryName(countryCode)),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.close),
+                      tooltip: localizations.travelWarningAlertsRemove,
+                      onPressed: () => _unwatch(countryCode),
+                    ),
+                  ),
+              ],
             ),
-          for (final countryCode in _countries)
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.notifications_active_outlined),
-              title: Text(_countryName(countryCode)),
-              trailing: IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: localizations.travelWarningAlertsRemove,
-                onPressed: () => _unwatch(countryCode),
-              ),
-            ),
-        ],
-      ),
     );
   }
 }

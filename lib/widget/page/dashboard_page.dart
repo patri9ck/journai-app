@@ -26,9 +26,10 @@ import '../../service/travel_warning_service.dart';
 import '../../util/auth_scope.dart';
 import '../../util/cache.dart';
 import '../../util/country_data.dart';
-import '../../util/storage.dart';
 import '../../util/emergency_card_notifier.dart';
 import '../../util/profile_notifier.dart';
+import '../../util/storage.dart';
+import '../../util/temperature_format.dart';
 import '../../util/units_notifier.dart';
 import '../shared/emergency_card_view.dart';
 import '../shared/share_image.dart';
@@ -576,9 +577,7 @@ class _DashboardPageState extends State<DashboardPage>
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                _metricUnits
-                    ? '${_temperature!.round()}°C'
-                    : '${(_temperature! * 9 / 5 + 32).round()}°F',
+                formatTemperature(localizations, _temperature!, metricUnits: _metricUnits),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,
@@ -1203,23 +1202,23 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
             nonNullDiseases;
     var translatedDiseaseIndex = 0;
     final vaccineDiseases = rawDiseases
-        .map((d) => d != null ? translatedDiseases[translatedDiseaseIndex++] : null)
+        .map((disease) => disease != null ? translatedDiseases[translatedDiseaseIndex++] : null)
         .toList();
 
     final originalVitalSigns = EmergencyCardTranslation.vitalSignsFrom(widget.healthData, metricUnits: widget.metricUnits);
     final translatedVitalLabels = await translationService.translateList(
-          originalVitalSigns.map((s) => s.split(': ').first).toList(),
+          originalVitalSigns.map((vitalSign) => vitalSign.split(': ').first).toList(),
           from: 'de',
           to: langCode,
         ) ??
-        originalVitalSigns.map((s) => s.split(': ').first).toList();
-    final vitalValues = originalVitalSigns.map((s) {
-      final parts = s.split(': ');
+        originalVitalSigns.map((vitalSign) => vitalSign.split(': ').first).toList();
+    final vitalValues = originalVitalSigns.map((vitalSign) {
+      final parts = vitalSign.split(': ');
       return parts.length > 1 ? parts.sublist(1).join(': ') : '-';
     }).toList();
     final vitalSigns = List.generate(
       translatedVitalLabels.length,
-      (i) => '${translatedVitalLabels[i]}: ${vitalValues[i]}',
+      (index) => '${translatedVitalLabels[index]}: ${vitalValues[index]}',
     );
 
     return EmergencyCardTranslation(
@@ -1259,7 +1258,7 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
         ? _translation!.healthValues
         : EmergencyCardTranslation.healthValuesFrom(widget.healthData);
 
-    final originalVaccines = widget.healthData.where((d) => d.feature == 'VACCINE').toList();
+    final originalVaccines = widget.healthData.where((data) => data.feature == 'VACCINE').toList();
 
     return DraggableScrollableSheet(
       initialChildSize: 0.92,
@@ -1449,10 +1448,10 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
                           icon: Icons.vaccines_outlined,
                           items: List.generate(
                             _translation!.vaccineNames.length,
-                            (i) {
-                              final name = _translation!.vaccineNames[i];
-                              final disease = i < _translation!.vaccineDiseases.length
-                                  ? _translation!.vaccineDiseases[i]
+                            (index) {
+                              final name = _translation!.vaccineNames[index];
+                              final disease = index < _translation!.vaccineDiseases.length
+                                  ? _translation!.vaccineDiseases[index]
                                   : null;
                               return disease != null && disease.isNotEmpty
                                   ? '$name - $disease'
@@ -1547,7 +1546,7 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
     final healthValues = isTranslated
         ? _translation!.healthValues
         : EmergencyCardTranslation.healthValuesFrom(widget.healthData);
-    final vaccines = widget.healthData.where((d) => d.feature == 'VACCINE').toList();
+    final vaccines = widget.healthData.where((data) => data.feature == 'VACCINE').toList();
 
     try {
       await shareWidgetAsImage(

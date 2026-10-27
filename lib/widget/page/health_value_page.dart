@@ -10,6 +10,7 @@ import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/storage.dart';
 import '../shared/document_shared.dart';
+import '../shared/empty_state.dart';
 import '../sheet/encryption_sheet.dart';
 import '../shared/loading_button.dart';
 
@@ -165,7 +166,6 @@ class _HealthValuePageState extends State<HealthValuePage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -180,32 +180,16 @@ class _HealthValuePageState extends State<HealthValuePage> {
                   ),
                   if (_documents.isEmpty)
                     SliverFillRemaining(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.monitor_heart_outlined,
-                              size: 56,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              localizations.healthValueEmpty,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 24),
-                            OutlinedButton.icon(
-                              onPressed: _add,
-                              icon: const Icon(Icons.add, size: 18),
-                              label: Text(localizations.documentAddManually),
-                            ),
-                          ],
-                        ),
+                      child: EmptyState(
+                        icon: Icons.monitor_heart_outlined,
+                        text: localizations.healthValueEmpty,
+                        actions: [
+                          OutlinedButton.icon(
+                            onPressed: _add,
+                            icon: const Icon(Icons.add, size: 18),
+                            label: Text(localizations.documentAddManually),
+                          ),
+                        ],
                       ),
                     )
                   else

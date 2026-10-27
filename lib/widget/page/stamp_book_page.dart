@@ -7,6 +7,7 @@ import '../../messages/app_localizations.dart';
 import '../../model/day_weather.dart';
 import '../../model/trip.dart';
 import '../../util/trip_memories.dart';
+import '../shared/empty_state.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 
@@ -43,20 +44,12 @@ class StampBookPage extends StatelessWidget {
         ],
       ),
       body: stampedTrips.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Text(localizations.stampBookEmpty, textAlign: TextAlign.center),
-              ),
-            )
+          ? EmptyState(icon: Icons.auto_stories_outlined, text: localizations.stampBookEmpty)
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF3EEDF),
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                decoration: BoxDecoration(color: const Color(0xFFF3EEDF), borderRadius: BorderRadius.circular(8)),
                 child: _StampPage(trips: stampedTrips, weather: weather),
               ),
             ),

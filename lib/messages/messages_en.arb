@@ -127,10 +127,6 @@
   "consentHealthDataScanDecline": "Decline",
   "vaccinesTitle": "Vaccinations",
   "vaccinesEmpty": "No vaccination records yet.\nTap the button below to add one.",
-  "vaccineScan": "Scan",
-  "vaccineScanning": "Scanning...",
-  "vaccineScanResult": "Scan result",
-  "vaccineScanResultSubtitle": "Review the extracted data and save.",
   "vaccineSave": "Save",
   "vaccineDeleteConfirm": "Delete this vaccination record?",
   "vaccineDeleteConfirmYes": "Delete",
@@ -141,7 +137,6 @@
   "vaccineBatchNumber": "Batch number",
   "vaccinePickCamera": "Take photo",
   "vaccinePickGallery": "Choose from gallery",
-  "vaccineAddManually": "Enter",
   "vaccineManualTitle": "Add",
   "vaccineEditTitle": "Edit vaccination record",
   "vaccineAddAnother": "Add vaccination",
@@ -297,7 +292,6 @@
   "visaValidFromHint": "Valid from",
   "visaValidUntil": "Valid until",
   "visaValidUntilHint": "Valid until",
-  "visaNumber": "Visa no.",
   "visaNumberHint": "Visa number",
   "ticketTitle": "Tickets & Other",
   "ticketEmpty": "No documents yet.\nTap the button below to add one.",
@@ -723,6 +717,7 @@
   "entryCheckDiseaseTickBorneEncephalitis": "Tick-borne encephalitis",
   "entryCheckDiseaseInfluenza": "Influenza",
   "failureEntryCheckUnavailable": "The entry check is currently unavailable. Please try again later.",
+  "failureDataTooLarge": "This entry is too large to save.",
   "failureInvalidAppleToken": "The Apple sign-in is invalid.",
   "failureAppleAccountNotExistent": "No Apple account can be found.",
   "failureConsentAlreadyGiven": "Consent has already been given.",
@@ -810,8 +805,6 @@
   "receiptCurrency": "Currency",
   "tripsTitle": "Trips",
   "tripsSubtitle": "Plan your next trip",
-  "tripsHint": "Add your trips and Journai checks entry requirements and vaccinations, watches the travel warnings and reminds you before you leave. Hold a trip to delete it.",
-  "tripsEmpty": "No trips planned yet.",
   "tripAdd": "Add trip",
   "tripDeleteConfirm": "Delete this trip?",
   "tripChangeDates": "Change dates",
@@ -863,19 +856,27 @@
       }
     }
   },
-  "tripDayWeather": "{temperature} °C",
-  "@tripDayWeather": {
+  "temperatureCelsius": "{temperature} °C",
+  "temperatureFahrenheit": "{temperature} °F",
+  "@temperatureCelsius": {
     "placeholders": {
       "temperature": {
         "type": "int"
       }
     }
   },
-  "tripDayWeatherRainy": "{temperature} °C · rain",
-  "@tripDayWeatherRainy": {
+  "@temperatureFahrenheit": {
     "placeholders": {
       "temperature": {
         "type": "int"
+      }
+    }
+  },
+  "tripDayWeatherRainy": "{temperature} · rain",
+  "@tripDayWeatherRainy": {
+    "placeholders": {
+      "temperature": {
+        "type": "String"
       }
     }
   },

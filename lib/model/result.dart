@@ -172,6 +172,7 @@ final Map<String, String Function(AppLocalizations)> _localizations = {
   "last-login-method": (appLocalizations) => appLocalizations.failureLastLoginMethod,
   "country-not-found": (appLocalizations) => appLocalizations.countryNoInformation,
   "entry-check-unavailable": (appLocalizations) => appLocalizations.failureEntryCheckUnavailable,
+  "data-too-large": (appLocalizations) => appLocalizations.failureDataTooLarge,
   "invalid-apple-token": (appLocalizations) => appLocalizations.failureInvalidAppleToken,
   "apple-account-not-existent": (appLocalizations) => appLocalizations.failureAppleAccountNotExistent,
   "consent-already-given": (appLocalizations) => appLocalizations.failureConsentAlreadyGiven,

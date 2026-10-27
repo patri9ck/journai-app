@@ -50,8 +50,8 @@ class EmergencyCardTranslation {
 
   static String hashFrom(List<Data> healthData) {
     final sorted = List.of(healthData)
-      ..sort((a, b) => (a.id ?? 0).compareTo(b.id ?? 0));
-    final text = sorted.map((d) => '${d.feature}:${d.id}:${d.fields}').join('|');
+      ..sort((first, second) => (first.id ?? 0).compareTo(second.id ?? 0));
+    final text = sorted.map((data) => '${data.feature}:${data.id}:${data.fields}').join('|');
     var hash = 0;
 
     for (final rune in text.runes) {
@@ -62,15 +62,15 @@ class EmergencyCardTranslation {
   }
 
   static List<String> allergiesFrom(List<Data> healthData) => healthData
-      .where((d) => d.feature == 'ALLERGY')
-      .map((d) => d.fields['name'] as String? ?? '')
-      .where((n) => n.isNotEmpty)
+      .where((data) => data.feature == 'ALLERGY')
+      .map((data) => data.fields['name'] as String? ?? '')
+      .where((name) => name.isNotEmpty)
       .toList();
 
   static List<String> conditionsFrom(List<Data> healthData) => healthData
-      .where((d) => d.feature == 'CONDITION')
-      .map((d) => d.fields['name'] as String? ?? '')
-      .where((n) => n.isNotEmpty)
+      .where((data) => data.feature == 'CONDITION')
+      .map((data) => data.fields['name'] as String? ?? '')
+      .where((name) => name.isNotEmpty)
       .toList();
 
   static const _vitalFeatures = [
@@ -102,28 +102,28 @@ class EmergencyCardTranslation {
 
   static List<String> vitalSignsFrom(List<Data> healthData, {bool metricUnits = true}) {
     return _vitalFeatures
-        .map((feature) => healthData.where((d) => d.feature == feature).firstOrNull)
+        .map((feature) => healthData.where((data) => data.feature == feature).firstOrNull)
         .where((item) => item != null && (item.fields['value'] as String? ?? '').isNotEmpty)
         .map((item) => '${item!.fields['key'] ?? ''}: ${_formatVitalValue(item, metricUnits)}')
-        .where((s) => s.trim() != ':')
+        .where((line) => line.trim() != ':')
         .toList();
   }
 
   static List<String> healthValuesFrom(List<Data> healthData) => healthData
-      .where((d) => Limits.healthValueFeatures.contains(d.feature))
-      .where((d) => !_vitalFeatures.contains(d.feature))
-      .where((d) => (d.fields['value'] as String? ?? '').isNotEmpty)
-      .map((d) => '${d.fields['key'] ?? ''}: ${d.fields['value'] ?? ''}')
-      .where((s) => s.trim() != ':')
+      .where((data) => Limits.healthValueFeatures.contains(data.feature))
+      .where((data) => !_vitalFeatures.contains(data.feature))
+      .where((data) => (data.fields['value'] as String? ?? '').isNotEmpty)
+      .map((data) => '${data.fields['key'] ?? ''}: ${data.fields['value'] ?? ''}')
+      .where((line) => line.trim() != ':')
       .toList();
 
   static List<String> vaccineNamesFrom(List<Data> healthData) => healthData
-      .where((d) => d.feature == 'VACCINE')
-      .map((d) => d.fields['name'] as String? ?? '')
+      .where((data) => data.feature == 'VACCINE')
+      .map((data) => data.fields['name'] as String? ?? '')
       .toList();
 
   static List<String?> vaccineDiseaseFrom(List<Data> healthData) => healthData
-      .where((d) => d.feature == 'VACCINE')
-      .map((d) => d.fields['disease'] as String?)
+      .where((data) => data.feature == 'VACCINE')
+      .map((data) => data.fields['disease'] as String?)
       .toList();
 }

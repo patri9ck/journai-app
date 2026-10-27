@@ -12,6 +12,7 @@ import '../../model/result.dart';
 import '../../service/services.dart';
 import '../sheet/encryption_sheet.dart';
 import 'document_shared.dart';
+import 'empty_state.dart';
 import 'scanning_dialog.dart';
 import 'loading_button.dart';
 
@@ -282,7 +283,6 @@ class _DocumentListPageState extends State<DocumentListPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final canScan = widget.ensureConsent != null;
 
     return Scaffold(
@@ -299,36 +299,22 @@ class _DocumentListPageState extends State<DocumentListPage> {
                     ),
                   if (_documents.isEmpty)
                     SliverFillRemaining(
-                      child: Padding(
-                        padding: const EdgeInsets.all(32),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(widget.icon, size: 56, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
-                            const SizedBox(height: 16),
-                            Text(
-                              widget.emptyText,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 24),
-                            if (canScan) ...[
-                              OutlinedButton.icon(
-                                onPressed: _scan,
-                                icon: const Icon(Icons.document_scanner_outlined, size: 18),
-                                label: Text(localizations.documentScan),
-                              ),
-                              const SizedBox(height: 8),
-                            ],
+                      child: EmptyState(
+                        icon: widget.icon,
+                        text: widget.emptyText,
+                        actions: [
+                          if (canScan)
                             OutlinedButton.icon(
-                              onPressed: _addManually,
-                              icon: Icon(canScan ? Icons.edit_outlined : Icons.add, size: 18),
-                              label: Text(localizations.documentAddManually),
+                              onPressed: _scan,
+                              icon: const Icon(Icons.document_scanner_outlined, size: 18),
+                              label: Text(localizations.documentScan),
                             ),
-                          ],
-                        ),
+                          OutlinedButton.icon(
+                            onPressed: _addManually,
+                            icon: Icon(canScan ? Icons.edit_outlined : Icons.add, size: 18),
+                            label: Text(localizations.documentAddManually),
+                          ),
+                        ],
                       ),
                     )
                   else

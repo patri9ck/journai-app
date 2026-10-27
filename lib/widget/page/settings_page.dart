@@ -296,7 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     label: localizations.settingsExpiryReminders,
                     hint: localizations.settingsExpiryRemindersHint,
                     value: _notificationsEnabled,
-                    onChanged: (v) => _toggleNotifications(context, localizations, v),
+                    onChanged: (enabled) => _toggleNotifications(context, localizations, enabled),
                   ),
                   _SwitchTile(
                     icon: Icons.campaign_outlined,
@@ -304,7 +304,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     label: localizations.settingsNewsNotifications,
                     hint: localizations.settingsNewsNotificationsHint,
                     value: _newsNotificationsEnabled,
-                    onChanged: (v) => _toggleNewsNotifications(context, localizations, v),
+                    onChanged: (enabled) => _toggleNewsNotifications(context, localizations, enabled),
                   ),
                   if (isLoggedIn) ...[
                     const _CardDivider(),

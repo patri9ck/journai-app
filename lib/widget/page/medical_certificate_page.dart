@@ -89,7 +89,7 @@ class _CertFormSheetState extends State<_CertFormSheet> {
       return;
     }
 
-    final bytesList = await Future.wait(photos.map((p) => p.readAsBytes()));
+    final bytesList = await Future.wait(photos.map((photo) => photo.readAsBytes()));
 
     setState(() {
       _images.addAll(bytesList.map(base64Encode));

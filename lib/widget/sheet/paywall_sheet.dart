@@ -438,7 +438,7 @@ class _PlanCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     ..._features.map(
-                      (f) => Padding(
+                      (feature) => Padding(
                         padding: const EdgeInsets.only(top: 3),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,7 +451,7 @@ class _PlanCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                f,
+                                feature,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                                 ),

@@ -29,6 +29,6 @@ class UserInfo {
       phone != null,
       googleLinked,
       appleLinked,
-    ].where((v) => v).length;
+    ].where((isSet) => isSet).length;
   }
 }

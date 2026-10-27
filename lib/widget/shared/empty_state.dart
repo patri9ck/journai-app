@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 
 class EmptyState extends StatelessWidget {
   final IconData icon;
-  final String title;
+  final String? title;
   final String? text;
+  final List<Widget> actions;
 
-  const EmptyState({required this.icon, required this.title, this.text, super.key});
+  const EmptyState({required this.icon, this.title, this.text, this.actions = const [], super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +23,21 @@ class EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 56, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
-            const SizedBox(height: 16),
-            Text(title, textAlign: TextAlign.center, style: theme.textTheme.titleMedium),
+            if (title != null) ...[
+              const SizedBox(height: 16),
+              Text(title!, textAlign: TextAlign.center, style: theme.textTheme.titleMedium),
+            ],
             if (text != null) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: title == null ? 16 : 8),
               Text(
                 text!,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(color: mutedColor),
               ),
+            ],
+            if (actions.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              for (final (index, action) in actions.indexed) ...[if (index > 0) const SizedBox(height: 8), action],
             ],
           ],
         ),
