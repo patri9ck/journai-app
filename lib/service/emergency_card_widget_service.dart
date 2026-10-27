@@ -7,7 +7,7 @@ import 'package:home_widget/home_widget.dart';
 
 import '../messages/app_localizations.dart';
 import '../model/data.dart';
-import '../model/emergency/emergency_card_translation.dart';
+import '../model/emergency/emergency_card_content.dart';
 import '../util/dynamic_palette.dart';
 import '../widget/shared/emergency_card_view.dart';
 import '../widget/shared/scale_to_fit.dart';
@@ -29,11 +29,7 @@ class EmergencyCardWidgetService {
 
       final card = EmergencyCardView(
         localizations: _localizations(),
-        allergies: EmergencyCardTranslation.allergiesFrom(healthData),
-        conditions: EmergencyCardTranslation.conditionsFrom(healthData),
-        vitalSigns: EmergencyCardTranslation.vitalSignsFrom(healthData, metricUnits: metricUnits),
-        healthValues: EmergencyCardTranslation.healthValuesFrom(healthData),
-        vaccines: healthData.where((data) => data.feature == 'VACCINE').toList(),
+        content: EmergencyCardContent.fromHealthData(healthData, metricUnits: metricUnits),
       );
 
       final size = await _widgetSize();

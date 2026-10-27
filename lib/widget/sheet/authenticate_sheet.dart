@@ -14,6 +14,7 @@ import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/navigation.dart';
 import '../page/contact_page.dart';
+import '../shared/sheet_handle.dart';
 
 class AuthenticateSheet extends StatefulWidget {
   final AuthMode mode;
@@ -42,14 +43,8 @@ class _AuthenticateSheetState extends State<AuthenticateSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(top: 12, bottom: 24),
-              decoration: BoxDecoration(color: theme.colorScheme.outline, borderRadius: BorderRadius.circular(2)),
-            ),
-          ),
+          const SheetHandle(),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
             child: Column(

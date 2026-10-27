@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journai_app/messages/app_localizations.dart';
+import 'package:journai_app/model/emergency/emergency_card_content.dart';
 import 'package:journai_app/widget/shared/emergency_card_view.dart';
 import 'package:journai_app/widget/shared/scale_to_fit.dart';
 
@@ -21,11 +22,11 @@ void main() {
             child: ScaleToFit(
               child: EmergencyCardView(
                 localizations: localizations,
-                allergies: allergies,
-                conditions: const ['Asthma'],
-                vitalSigns: const ['Blood type A+'],
-                healthValues: const [],
-                vaccines: const [],
+                content: EmergencyCardContent(
+                  allergies: allergies,
+                  conditions: const ['Asthma'],
+                  vitalSigns: const ['Blood type A+'],
+                ),
               ),
             ),
           ),

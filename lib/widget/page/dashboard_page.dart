@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../messages/app_localizations.dart';
 import '../../model/country_content.dart';
 import '../../model/data.dart';
+import '../../model/emergency/emergency_card_content.dart';
 import '../../model/emergency/emergency_card_translation.dart';
 import '../../model/emergency/emergency_numbers.dart';
 import '../../model/limits.dart';
@@ -33,6 +34,7 @@ import '../../util/temperature_format.dart';
 import '../../util/units_notifier.dart';
 import '../shared/emergency_card_view.dart';
 import '../shared/share_image.dart';
+import '../shared/sheet_handle.dart';
 import '../shared/status_row.dart';
 import '../shared/tier_badge.dart';
 import '../sheet/encryption_sheet.dart';
@@ -700,20 +702,6 @@ class _DashboardPageState extends State<DashboardPage>
     );
   }
 
-  String _formatAge(DateTime fetchedAt, AppLocalizations localizations) {
-    final diff = DateTime.now().difference(fetchedAt);
-
-    if (diff.inMinutes < 1) {
-      return localizations.currencyConverterJustNow;
-    }
-
-    if (diff.inMinutes < 60) {
-      return localizations.currencyConverterMinutesAgo(diff.inMinutes);
-    }
-
-    return localizations.currencyConverterHoursAgo(diff.inHours);
-  }
-
   void _openCurrencyConverter(
     BuildContext context,
     AppLocalizations localizations,
@@ -1242,23 +1230,7 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
         ? lookupAppLocalizations(Locale(_selectedLanguage!))
         : null;
 
-    final allergies = isTranslated
-        ? _translation!.allergies
-        : EmergencyCardTranslation.allergiesFrom(widget.healthData);
-
-    final conditions = isTranslated
-        ? _translation!.conditions
-        : EmergencyCardTranslation.conditionsFrom(widget.healthData);
-
-    final vitalSigns = isTranslated
-        ? _translation!.vitalSigns
-        : EmergencyCardTranslation.vitalSignsFrom(widget.healthData, metricUnits: widget.metricUnits);
-
-    final healthValueStrings = isTranslated
-        ? _translation!.healthValues
-        : EmergencyCardTranslation.healthValuesFrom(widget.healthData);
-
-    final originalVaccines = widget.healthData.where((data) => data.feature == 'VACCINE').toList();
+    final content = _content;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.92,
@@ -1273,17 +1245,7 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
           ),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 4),
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
+              SheetHandle(color: Colors.white.withValues(alpha: 0.3)),
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -1415,67 +1377,39 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
                       _EmergencySection(
                         title: translatedLocalizations?.dashboardEmergencyAllergies ?? appLocalizations.dashboardEmergencyAllergies,
                         icon: Icons.warning_amber_outlined,
-                        items: allergies,
+                        items: content.allergies,
                         emptyText: translatedLocalizations?.dashboardEmergencyNoAllergies ?? appLocalizations.dashboardEmergencyNoAllergies,
                       ),
                       const SizedBox(height: 20),
                       _EmergencySection(
                         title: translatedLocalizations?.dashboardEmergencyConditions ?? appLocalizations.dashboardEmergencyConditions,
                         icon: Icons.medical_information_outlined,
-                        items: conditions,
+                        items: content.conditions,
                         emptyText: translatedLocalizations?.dashboardEmergencyNoConditions ?? appLocalizations.dashboardEmergencyNoConditions,
                       ),
                       const SizedBox(height: 20),
                       _EmergencySection(
                         title: translatedLocalizations?.dashboardEmergencyVitals ?? appLocalizations.dashboardEmergencyVitals,
                         icon: Icons.favorite_outline,
-                        items: vitalSigns,
+                        items: content.vitalSigns,
                         emptyText: translatedLocalizations?.dashboardEmergencyNoVitals ?? appLocalizations.dashboardEmergencyNoVitals,
                       ),
-                      if (healthValueStrings.isNotEmpty) ...[
+                      if (content.healthValues.isNotEmpty) ...[
                         const SizedBox(height: 20),
                         _EmergencySection(
                           title: translatedLocalizations?.dashboardEmergencyHealthValues ?? appLocalizations.dashboardEmergencyHealthValues,
                           icon: Icons.monitor_heart_outlined,
-                          items: healthValueStrings,
+                          items: content.healthValues,
                           emptyText: '',
                         ),
                       ],
                       const SizedBox(height: 20),
-                      if (isTranslated)
-                        _EmergencySection(
-                          title: translatedLocalizations?.dashboardEmergencyVaccines ?? appLocalizations.dashboardEmergencyVaccines,
-                          icon: Icons.vaccines_outlined,
-                          items: List.generate(
-                            _translation!.vaccineNames.length,
-                            (index) {
-                              final name = _translation!.vaccineNames[index];
-                              final disease = index < _translation!.vaccineDiseases.length
-                                  ? _translation!.vaccineDiseases[index]
-                                  : null;
-                              return disease != null && disease.isNotEmpty
-                                  ? '$name - $disease'
-                                  : name;
-                            },
-                          ),
-                          emptyText: translatedLocalizations?.dashboardEmergencyNoVaccines ?? appLocalizations.dashboardEmergencyNoVaccines,
-                        )
-                      else
-                        _EmergencySection(
-                          title: appLocalizations.dashboardEmergencyVaccines,
-                          icon: Icons.vaccines_outlined,
-                          items: originalVaccines.map((vaccine) {
-                            final name = vaccine.fields['name'] as String? ?? '-';
-                            final disease = vaccine.fields['disease'] as String?;
-                            final date = vaccine.fields['date'] as String?;
-                            final parts = [
-                              if (disease != null && disease.isNotEmpty) disease,
-                              if (date != null && date.isNotEmpty) date,
-                            ];
-                            return parts.isEmpty ? name : '$name - ${parts.join(' - ')}';
-                          }).toList(),
-                          emptyText: appLocalizations.dashboardEmergencyNoVaccines,
-                        ),
+                      _EmergencySection(
+                        title: translatedLocalizations?.dashboardEmergencyVaccines ?? appLocalizations.dashboardEmergencyVaccines,
+                        icon: Icons.vaccines_outlined,
+                        items: content.vaccines,
+                        emptyText: translatedLocalizations?.dashboardEmergencyNoVaccines ?? appLocalizations.dashboardEmergencyNoVaccines,
+                      ),
                     ],
                     const SizedBox(height: 28),
                     Divider(color: Colors.white.withValues(alpha: 0.2), height: 1),
@@ -1529,6 +1463,16 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
     );
   }
 
+  EmergencyCardContent get _content {
+    final translation = _translation;
+
+    if (_selectedLanguage != null && translation != null) {
+      return EmergencyCardContent.fromTranslation(translation, widget.healthData);
+    }
+
+    return EmergencyCardContent.fromHealthData(widget.healthData, metricUnits: widget.metricUnits);
+  }
+
   Future<void> _shareCard(AppLocalizations localizations) async {
     setState(() => _exporting = true);
 
@@ -1537,30 +1481,12 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
         ? lookupAppLocalizations(Locale(_selectedLanguage!))
         : null;
 
-    final allergies = isTranslated
-        ? _translation!.allergies
-        : EmergencyCardTranslation.allergiesFrom(widget.healthData);
-    final conditions = isTranslated
-        ? _translation!.conditions
-        : EmergencyCardTranslation.conditionsFrom(widget.healthData);
-    final healthValues = isTranslated
-        ? _translation!.healthValues
-        : EmergencyCardTranslation.healthValuesFrom(widget.healthData);
-    final vaccines = widget.healthData.where((data) => data.feature == 'VACCINE').toList();
-
     try {
       await shareWidgetAsImage(
         context,
         fileName: 'emergency_card',
         subject: localizations.dashboardEmergencyCardTitle,
-        child: EmergencyCardView(
-          localizations: translatedLocalizations ?? localizations,
-          allergies: allergies,
-          conditions: conditions,
-          vitalSigns: EmergencyCardTranslation.vitalSignsFrom(widget.healthData, metricUnits: widget.metricUnits),
-          healthValues: healthValues,
-          vaccines: vaccines,
-        ),
+        child: EmergencyCardView(localizations: translatedLocalizations ?? localizations, content: _content),
       );
     } finally {
       if (mounted) {
@@ -1990,18 +1916,7 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
       builder: (context, scrollController) {
         return Column(
           children: [
-            Padding(
-              key: const ValueKey('travel_warning_drag_handle'),
-              padding: const EdgeInsets.only(top: 12, bottom: 8),
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
+            const SheetHandle(key: ValueKey('travel_warning_drag_handle')),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
               child: Row(
@@ -2369,17 +2284,7 @@ class _CurrencyConverterSheetState extends State<_CurrencyConverterSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
+          const SheetHandle(),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
             child: Row(
@@ -2495,20 +2400,6 @@ class _CurrencyConverterSheetState extends State<_CurrencyConverterSheet> {
     );
   }
 
-  String _formatAge(DateTime fetchedAt, AppLocalizations localizations) {
-    final diff = DateTime.now().difference(fetchedAt);
-
-    if (diff.inMinutes < 1) {
-      return localizations.currencyConverterJustNow;
-    }
-
-    if (diff.inMinutes < 60) {
-      return localizations.currencyConverterMinutesAgo(diff.inMinutes);
-    }
-
-    return localizations.currencyConverterHoursAgo(diff.inHours);
-  }
-
   Future<void> _pickCurrency(
     BuildContext context,
     AppLocalizations localizations, {
@@ -2562,17 +2453,7 @@ class _CurrencyPickerSheet extends StatelessWidget {
       builder: (context, controller) {
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 8),
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
+            const SheetHandle(),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
               child: Text(
@@ -2663,4 +2544,18 @@ class _CurrencyField extends StatelessWidget {
       ),
     );
   }
+}
+
+String _formatAge(DateTime fetchedAt, AppLocalizations localizations) {
+  final age = DateTime.now().difference(fetchedAt);
+
+  if (age.inMinutes < 1) {
+    return localizations.currencyConverterJustNow;
+  }
+
+  if (age.inMinutes < 60) {
+    return localizations.currencyConverterMinutesAgo(age.inMinutes);
+  }
+
+  return localizations.currencyConverterHoursAgo(age.inHours);
 }

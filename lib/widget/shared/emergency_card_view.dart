@@ -4,26 +4,14 @@
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
-import '../../model/data.dart';
+import '../../model/emergency/emergency_card_content.dart';
 import '../../util/dynamic_palette.dart';
 
 class EmergencyCardView extends StatelessWidget {
   final AppLocalizations localizations;
-  final List<String> allergies;
-  final List<String> conditions;
-  final List<String> vitalSigns;
-  final List<String> healthValues;
-  final List<Data> vaccines;
+  final EmergencyCardContent content;
 
-  const EmergencyCardView({
-    required this.localizations,
-    required this.allergies,
-    required this.conditions,
-    required this.vitalSigns,
-    required this.healthValues,
-    required this.vaccines,
-    super.key,
-  });
+  const EmergencyCardView({required this.localizations, required this.content, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,33 +42,29 @@ class EmergencyCardView extends StatelessWidget {
           const SizedBox(height: 20),
           _CardSection(
             title: localizations.dashboardEmergencyAllergies,
-            items: allergies,
+            items: content.allergies,
             emptyText: localizations.dashboardEmergencyNoAllergies,
           ),
           const SizedBox(height: 16),
           _CardSection(
             title: localizations.dashboardEmergencyConditions,
-            items: conditions,
+            items: content.conditions,
             emptyText: localizations.dashboardEmergencyNoConditions,
           ),
           const SizedBox(height: 16),
           _CardSection(
             title: localizations.dashboardEmergencyVitals,
-            items: vitalSigns,
+            items: content.vitalSigns,
             emptyText: localizations.dashboardEmergencyNoVitals,
           ),
-          if (healthValues.isNotEmpty) ...[
+          if (content.healthValues.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _CardSection(title: localizations.dashboardEmergencyHealthValues, items: healthValues, emptyText: ''),
+            _CardSection(title: localizations.dashboardEmergencyHealthValues, items: content.healthValues, emptyText: ''),
           ],
           const SizedBox(height: 16),
           _CardSection(
             title: localizations.dashboardEmergencyVaccines,
-            items: vaccines.map((vaccine) {
-              final name = vaccine.fields['name'] as String? ?? '-';
-              final disease = vaccine.fields['disease'] as String?;
-              return disease != null && disease.isNotEmpty ? '$name - $disease' : name;
-            }).toList(),
+            items: content.vaccines,
             emptyText: localizations.dashboardEmergencyNoVaccines,
           ),
           const SizedBox(height: 20),
