@@ -76,14 +76,12 @@ class EmergencyCardView extends StatelessWidget {
           const SizedBox(height: 16),
           _CardSection(
             title: localizations.dashboardEmergencyVaccines,
-            items: vaccines.isEmpty
-                ? [localizations.dashboardEmergencyNoVaccines]
-                : vaccines.map((v) {
-                    final name = v.fields['name'] as String? ?? '-';
-                    final disease = v.fields['disease'] as String?;
-                    return disease != null && disease.isNotEmpty ? '$name - $disease' : name;
-                  }).toList(),
-            emptyText: '',
+            items: vaccines.map((v) {
+              final name = v.fields['name'] as String? ?? '-';
+              final disease = v.fields['disease'] as String?;
+              return disease != null && disease.isNotEmpty ? '$name - $disease' : name;
+            }).toList(),
+            emptyText: localizations.dashboardEmergencyNoVaccines,
           ),
           const SizedBox(height: 20),
           Text(
