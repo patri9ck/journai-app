@@ -10,6 +10,7 @@ class Trip {
   final int? id;
   final String countryCode;
   final String countryName;
+  final String city;
   final DateTime start;
   final DateTime end;
   final StampStyle stampStyle;
@@ -19,6 +20,7 @@ class Trip {
     this.id,
     required this.countryCode,
     required this.countryName,
+    this.city = '',
     required this.start,
     required this.end,
     this.stampStyle = const StampStyle(),
@@ -38,6 +40,7 @@ class Trip {
       id: data.id,
       countryCode: countryCode,
       countryName: data.fields['countryName'] as String? ?? countryCode,
+      city: data.fields['city'] as String? ?? '',
       start: start,
       end: end,
       stampStyle: StampStyle.fromFields(data.fields),
@@ -45,10 +48,11 @@ class Trip {
     );
   }
 
-  Trip copyWith({DateTime? start, DateTime? end, StampStyle? stampStyle, PosterStyle? albumStyle}) => Trip(
+  Trip copyWith({String? city, DateTime? start, DateTime? end, StampStyle? stampStyle, PosterStyle? albumStyle}) => Trip(
     id: id,
     countryCode: countryCode,
     countryName: countryName,
+    city: city ?? this.city,
     start: start ?? this.start,
     end: end ?? this.end,
     stampStyle: stampStyle ?? this.stampStyle,
@@ -70,6 +74,7 @@ class Trip {
   Map<String, dynamic> toFields() => {
     'countryCode': countryCode,
     'countryName': countryName,
+    'city': city,
     'start': start.toIso8601String().substring(0, 10),
     'end': end.toIso8601String().substring(0, 10),
     ...stampStyle.toFields(),

@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
+import 'package:flutter/painting.dart';
+
 import '../model/data.dart';
 import '../model/day_weather.dart';
 import '../model/result.dart';
 import '../model/trip.dart';
 import '../service/services.dart';
-import 'cache.dart';
+import '../widget/shared/document_shared.dart';
 import '../widget/shared/trip_stripes.dart';
+import 'cache.dart';
 import 'document_date.dart';
 import 'temperature_color.dart';
 
@@ -82,4 +85,28 @@ Future<Result<void>> deleteTripWithMemories(Trip trip, List<Data> data) async {
   }
 
   return dataService.deleteData(trip.id!);
+}
+
+final _albumImages = <String, ImageProvider>{};
+
+ImageProvider? albumImage(Data item) {
+  final imageBase64 = item.fields['imageBase64'] as String?;
+
+  if (imageBase64 == null) {
+    return null;
+  }
+
+  final cached = _albumImages[imageBase64];
+
+  if (cached != null) {
+    return cached;
+  }
+
+  final bytes = tryDecodeBase64(imageBase64);
+
+  if (bytes == null) {
+    return null;
+  }
+
+  return _albumImages[imageBase64] = ResizeImage(MemoryImage(bytes), width: 450);
 }

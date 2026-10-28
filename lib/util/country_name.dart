@@ -10,3 +10,9 @@ String localizedCountryName(BuildContext context, String countryCode, String fal
     CountryLocalizations.of(context)?.countryName(countryCode: countryCode.toUpperCase()) ?? fallback;
 
 String tripCountryName(BuildContext context, Trip trip) => localizedCountryName(context, trip.countryCode, trip.countryName);
+
+String tripPlaceName(BuildContext context, Trip trip) {
+  final countryName = tripCountryName(context, trip);
+
+  return trip.city.isEmpty ? countryName : '${trip.city}, $countryName';
+}

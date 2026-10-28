@@ -129,7 +129,7 @@ class NotificationService {
 
         await _schedule(
           notificationId++,
-          _localizations().tripReminderTitle(trip.countryName),
+          _localizations().tripReminderTitle(trip.city.isEmpty ? trip.countryName : '${trip.city}, ${trip.countryName}'),
           _localizations().tripReminderBody(daysBefore),
           notifyAt,
         );
@@ -145,7 +145,7 @@ class NotificationService {
 
       await _schedule(
         notificationId++,
-        _localizations().timeCapsuleNotificationTitle(trip.countryName),
+        _localizations().timeCapsuleNotificationTitle(trip.city.isEmpty ? trip.countryName : '${trip.city}, ${trip.countryName}'),
         _localizations().timeCapsuleNotificationBody,
         timeCapsule.opensAt,
       );

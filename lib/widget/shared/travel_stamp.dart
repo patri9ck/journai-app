@@ -24,7 +24,9 @@ class TravelStamp extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final dateLabel = DateFormat.yMMM(localizations.localeName).format(trip.start);
-    final daysLabel = localizations.tripDays(trip.days.length);
+    final daysLabel = trip.city.isEmpty
+        ? localizations.tripDays(trip.days.length)
+        : '${trip.city} · ${localizations.tripDays(trip.days.length)}';
     final countryName = tripCountryName(context, trip);
     final seed = trip.countryCode.codeUnits.fold(0, (sum, unit) => sum * 31 + unit);
 
@@ -93,27 +95,27 @@ class _StampPainter extends CustomPainter {
         canvas.drawCircle(center, 31 * unit, innerOutline);
         _paintArcText(canvas, center, 36.5 * unit, countryName, _style(7 * unit, letterSpacing: 1.2 * unit));
         _paintCenteredText(canvas, center.translate(0, -2 * unit), dateLabel, _style(11 * unit), maximumWidth: 56 * unit);
-        _paintCenteredText(canvas, center.translate(0, 13 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
+        _paintCenteredText(canvas, center.translate(0, 13 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit), maximumWidth: 50 * unit);
       case StampShape.rectangle:
         final outer = Rect.fromCenter(center: center, width: 92 * unit, height: 66 * unit);
         canvas.drawRRect(RRect.fromRectAndRadius(outer, Radius.circular(6 * unit)), outline);
         canvas.drawRRect(RRect.fromRectAndRadius(outer.deflate(5 * unit), Radius.circular(3 * unit)), innerOutline);
-        _paintCenteredText(canvas, center.translate(0, -16 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 76 * unit);
+        _paintCenteredText(canvas, center.translate(0, -16 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 68 * unit);
         _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
-        _paintCenteredText(canvas, center.translate(0, 15 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
+        _paintCenteredText(canvas, center.translate(0, 15 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit), maximumWidth: 68 * unit);
       case StampShape.oval:
         final outer = Rect.fromCenter(center: center, width: 94 * unit, height: 74 * unit);
         canvas.drawOval(outer, outline);
         canvas.drawOval(outer.deflate(6 * unit), innerOutline);
         _paintCenteredText(canvas, center.translate(0, -15 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 66 * unit);
         _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
-        _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
+        _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit), maximumWidth: 54 * unit);
       case StampShape.hexagon:
         canvas.drawPath(_hexagon(center, 47 * unit), outline);
         canvas.drawPath(_hexagon(center, 40 * unit), innerOutline);
         _paintCenteredText(canvas, center.translate(0, -15 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 60 * unit);
         _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
-        _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
+        _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit), maximumWidth: 48 * unit);
     }
 
     canvas.restore();

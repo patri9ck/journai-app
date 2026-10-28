@@ -129,7 +129,7 @@ class _TimeCapsulePageState extends State<TimeCapsulePage> {
                 context,
                 fileName: 'time_capsule',
                 subject: localizations.tripTimeCapsuleTitle,
-                child: SharePoster(title: tripCountryName(context, widget.trip), child: postcard),
+                child: SharePoster(title: tripPlaceName(context, widget.trip), child: postcard),
               ),
             ),
           if (timeCapsule != null)
@@ -235,7 +235,7 @@ class _Postcard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   localizations.timeCapsuleFrom(
-                    tripCountryName(context, trip),
+                    tripPlaceName(context, trip),
                     DateFormat.yMMMd(localizations.localeName).format(timeCapsule.writtenAt),
                   ),
                   style: theme.textTheme.bodySmall?.copyWith(color: inkColor),

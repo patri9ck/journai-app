@@ -2,7 +2,6 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +24,7 @@ import '../sheet/journal_entry_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../sheet/poster_style_sheet.dart';
 import '../shared/document_shared.dart';
+import '../shared/location_dialog.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
@@ -194,6 +194,31 @@ class _TripPageState extends State<TripPage> {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => EntryCheckPage(data: _data, trip: _trip)));
   }
 
+  Future<void> _changeLocation() async {
+    final city = await showLocationDialog(context, _trip.city);
+
+    if (city == null || !mounted) {
+      return;
+    }
+
+    final trip = _trip.copyWith(city: city);
+
+    final saved = await ensureAndSave(
+      context,
+      () => dataService.updateData(trip.id!, Data(feature: 'TRIP', fields: trip.toFields())),
+    );
+
+    if (!saved) {
+      return;
+    }
+
+    await dataService.getData();
+
+    if (mounted) {
+      setState(() => _trip = trip);
+    }
+  }
+
   Future<void> _customizeStamp() async {
     final trip = await showModalBottomSheet<Trip>(
       context: context,
@@ -257,9 +282,9 @@ class _TripPageState extends State<TripPage> {
   Future<void> _shareTrip(AppLocalizations localizations) => shareWidgetAsImage(
     context,
     fileName: 'trip',
-    subject: tripCountryName(context, _trip),
+    subject: tripPlaceName(context, _trip),
     child: SharePoster(
-      title: tripCountryName(context, _trip),
+      title: tripPlaceName(context, _trip),
       subtitle: _dateRange(localizations),
       child: Column(
         children: [
@@ -271,17 +296,27 @@ class _TripPageState extends State<TripPage> {
     ),
   );
 
-  Future<void> _shareAlbum(AppLocalizations localizations, List<Data> album) => shareWidgetAsImage(
-    context,
-    fileName: 'album',
-    subject: localizations.tripAlbumTitle,
-    child: SharePoster(
-      title: localizations.tripAlbumTitle,
-      subtitle: tripCountryName(context, _trip),
-      style: _trip.albumStyle,
-      child: _Album(items: album),
-    ),
-  );
+  Future<void> _shareAlbum(AppLocalizations localizations, List<Data> album) async {
+    await Future.wait([
+      for (final image in album.map(albumImage).whereType<ImageProvider>()) precacheImage(image, context),
+    ]);
+
+    if (!mounted) {
+      return;
+    }
+
+    await shareWidgetAsImage(
+      context,
+      fileName: 'album',
+      subject: localizations.tripAlbumTitle,
+      child: SharePoster(
+        title: localizations.tripAlbumTitle,
+        subtitle: tripPlaceName(context, _trip),
+        style: _trip.albumStyle,
+        child: _Album(items: album),
+      ),
+    );
+  }
 
   Future<void> _customizeAlbum() async {
     final localizations = AppLocalizations.of(context)!;
@@ -339,7 +374,7 @@ class _TripPageState extends State<TripPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tripCountryName(context, _trip)),
+        title: Text(tripPlaceName(context, _trip)),
         actions: [
           IconButton(
             tooltip: localizations.share,
@@ -351,6 +386,7 @@ class _TripPageState extends State<TripPage> {
             onSelected: (action) => action(),
             itemBuilder: (_) => [
               PopupMenuItem(value: _customizeStamp, child: Text(localizations.stampCustomize)),
+              PopupMenuItem(value: _changeLocation, child: Text(localizations.tripChangeLocation)),
               PopupMenuItem(value: _changeDates, child: Text(localizations.tripChangeDates)),
               PopupMenuItem(value: _delete, child: Text(localizations.tripDelete)),
             ],
@@ -438,6 +474,7 @@ class _TripPageState extends State<TripPage> {
           const SizedBox(height: 24),
           PosterCard(
             title: localizations.tripAlbumTitle,
+            subtitle: tripPlaceName(context, _trip),
             style: _trip.albumStyle,
             customizeTooltip: localizations.tripAlbumCustomize,
             onCustomize: _customizeAlbum,
@@ -485,31 +522,15 @@ class _Album extends StatelessWidget {
   }
 }
 
-class _AlbumItem extends StatefulWidget {
+class _AlbumItem extends StatelessWidget {
   final Data item;
 
   const _AlbumItem({super.key, required this.item});
 
   @override
-  State<_AlbumItem> createState() => _AlbumItemState();
-}
-
-class _AlbumItemState extends State<_AlbumItem> {
-  late Uint8List? _image = tryDecodeBase64(widget.item.fields['imageBase64'] as String?);
-
-  @override
-  void didUpdateWidget(_AlbumItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.item.fields['imageBase64'] != widget.item.fields['imageBase64']) {
-      _image = tryDecodeBase64(widget.item.fields['imageBase64'] as String?);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final item = widget.item;
+    final image = albumImage(item);
     const paperColor = Color(0xFFFBF6EA);
     const inkColor = Color(0xFF3A3A3A);
 
@@ -526,10 +547,10 @@ class _AlbumItemState extends State<_AlbumItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_image != null) ...[
+            if (image != null) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(2),
-                child: Image.memory(_image!, height: 100, width: double.infinity, fit: BoxFit.cover, cacheWidth: 450),
+                child: Image(image: image, height: 100, width: double.infinity, fit: BoxFit.cover),
               ),
               const SizedBox(height: 8),
             ] else ...[

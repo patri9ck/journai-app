@@ -25,6 +25,7 @@ import '../sheet/life_band_style_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
+import '../shared/location_dialog.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
@@ -129,12 +130,19 @@ class _MemoriesPageState extends State<MemoriesPage> {
           return;
         }
 
+        final city = await showLocationDialog(context, '');
+
+        if (!mounted) {
+          return;
+        }
+
         final countryName =
             CountryLocalizations.of(context)?.countryName(countryCode: country.countryCode) ?? country.name;
 
         final trip = Trip(
           countryCode: country.countryCode,
           countryName: countryName,
+          city: city ?? '',
           start: dates.start,
           end: dates.end,
         );
@@ -246,7 +254,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(tripCountryName(context, trip), style: theme.textTheme.titleMedium),
+                                  Text(tripPlaceName(context, trip), style: theme.textTheme.titleMedium),
                                   Text('${dateFormat.format(trip.start)} - ${dateFormat.format(trip.end)}'),
                                   if (!trip.isOver(today) && _passportExpiresDuring(trip))
                                     Text(localizations.tripPassportExpires, style: TextStyle(color: Colors.red.shade600)),
@@ -317,7 +325,7 @@ class _LifeBand extends StatelessWidget {
                   const SizedBox(height: 4),
                 ],
                 Text(
-                  '${trip.countryCode} · ${labelFormat.format(trip.start)}',
+                  '${trip.city.isEmpty ? trip.countryCode : '${trip.city}, ${trip.countryCode}'} · ${labelFormat.format(trip.start)}',
                   style: theme.textTheme.labelSmall?.copyWith(color: sharePosterSubtitleColor),
                 ),
               ],

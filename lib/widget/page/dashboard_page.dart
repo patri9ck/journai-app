@@ -916,7 +916,7 @@ class _DashboardPageState extends State<DashboardPage>
       title: localizations.tripsTitle,
       subtitle: nextTrip == null
           ? localizations.tripsSubtitle
-          : '${tripCountryName(context, nextTrip)}, ${dateFormat.format(nextTrip.start)}',
+          : '${tripPlaceName(context, nextTrip)}, ${dateFormat.format(nextTrip.start)}',
       enabled: _limits.tripsEnabled,
       onOpen: () async {
         await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MemoriesPage()));
