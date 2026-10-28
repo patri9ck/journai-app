@@ -6,18 +6,40 @@ import '../model/day_weather.dart';
 import '../model/result.dart';
 import '../model/trip.dart';
 import '../service/services.dart';
+import 'cache.dart';
 import '../widget/shared/trip_stripes.dart';
 import 'document_date.dart';
 import 'temperature_color.dart';
 
-Future<Map<DateTime, DayWeather>> loadTripWeather(Trip trip) async {
-  final center = await geocodingService.getCountryCenter(trip.countryCode);
+String _tripWeatherCacheKey(Trip trip) =>
+    'cache_trip_weather_${trip.countryCode}_${trip.toFields()['start']}_${trip.toFields()['end']}';
 
-  if (center == null) {
+Future<Map<DateTime, DayWeather>> getCachedTripWeather(Trip trip) async {
+  final cached = await readObjectCache(_tripWeatherCacheKey(trip));
+
+  if (cached == null) {
     return {};
   }
 
-  return weatherService.getDailyWeather(center, trip.start, trip.end);
+  return {
+    for (final MapEntry(:key, :value) in cached.entries)
+      DateTime.parse(key): DayWeather.fromJson(Map<String, dynamic>.from(value as Map)),
+  };
+}
+
+Future<Map<DateTime, DayWeather>> loadTripWeather(Trip trip) async {
+  final center = await geocodingService.getCountryCenter(trip.countryCode);
+  final weather = center == null ? <DateTime, DayWeather>{} : await weatherService.getDailyWeather(center, trip.start, trip.end);
+
+  if (weather.isEmpty) {
+    return getCachedTripWeather(trip);
+  }
+
+  await saveObjectCache(_tripWeatherCacheKey(trip), {
+    for (final MapEntry(:key, :value) in weather.entries) key.toIso8601String().substring(0, 10): value.toJson(),
+  });
+
+  return weather;
 }
 
 double? averageTemperature(Map<DateTime, DayWeather> weather) {

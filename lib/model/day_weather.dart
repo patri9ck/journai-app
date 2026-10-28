@@ -7,5 +7,12 @@ class DayWeather {
 
   const DayWeather({required this.temperature, required this.precipitation});
 
+  static DayWeather fromJson(Map<String, dynamic> json) => DayWeather(
+    temperature: (json['temperature'] as num).toDouble(),
+    precipitation: (json['precipitation'] as num).toDouble(),
+  );
+
   bool get isRainy => precipitation >= 1;
+
+  Map<String, dynamic> toJson() => {'temperature': temperature, 'precipitation': precipitation};
 }

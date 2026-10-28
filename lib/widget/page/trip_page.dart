@@ -85,6 +85,14 @@ class _TripPageState extends State<TripPage> {
       _limits = limits;
     });
 
+    final cachedWeather = await getCachedTripWeather(_trip);
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() => _weather = cachedWeather);
+
     final result = await dataService.getData();
 
     if (!mounted) {

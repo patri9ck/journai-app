@@ -62,16 +62,26 @@ class _MemoriesPageState extends State<MemoriesPage> {
       _limits = limits;
     });
 
-    final result = await dataService.getData();
+    final cachedWeather = {for (final trip in _trips) trip.id!: await getCachedTripWeather(trip)};
 
-    if (!mounted || result is! Success<List<Data>>) {
+    if (!mounted) {
       return;
     }
 
-    setState(() {
-      _data = result.value ?? [];
-      _trips = Trip.fromDataList(_data);
-    });
+    setState(() => _weather = cachedWeather);
+
+    final result = await dataService.getData();
+
+    if (!mounted) {
+      return;
+    }
+
+    if (result is Success<List<Data>>) {
+      setState(() {
+        _data = result.value ?? [];
+        _trips = Trip.fromDataList(_data);
+      });
+    }
 
     for (final trip in _trips) {
       final weather = await loadTripWeather(trip);
