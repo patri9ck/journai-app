@@ -191,6 +191,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
     final style = await showModalBottomSheet<LifeBandStyle>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => LifeBandStyleSheet(style: _memoriesStyle.lifeBand),
     );
 

@@ -410,6 +410,7 @@ class _DashboardPageState extends State<DashboardPage>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => _TravelWarningSheet(
         countryCode: countryCode,
         countryName: countryName,
@@ -2409,6 +2410,7 @@ class _CurrencyConverterSheetState extends State<_CurrencyConverterSheet> {
     final selected = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => _CurrencyPickerSheet(
         currencies: CurrencyService.supportedCurrencies,
         selected: isFrom ? _from : _to,

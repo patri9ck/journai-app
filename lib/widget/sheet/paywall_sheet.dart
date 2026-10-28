@@ -13,6 +13,7 @@ import '../../service/services.dart';
 Future<bool?> showPaywall(BuildContext context, {String currentTier = 'FREE'}) => showModalBottomSheet<bool>(
   context: context,
   isScrollControlled: true,
+  useSafeArea: true,
   builder: (_) => PaywallSheet(currentTier: currentTier),
 );
 

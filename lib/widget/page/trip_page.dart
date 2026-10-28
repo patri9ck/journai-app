@@ -224,6 +224,7 @@ class _TripPageState extends State<TripPage> {
     final trip = await showModalBottomSheet<Trip>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => StampStyleSheet(trip: _trip, temperature: averageTemperature(_weather)),
     );
 
@@ -244,6 +245,7 @@ class _TripPageState extends State<TripPage> {
     final saved = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => JournalEntrySheet(tripId: _trip.id!, date: day, entry: _entryOn(day)),
     );
 
@@ -280,23 +282,6 @@ class _TripPageState extends State<TripPage> {
     await _load();
   }
 
-  Future<void> _shareTrip(AppLocalizations localizations) => shareWidgetAsImage(
-    context,
-    fileName: 'trip',
-    subject: tripPlaceName(context, _trip),
-    child: SharePoster(
-      title: tripPlaceName(context, _trip),
-      subtitle: _dateRange(localizations),
-      child: Column(
-        children: [
-          TravelStamp(trip: _trip, temperature: averageTemperature(_weather), size: 160),
-          const SizedBox(height: 20),
-          TripStripes(stripes: tripStripes(_trip, _weather), height: 72),
-        ],
-      ),
-    ),
-  );
-
   Future<void> _shareAlbum(AppLocalizations localizations, List<Data> album) async {
     await Future.wait([
       for (final image in album.map(albumImage).whereType<ImageProvider>()) precacheImage(image, context),
@@ -325,6 +310,7 @@ class _TripPageState extends State<TripPage> {
     final style = await showModalBottomSheet<PosterStyle>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => PosterStyleSheet(
         title: localizations.tripAlbumCustomize,
         defaultHeading: localizations.tripAlbumTitle,
@@ -377,11 +363,6 @@ class _TripPageState extends State<TripPage> {
       appBar: AppBar(
         title: Text(tripPlaceName(context, _trip)),
         actions: [
-          IconButton(
-            tooltip: localizations.share,
-            icon: const Icon(Icons.share_outlined),
-            onPressed: () => _shareTrip(localizations),
-          ),
           PopupMenuButton<VoidCallback>(
             key: const ValueKey('trip_menu'),
             onSelected: (action) => action(),

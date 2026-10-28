@@ -145,6 +145,7 @@ Future<bool> ensureConsent(BuildContext context, ConsentType type) async {
   final result = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
+    useSafeArea: true,
     builder: (_) => ConsentSheet(type: type),
   );
 

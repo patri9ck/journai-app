@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (sheetContext) => _TrialPopup(
         localizations: localizations,
         theme: theme,

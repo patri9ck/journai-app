@@ -119,6 +119,7 @@ class _StartPageState extends State<StartPage> {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
+                          useSafeArea: true,
                           builder: (_) => const RegisterSheet(),
                         );
                       },
@@ -129,6 +130,7 @@ class _StartPageState extends State<StartPage> {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
+                          useSafeArea: true,
                           builder: (_) => const LoginSheet(),
                         );
                       },

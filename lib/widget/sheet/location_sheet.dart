@@ -9,6 +9,7 @@ import '../shared/form_sheet.dart';
 Future<String?> showLocationSheet(BuildContext context, String initialLocation) => showModalBottomSheet<String>(
   context: context,
   isScrollControlled: true,
+  useSafeArea: true,
   builder: (_) => _LocationSheet(initialLocation: initialLocation),
 );
 

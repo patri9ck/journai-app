@@ -54,6 +54,7 @@ Future<bool> ensureEncryptionUnlocked(BuildContext context) async {
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
+      useSafeArea: true,
       isDismissible: false,
       enableDrag: false,
       builder: (_) => EncryptionUnlockSheet(
@@ -75,6 +76,7 @@ Future<bool> ensureEncryptionUnlocked(BuildContext context) async {
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
+    useSafeArea: true,
     isDismissible: false,
     enableDrag: false,
     builder: (_) => EncryptionSetupSheet(

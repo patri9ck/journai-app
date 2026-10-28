@@ -699,6 +699,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => _UpdateContactSheet(type: type, localizations: localizations, theme: theme),
     ).then((_) => _loadUserInfo());
   }
@@ -758,6 +759,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => _ChangePasswordSheet(localizations: localizations, theme: theme),
     );
   }
