@@ -46,10 +46,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('trip_menu')));
     await settle(tester);
 
-    expect(find.text('Change dates'), findsOneWidget);
-    expect(find.text('Delete trip'), findsOneWidget);
+    expect(find.text('Change Dates'), findsOneWidget);
+    expect(find.text('Delete Trip'), findsOneWidget);
 
-    await tester.tap(find.text('Change dates'));
+    await tester.tap(find.text('Change Dates'));
     await settle(tester);
 
     expect(find.byType(DateRangePickerDialog), findsOneWidget);

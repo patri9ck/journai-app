@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
+import 'dart:math';
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,9 +10,9 @@ import 'package:intl/intl.dart';
 import '../../messages/app_localizations.dart';
 import '../../model/data.dart';
 import '../../model/day_weather.dart';
+import '../../model/life_band_style.dart';
 import '../../model/limits.dart';
 import '../../model/memories_style.dart';
-import '../../model/poster_style.dart';
 import '../../model/result.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
@@ -26,7 +28,6 @@ import '../shared/empty_state.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
-import 'stamp_book_page.dart';
 import 'trip_page.dart';
 
 class MemoriesPage extends StatefulWidget {
@@ -171,15 +172,15 @@ class _MemoriesPageState extends State<MemoriesPage> {
     child: SharePoster(
       title: localizations.memoriesLifeBand,
       subtitle: localizations.memoriesLifeBandHint,
-      style: _memoriesStyle.lifeBand,
-      child: _LifeBand(trips: _trips, weather: _weather),
+      style: _memoriesStyle.lifeBand.poster,
+      child: _LifeBand(trips: _trips, weather: _weather, style: _memoriesStyle.lifeBand),
     ),
   );
 
   MemoriesStyle get _memoriesStyle => MemoriesStyle.fromDataList(_data);
 
   Future<void> _customizeLifeBand() async {
-    final style = await showModalBottomSheet<PosterStyle>(
+    final style = await showModalBottomSheet<LifeBandStyle>(
       context: context,
       isScrollControlled: true,
       builder: (_) => LifeBandStyleSheet(style: _memoriesStyle.lifeBand),
@@ -206,28 +207,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
     final today = DateTime(now.year, now.month, now.day);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.memoriesTitle),
-        actions: [
-          if (_trips.isNotEmpty) ...[
-            IconButton(
-              tooltip: localizations.memoriesStampBook,
-              icon: const Icon(Icons.auto_stories_outlined),
-              onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => StampBookPage(trips: _trips, weather: _weather)),
-                );
-                await _load();
-              },
-            ),
-            IconButton(
-              tooltip: localizations.share,
-              icon: const Icon(Icons.share_outlined),
-              onPressed: () => _shareLifeBand(localizations),
-            ),
-          ],
-        ],
-      ),
+      appBar: AppBar(title: Text(localizations.memoriesTitle)),
       floatingActionButton: isLoggedIn
           ? FloatingActionButton.extended(onPressed: _add, icon: const Icon(Icons.add), label: Text(localizations.tripAdd))
           : null,
@@ -243,7 +223,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(16, 12, 4, 16),
                   decoration: BoxDecoration(
-                    color: _memoriesStyle.lifeBand.background,
+                    color: _memoriesStyle.lifeBand.poster.background,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -256,20 +236,29 @@ class _MemoriesPageState extends State<MemoriesPage> {
                             child: PosterHeading(
                               title: localizations.memoriesLifeBand,
                               subtitle: localizations.memoriesLifeBandHint,
-                              style: _memoriesStyle.lifeBand,
+                              style: _memoriesStyle.lifeBand.poster,
                             ),
                           ),
-                          IconButton(
-                            tooltip: localizations.lifeBandCustomize,
-                            icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
-                            onPressed: _customizeLifeBand,
+                          Column(
+                            children: [
+                              IconButton(
+                                tooltip: localizations.lifeBandCustomize,
+                                icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
+                                onPressed: _customizeLifeBand,
+                              ),
+                              IconButton(
+                                tooltip: localizations.share,
+                                icon: const Icon(Icons.share_outlined, color: sharePosterSubtitleColor),
+                                onPressed: () => _shareLifeBand(localizations),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
-                        child: _LifeBand(trips: _trips, weather: _weather, onOpen: _open),
+                        child: _LifeBand(trips: _trips, weather: _weather, style: _memoriesStyle.lifeBand, onOpen: _open),
                       ),
                     ],
                   ),
@@ -315,9 +304,10 @@ class _MemoriesPageState extends State<MemoriesPage> {
 class _LifeBand extends StatelessWidget {
   final List<Trip> trips;
   final Map<int, Map<DateTime, DayWeather>> weather;
+  final LifeBandStyle style;
   final ValueChanged<Trip>? onOpen;
 
-  const _LifeBand({required this.trips, required this.weather, this.onOpen});
+  const _LifeBand({required this.trips, required this.weather, required this.style, this.onOpen});
 
   static const _dayWidth = 9.0;
 
@@ -326,10 +316,13 @@ class _LifeBand extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final labelFormat = DateFormat.yMMM(localizations.localeName);
+    final now = DateTime.now();
+    final frameColor = Color.lerp(style.poster.background, const Color(0xFF14161B), 0.45)!;
 
-    return Wrap(
+    final band = Wrap(
       spacing: 12,
       runSpacing: 12,
+      crossAxisAlignment: WrapCrossAlignment.end,
       children: [
         for (final trip in trips)
           GestureDetector(
@@ -337,11 +330,27 @@ class _LifeBand extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: trip.days.length * _dayWidth,
-                  child: TripStripes(stripes: tripStripes(trip, weather[trip.id] ?? {}), height: 56, spacing: 2),
-                ),
-                const SizedBox(height: 4),
+                if (style.showStamps) ...[
+                  _placedStamp(
+                    trip,
+                    Opacity(
+                      opacity: trip.start.isAfter(now) ? 0.5 : 1,
+                      child: TravelStamp(
+                        trip: trip,
+                        temperature: averageTemperature(weather[trip.id] ?? {}),
+                        size: style.stampDimension,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                ],
+                if (style.showStripes) ...[
+                  SizedBox(
+                    width: trip.days.length * _dayWidth,
+                    child: TripStripes(stripes: tripStripes(trip, weather[trip.id] ?? {}), height: 56, spacing: 2),
+                  ),
+                  const SizedBox(height: 4),
+                ],
                 Text(
                   '${trip.countryCode} · ${labelFormat.format(trip.start)}',
                   style: theme.textTheme.labelSmall?.copyWith(color: sharePosterSubtitleColor),
@@ -350,6 +359,41 @@ class _LifeBand extends StatelessWidget {
             ),
           ),
       ],
+    );
+
+    if (style.frame == LifeBandFrame.none) {
+      return band;
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: frameColor, width: 2),
+      ),
+      child: style.frame == LifeBandFrame.double
+          ? Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: frameColor, width: 1),
+              ),
+              child: band,
+            )
+          : band,
+    );
+  }
+
+  Widget _placedStamp(Trip trip, Widget stamp) {
+    if (style.stampLayout == StampLayout.tidy) {
+      return stamp;
+    }
+
+    final random = Random(trip.id ?? trip.countryCode.hashCode);
+
+    return Transform.translate(
+      offset: Offset((random.nextDouble() - 0.5) * 8, (random.nextDouble() - 0.5) * 8),
+      child: Transform.rotate(angle: (random.nextDouble() - 0.5) * 0.6, child: stamp),
     );
   }
 }

@@ -108,14 +108,9 @@ void main() {
         await pumpFor(tester, const Duration(seconds: 8));
         await _save(tester, lang, '07_memories');
 
-        await tester.tap(find.byIcon(Icons.auto_stories_outlined));
-        await pumpFor(tester, const Duration(seconds: 2));
-        await _save(tester, lang, '08_stamp_book');
-        await back(tester);
-
         await tester.tap(find.text('Japan').first);
         await pumpFor(tester, const Duration(seconds: 5));
-        await _save(tester, lang, '09_trip');
+        await _save(tester, lang, '08_trip');
         await back(tester);
       }
 

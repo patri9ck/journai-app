@@ -9,7 +9,7 @@ OUTPUT_DIR="build/screenshots"
 RAW_DIR="$OUTPUT_DIR/raw"
 CONFIG="build/screenshot_config.json"
 LANGS=(en de)
-SCREENSHOT_NAMES=(01_dashboard 02_emergency_card 03_full_map 04_country_info 05_vaccinations 06_entry_check 07_memories 08_stamp_book 09_trip)
+SCREENSHOT_NAMES=(01_dashboard 02_emergency_card 03_full_map 04_country_info 05_vaccinations 06_entry_check 07_memories 08_trip)
 
 declare -A LOCALE_MAP=(
   [en]="en-US"

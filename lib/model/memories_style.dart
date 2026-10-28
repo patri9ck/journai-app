@@ -2,15 +2,13 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'data.dart';
-import 'poster_style.dart';
-import 'stamp_book_style.dart';
+import 'life_band_style.dart';
 
 class MemoriesStyle {
   final int? id;
-  final PosterStyle lifeBand;
-  final StampBookStyle stampBook;
+  final LifeBandStyle lifeBand;
 
-  const MemoriesStyle({this.id, this.lifeBand = const PosterStyle(), this.stampBook = const StampBookStyle()});
+  const MemoriesStyle({this.id, this.lifeBand = const LifeBandStyle()});
 
   static MemoriesStyle fromDataList(List<Data> data) {
     final entry = data.where((entry) => entry.feature == 'MEMORIES_STYLE').firstOrNull;
@@ -21,16 +19,11 @@ class MemoriesStyle {
 
     return MemoriesStyle(
       id: entry.id,
-      lifeBand: PosterStyle.fromJson(entry.fields['lifeBand'] as Map<String, dynamic>?),
-      stampBook: StampBookStyle.fromJson(entry.fields['stampBook'] as Map<String, dynamic>?),
+      lifeBand: LifeBandStyle.fromJson(entry.fields['lifeBand'] as Map<String, dynamic>?),
     );
   }
 
-  MemoriesStyle copyWith({PosterStyle? lifeBand, StampBookStyle? stampBook}) =>
-      MemoriesStyle(id: id, lifeBand: lifeBand ?? this.lifeBand, stampBook: stampBook ?? this.stampBook);
+  MemoriesStyle copyWith({LifeBandStyle? lifeBand}) => MemoriesStyle(id: id, lifeBand: lifeBand ?? this.lifeBand);
 
-  Map<String, dynamic> toFields() => {
-    'lifeBand': lifeBand.toJson(),
-    'stampBook': stampBook.toJson(),
-  };
+  Map<String, dynamic> toFields() => {'lifeBand': lifeBand.toJson()};
 }

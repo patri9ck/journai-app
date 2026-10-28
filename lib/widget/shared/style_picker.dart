@@ -164,7 +164,7 @@ class FontChoices extends StatelessWidget {
 
 List<Widget> posterStyleSections(AppLocalizations localizations, PosterStyle style, ValueChanged<PosterStyle> onChanged) => [
   StyleSection(
-    label: localizations.stampBookBackground,
+    label: localizations.lifeBandBackground,
     child: ColorChoices(
       colors: posterBackgrounds,
       selected: style.background,
