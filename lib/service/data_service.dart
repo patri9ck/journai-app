@@ -12,17 +12,21 @@ import '../util/cache.dart';
 import '../util/profile_notifier.dart';
 import '../util/storage.dart';
 import 'cryptography_service.dart';
+import 'limits_service.dart';
 import 'request_service.dart';
 
 class DataService {
   final RequestService _requestService;
   final CryptographyService _cryptographyService;
+  final LimitsService _limitsService;
 
   DataService({
     required RequestService requestService,
     required CryptographyService cryptographyService,
+    required LimitsService limitsService,
   }) : _requestService = requestService,
-       _cryptographyService = cryptographyService;
+       _cryptographyService = cryptographyService,
+       _limitsService = limitsService;
 
   Future<Result<List<Map<String, dynamic>>>> scanImages(
     String category,
@@ -80,6 +84,10 @@ class DataService {
   }
 
   Future<Result<void>> saveData(Data data) async {
+    if (await _isProfileLimitReached(data.feature)) {
+      return ServerFailure<void>(message: 'Limit exceeded.', key: 'limit-exceeded', statusCode: 402);
+    }
+
     final payload = jsonEncode(_withSelectedProfile(data).toJson());
     final encryptedData = await _cryptographyService.encryptData(payload);
 
@@ -89,6 +97,20 @@ class DataService {
     });
 
     return voidResult(result);
+  }
+
+  Future<bool> _isProfileLimitReached(String feature) async {
+    if (feature == 'PROFILE') {
+      return false;
+    }
+
+    final limit = (await _limitsService.getCachedLimits()).features[feature];
+
+    if (limit == null || limit == -1) {
+      return false;
+    }
+
+    return (await getCachedData([feature])).length >= limit;
   }
 
   Future<List<Data>> getCachedData([List<String>? features]) async {

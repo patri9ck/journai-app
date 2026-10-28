@@ -5,9 +5,11 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:journai_app/model/data.dart';
 import 'package:journai_app/model/result.dart';
 import 'package:journai_app/service/cryptography_service.dart';
 import 'package:journai_app/service/data_service.dart';
+import 'package:journai_app/service/limits_service.dart';
 import 'package:journai_app/service/request_service.dart';
 import 'package:journai_app/util/cache.dart';
 import 'package:journai_app/util/profile_notifier.dart';
@@ -23,7 +25,12 @@ class _DeleteRequestService extends RequestService {
 
 void main() {
   final cryptographyService = CryptographyService();
-  final dataService = DataService(requestService: RequestService(baseUrl: ''), cryptographyService: cryptographyService);
+  final limitsService = LimitsService(requestService: RequestService(baseUrl: ''));
+  final dataService = DataService(
+    requestService: RequestService(baseUrl: ''),
+    cryptographyService: cryptographyService,
+    limitsService: limitsService,
+  );
 
   Future<Map<String, dynamic>> entry(int id, String feature, Map<String, dynamic> fields, {int? profileId}) async => {
     'id': id,
@@ -61,6 +68,22 @@ void main() {
     expect((await dataService.getCachedData(['VACCINE'])).map((data) => data.id), [1]);
   });
 
+  test('the limit counts only the entries of the selected profile', () async {
+    await saveObjectCache('cache_limits', {'imageScans': 20, 'tier': 'FAMILY', 'profiles': 5, 'features': {'VACCINE': 1}});
+
+    await selectProfile(null);
+
+    final blocked = await dataService.saveData(Data(feature: 'VACCINE', fields: {'name': 'Another'}));
+
+    expect(blocked, isA<ServerFailure<void>>().having((failure) => failure.key, 'key', 'limit-exceeded'));
+
+    await selectProfile(2);
+
+    final allowed = await dataService.saveData(Data(feature: 'ALLERGY', fields: {'name': 'Pollen'}));
+
+    expect(allowed, isNot(isA<ServerFailure<void>>().having((failure) => failure.key, 'key', 'limit-exceeded')));
+  });
+
   test('expiry reminders see the entries of all profiles', () async {
     expect((await dataService.getCachedDataOfAllProfiles()).map((data) => data.id), [1, 3]);
   });
@@ -69,6 +92,7 @@ void main() {
     final offlineDataService = DataService(
       requestService: _DeleteRequestService(NetworkFailure()),
       cryptographyService: cryptographyService,
+      limitsService: limitsService,
     );
 
     expect(await offlineDataService.deleteData(1), isA<NetworkFailure<void>>());
@@ -79,6 +103,7 @@ void main() {
     final onlineDataService = DataService(
       requestService: _DeleteRequestService(Success({})),
       cryptographyService: cryptographyService,
+      limitsService: limitsService,
     );
 
     expect(await onlineDataService.deleteData(1), isA<Success<void>>());

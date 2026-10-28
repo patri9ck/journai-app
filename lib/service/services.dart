@@ -47,12 +47,13 @@ final encryptionService = EncryptionService(
   requestService: requestService,
   cryptographyService: cryptographyService,
 );
+final limitsService = LimitsService(requestService: requestService);
 final dataService = DataService(
   requestService: requestService,
   cryptographyService: cryptographyService,
+  limitsService: limitsService,
 );
 final consentService = ConsentService(requestService: requestService);
-final limitsService = LimitsService(requestService: requestService);
 final entryCheckService = EntryCheckService(requestService: requestService);
 final contactService = ContactService(requestService: requestService);
 final weatherService = WeatherService();
