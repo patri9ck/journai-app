@@ -206,7 +206,7 @@ class NotificationService {
       ),
       iOS: const DarwinNotificationDetails(),
     ),
-    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
   );
 
   AppLocalizations _localizations() {

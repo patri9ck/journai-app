@@ -4,10 +4,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import '../../messages/app_localizations.dart';
+import '../../model/stamp_style.dart';
 import '../../model/trip.dart';
+import '../../util/country_name.dart';
 import '../../util/temperature_color.dart';
 
 class TravelStamp extends StatelessWidget {
@@ -22,18 +25,22 @@ class TravelStamp extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     final dateLabel = DateFormat.yMMM(localizations.localeName).format(trip.start);
     final daysLabel = localizations.tripDays(trip.days.length);
+    final countryName = tripCountryName(context, trip);
+    final seed = trip.countryCode.codeUnits.fold(0, (sum, unit) => sum * 31 + unit);
 
     return Semantics(
-      label: '${trip.countryName}, $dateLabel, $daysLabel',
+      label: '$countryName, $dateLabel, $daysLabel',
       child: RepaintBoundary(
         child: CustomPaint(
           size: Size.square(size),
           painter: _StampPainter(
-            seed: trip.countryCode.codeUnits.fold(0, (sum, unit) => sum * 31 + unit),
-            countryName: trip.countryName.toUpperCase(),
+            seed: seed,
+            shape: trip.stampStyle.shape ?? StampShape.values[seed.abs() % 3],
+            font: trip.stampStyle.font,
+            countryName: countryName.toUpperCase(),
             dateLabel: dateLabel.toUpperCase(),
             daysLabel: daysLabel.toUpperCase(),
-            color: stampInkColor(temperature),
+            color: trip.stampStyle.color ?? stampInkColor(temperature),
           ),
         ),
       ),
@@ -43,6 +50,8 @@ class TravelStamp extends StatelessWidget {
 
 class _StampPainter extends CustomPainter {
   final int seed;
+  final StampShape shape;
+  final StampFont font;
   final String countryName;
   final String dateLabel;
   final String daysLabel;
@@ -50,6 +59,8 @@ class _StampPainter extends CustomPainter {
 
   _StampPainter({
     required this.seed,
+    required this.shape,
+    required this.font,
     required this.countryName,
     required this.dateLabel,
     required this.daysLabel,
@@ -76,25 +87,31 @@ class _StampPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2 * unit;
 
-    switch (seed.abs() % 3) {
-      case 0:
+    switch (shape) {
+      case StampShape.circle:
         _paintBrokenCircle(canvas, center, 46 * unit, outline, random);
         canvas.drawCircle(center, 36 * unit, innerOutline);
-        _paintArcText(canvas, center, 38.5 * unit, countryName, _style(7.5 * unit, letterSpacing: 1.2 * unit));
+        _paintArcText(canvas, center, 40.5 * unit, countryName, _style(7.5 * unit, letterSpacing: 1.2 * unit));
         _paintCenteredText(canvas, center.translate(0, -2 * unit), dateLabel, _style(11 * unit));
         _paintCenteredText(canvas, center.translate(0, 13 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
-      case 1:
+      case StampShape.rectangle:
         final outer = Rect.fromCenter(center: center, width: 92 * unit, height: 66 * unit);
         canvas.drawRRect(RRect.fromRectAndRadius(outer, Radius.circular(6 * unit)), outline);
         canvas.drawRRect(RRect.fromRectAndRadius(outer.deflate(5 * unit), Radius.circular(3 * unit)), innerOutline);
         _paintCenteredText(canvas, center.translate(0, -16 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 76 * unit);
         _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
         _paintCenteredText(canvas, center.translate(0, 15 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
-      default:
+      case StampShape.oval:
         final outer = Rect.fromCenter(center: center, width: 94 * unit, height: 74 * unit);
         canvas.drawOval(outer, outline);
         canvas.drawOval(outer.deflate(6 * unit), innerOutline);
         _paintCenteredText(canvas, center.translate(0, -15 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 66 * unit);
+        _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
+        _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
+      case StampShape.hexagon:
+        canvas.drawPath(_hexagon(center, 47 * unit), outline);
+        canvas.drawPath(_hexagon(center, 40 * unit), innerOutline);
+        _paintCenteredText(canvas, center.translate(0, -15 * unit), countryName, _style(8 * unit, letterSpacing: 1.2 * unit), maximumWidth: 60 * unit);
         _paintCenteredText(canvas, center.translate(0, 0), dateLabel, _style(12 * unit));
         _paintCenteredText(canvas, center.translate(0, 14 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
     }
@@ -102,13 +119,27 @@ class _StampPainter extends CustomPainter {
     canvas.restore();
   }
 
-  TextStyle _style(double fontSize, {double letterSpacing = 0}) => TextStyle(
-    color: color,
-    fontSize: fontSize,
-    fontWeight: FontWeight.w700,
-    letterSpacing: letterSpacing,
-    height: 1,
-  );
+  TextStyle _style(double fontSize, {double letterSpacing = 0}) {
+    final style = TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: FontWeight.w700,
+      letterSpacing: letterSpacing,
+      height: 1,
+    );
+
+    return switch (font) {
+      StampFont.sans => GoogleFonts.inter(textStyle: style),
+      StampFont.serif => GoogleFonts.instrumentSerif(textStyle: style.copyWith(fontWeight: FontWeight.w400, fontSize: fontSize * 1.2)),
+      StampFont.typewriter => style.copyWith(fontFamily: 'monospace', fontFamilyFallback: const ['Courier']),
+    };
+  }
+
+  Path _hexagon(Offset center, double radius) => Path()
+    ..addPolygon([
+      for (var corner = 0; corner < 6; corner++)
+        center + Offset(radius * cos(corner * pi / 3), radius * sin(corner * pi / 3)),
+    ], true);
 
   void _paintBrokenCircle(Canvas canvas, Offset center, double radius, Paint paint, Random random) {
     final rect = Rect.fromCircle(center: center, radius: radius);
@@ -154,7 +185,7 @@ class _StampPainter extends CustomPainter {
       canvas.save();
       canvas.translate(center.dx + radius * cos(angle), center.dy + radius * sin(angle));
       canvas.rotate(angle + pi / 2);
-      painter.paint(canvas, Offset(-painter.width / 2, -painter.height));
+      painter.paint(canvas, Offset(-painter.width / 2, -painter.height / 2));
       canvas.restore();
 
       angle += halfAngle;
@@ -168,6 +199,8 @@ class _StampPainter extends CustomPainter {
   @override
   bool shouldRepaint(_StampPainter oldDelegate) =>
       oldDelegate.seed != seed ||
+      oldDelegate.shape != shape ||
+      oldDelegate.font != font ||
       oldDelegate.countryName != countryName ||
       oldDelegate.dateLabel != dateLabel ||
       oldDelegate.daysLabel != daysLabel ||

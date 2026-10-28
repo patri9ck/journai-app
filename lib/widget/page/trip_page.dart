@@ -15,6 +15,7 @@ import '../../model/result.dart';
 import '../../model/time_capsule.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
+import '../../util/country_name.dart';
 import '../../util/temperature_format.dart';
 import '../../util/trip_memories.dart';
 import '../../util/units_notifier.dart';
@@ -24,6 +25,7 @@ import '../shared/document_shared.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
+import '../sheet/stamp_style_sheet.dart';
 import 'entry_check_page.dart';
 import 'time_capsule_page.dart';
 
@@ -130,6 +132,7 @@ class _TripPageState extends State<TripPage> {
       countryName: _trip.countryName,
       start: dates.start,
       end: dates.end,
+      stampStyle: _trip.stampStyle,
     );
 
     final saved = await ensureAndSave(
@@ -187,6 +190,20 @@ class _TripPageState extends State<TripPage> {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => EntryCheckPage(data: _data, trip: _trip)));
   }
 
+  Future<void> _customizeStamp() async {
+    final trip = await showModalBottomSheet<Trip>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => StampStyleSheet(trip: _trip, temperature: averageTemperature(_weather)),
+    );
+
+    if (trip == null || !mounted) {
+      return;
+    }
+
+    setState(() => _trip = trip);
+  }
+
   Future<void> _editEntry(DateTime day) async {
     if (!_limits.isFeatureEnabled('JOURNAL_ENTRY')) {
       await showPaywall(context);
@@ -236,9 +253,9 @@ class _TripPageState extends State<TripPage> {
   Future<void> _shareTrip(AppLocalizations localizations) => shareWidgetAsImage(
     context,
     fileName: 'trip',
-    subject: _trip.countryName,
+    subject: tripCountryName(context, _trip),
     child: SharePoster(
-      title: _trip.countryName,
+      title: tripCountryName(context, _trip),
       subtitle: _dateRange(localizations),
       child: Column(
         children: [
@@ -254,7 +271,7 @@ class _TripPageState extends State<TripPage> {
     context,
     fileName: 'album',
     subject: localizations.tripAlbumTitle,
-    child: SharePoster(title: _trip.countryName, subtitle: localizations.tripAlbumTitle, child: _Album(items: album)),
+    child: SharePoster(title: tripCountryName(context, _trip), subtitle: localizations.tripAlbumTitle, child: _Album(items: album)),
   );
 
   String _dateRange(AppLocalizations localizations) {
@@ -278,7 +295,7 @@ class _TripPageState extends State<TripPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_trip.countryName),
+        title: Text(tripCountryName(context, _trip)),
         actions: [
           IconButton(
             tooltip: localizations.share,
@@ -289,6 +306,7 @@ class _TripPageState extends State<TripPage> {
             key: const ValueKey('trip_menu'),
             onSelected: (action) => action(),
             itemBuilder: (_) => [
+              PopupMenuItem(value: _customizeStamp, child: Text(localizations.stampCustomize)),
               PopupMenuItem(value: _changeDates, child: Text(localizations.tripChangeDates)),
               PopupMenuItem(value: _delete, child: Text(localizations.tripDelete)),
             ],
@@ -298,7 +316,12 @@ class _TripPageState extends State<TripPage> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
         children: [
-          Center(child: TravelStamp(trip: _trip, temperature: averageTemperature(_weather), size: 150)),
+          Center(
+            child: GestureDetector(
+              onTap: _customizeStamp,
+              child: TravelStamp(trip: _trip, temperature: averageTemperature(_weather), size: 150),
+            ),
+          ),
           const SizedBox(height: 8),
           Center(child: Text(_dateRange(localizations), style: theme.textTheme.bodyMedium?.copyWith(color: mutedColor))),
           const SizedBox(height: 12),

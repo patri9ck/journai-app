@@ -3,6 +3,7 @@
 
 import '../util/document_date.dart';
 import 'data.dart';
+import 'stamp_style.dart';
 
 class Trip {
   final int? id;
@@ -10,8 +11,16 @@ class Trip {
   final String countryName;
   final DateTime start;
   final DateTime end;
+  final StampStyle stampStyle;
 
-  const Trip({this.id, required this.countryCode, required this.countryName, required this.start, required this.end});
+  const Trip({
+    this.id,
+    required this.countryCode,
+    required this.countryName,
+    required this.start,
+    required this.end,
+    this.stampStyle = const StampStyle(),
+  });
 
   static Trip? fromData(Data data) {
     final start = parseDocumentDate(data.fields['start'] as String?);
@@ -28,6 +37,7 @@ class Trip {
       countryName: data.fields['countryName'] as String? ?? countryCode,
       start: start,
       end: end,
+      stampStyle: StampStyle.fromFields(data.fields),
     );
   }
 
@@ -48,5 +58,6 @@ class Trip {
     'countryName': countryName,
     'start': start.toIso8601String().substring(0, 10),
     'end': end.toIso8601String().substring(0, 10),
+    ...stampStyle.toFields(),
   };
 }

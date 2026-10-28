@@ -27,6 +27,7 @@ import '../../service/travel_warning_service.dart';
 import '../../util/auth_scope.dart';
 import '../../util/cache.dart';
 import '../../util/country_data.dart';
+import '../../util/country_name.dart';
 import '../../util/emergency_card_notifier.dart';
 import '../../util/profile_notifier.dart';
 import '../../util/storage.dart';
@@ -915,7 +916,7 @@ class _DashboardPageState extends State<DashboardPage>
       title: localizations.tripsTitle,
       subtitle: nextTrip == null
           ? localizations.tripsSubtitle
-          : '${nextTrip.countryName}, ${dateFormat.format(nextTrip.start)}',
+          : '${tripCountryName(context, nextTrip)}, ${dateFormat.format(nextTrip.start)}',
       enabled: _limits.tripsEnabled,
       onOpen: () async {
         await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MemoriesPage()));
@@ -2041,7 +2042,7 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
       return StatusRow(
         icon: Icons.info_outline,
         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-        text: localizations.countryNoInformation,
+        text: widget.countryCode == 'DE' ? localizations.countryNoInformationGermany : localizations.countryNoInformation,
       );
     }
 

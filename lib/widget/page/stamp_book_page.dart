@@ -20,14 +20,12 @@ class StampBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final now = DateTime.now();
-    final stampedTrips = trips.where((trip) => !trip.start.isAfter(now)).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoriesStampBook),
         actions: [
-          if (stampedTrips.isNotEmpty)
+          if (trips.isNotEmpty)
             IconButton(
               tooltip: localizations.share,
               icon: const Icon(Icons.share_outlined),
@@ -37,20 +35,20 @@ class StampBookPage extends StatelessWidget {
                 subject: localizations.memoriesStampBook,
                 child: SharePoster(
                   title: localizations.memoriesStampBook,
-                  child: _StampPage(trips: stampedTrips, weather: weather),
+                  child: _StampPage(trips: trips, weather: weather),
                 ),
               ),
             ),
         ],
       ),
-      body: stampedTrips.isEmpty
+      body: trips.isEmpty
           ? EmptyState(icon: Icons.auto_stories_outlined, text: localizations.stampBookEmpty)
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(color: const Color(0xFFF3EEDF), borderRadius: BorderRadius.circular(8)),
-                child: _StampPage(trips: stampedTrips, weather: weather),
+                child: _StampPage(trips: trips, weather: weather),
               ),
             ),
     );
@@ -65,13 +63,18 @@ class _StampPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8,
       runSpacing: 8,
       children: [
         for (final trip in trips)
-          TravelStamp(trip: trip, temperature: averageTemperature(weather[trip.id] ?? {}), size: 140),
+          Opacity(
+            opacity: trip.start.isAfter(now) ? 0.35 : 1,
+            child: TravelStamp(trip: trip, temperature: averageTemperature(weather[trip.id] ?? {}), size: 140),
+          ),
       ],
     );
   }

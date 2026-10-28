@@ -13,6 +13,7 @@ import '../../model/result.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
 import '../../util/auth_scope.dart';
+import '../../util/country_name.dart';
 import '../../util/document_date.dart';
 import '../../util/trip_memories.dart';
 import '../sheet/paywall_sheet.dart';
@@ -226,7 +227,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(trip.countryName, style: theme.textTheme.titleMedium),
+                                  Text(tripCountryName(context, trip), style: theme.textTheme.titleMedium),
                                   Text('${dateFormat.format(trip.start)} - ${dateFormat.format(trip.end)}'),
                                   if (!trip.isOver(today) && _passportExpiresDuring(trip))
                                     Text(localizations.tripPassportExpires, style: TextStyle(color: Colors.red.shade600)),

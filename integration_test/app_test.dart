@@ -50,7 +50,7 @@ void main() {
       ),
     );
 
-    expect(await waitFor(tester, find.text('Vaccination plan')), isTrue);
+    expect(await waitFor(tester, find.text('Vaccination Plan')), isTrue);
 
     await back(tester);
     expect(await dataService.getCachedData(['PROFILE']), isEmpty);
@@ -72,11 +72,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('tab_data')));
     await pumpFor(tester, const Duration(seconds: 1));
     await tester.scrollUntilVisible(
-      find.text('Medical receipts'),
+      find.text('Medical Receipts'),
       200,
       scrollable: find.descendant(of: find.byType(DataPage), matching: find.byType(Scrollable)).first,
     );
-    await tester.tap(find.text('Medical receipts'));
+    await tester.tap(find.text('Medical Receipts'));
 
     expect(await waitFor(tester, find.text('Bangkok Hospital')), isTrue);
     expect(await waitFor(tester, find.text('Total in euros')), isTrue);

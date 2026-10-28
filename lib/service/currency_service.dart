@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../util/http_timeout.dart';
 import '../util/storage.dart';
 
 class CurrencyService {
@@ -83,7 +84,7 @@ class CurrencyService {
         'https://api.frankfurter.app/latest?from=$baseCurrency',
       );
 
-      final response = await http.get(uri).timeout(const Duration(seconds: 8));
+      final response = await http.get(uri).timeout(httpTimeout);
 
       if (response.statusCode != 200) {
         return null;

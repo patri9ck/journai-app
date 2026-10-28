@@ -10,15 +10,13 @@ import 'package:http/http.dart';
 
 import '../model/result.dart';
 import '../util/auth_notifier.dart';
+import '../util/http_timeout.dart';
 import '../util/navigator_key.dart';
 import '../util/storage.dart';
 import 'services.dart';
 import '../widget/page/start_page.dart';
 
 class RequestService {
-  static const _defaultTimeout = Duration(seconds: 5);
-  static const _refreshTimeout = Duration(seconds: 15);
-
   final String _baseUrl;
 
   Future<Result<Map<String, dynamic>>>? _pendingRefresh;
@@ -27,17 +25,13 @@ class RequestService {
 
   Future<Result<Map<String, dynamic>>> postRequest(
     String path,
-    Map<String, dynamic> body, {
-    Duration timeout = _defaultTimeout,
-  }) => _send('POST', path, body: body, timeout: timeout);
+    Map<String, dynamic> body,
+  ) => _send('POST', path, body: body);
 
   Future<Result<Map<String, dynamic>>> postAuthenticatedRequest(
     String path,
-    Map<String, dynamic> body, {
-    Duration timeout = _defaultTimeout,
-  }) => _sendAuthenticated(
-    (accessToken) => _send('POST', path, body: body, accessToken: accessToken, timeout: timeout),
-  );
+    Map<String, dynamic> body,
+  ) => _sendAuthenticated((accessToken) => _send('POST', path, body: body, accessToken: accessToken));
 
   Future<Result<Map<String, dynamic>>> getAuthenticatedRequest(String path) =>
       _sendAuthenticated((accessToken) => _send('GET', path, accessToken: accessToken));
@@ -53,7 +47,6 @@ class RequestService {
     String path, {
     Map<String, dynamic>? body,
     String? accessToken,
-    Duration timeout = _defaultTimeout,
   }) async {
     final request = Request(method, Uri.parse('$_baseUrl$path'));
 
@@ -67,7 +60,7 @@ class RequestService {
     }
 
     try {
-      return _handleResponse(await request.send().then(Response.fromStream).timeout(timeout));
+      return _handleResponse(await request.send().then(Response.fromStream).timeout(httpTimeout));
     } on IOException catch (_) {
       return NetworkFailure();
     } on ClientException catch (_) {
@@ -132,7 +125,7 @@ class RequestService {
       return Failure();
     }
 
-    final result = await postRequest('refresh', {'refreshToken': refreshToken}, timeout: _refreshTimeout);
+    final result = await postRequest('refresh', {'refreshToken': refreshToken});
 
     if (result is ServerFailure && (result as ServerFailure).key == 'invalid-refresh-token') {
       await _resetToStartPage();

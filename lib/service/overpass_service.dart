@@ -10,12 +10,13 @@ import 'package:http/http.dart' as http;
 
 import '../model/poi.dart';
 import '../util/cache.dart';
+import '../util/http_timeout.dart';
 
 class OverpassService {
   static const _cacheKey = 'cache_overpass_pois';
-  static const _radiusMeters = 10000;
+  static const _radiusMeters = 5000;
   static const _cacheRadiusMeters = 3000;
-  static const _attempts = 3;
+  static const _attempts = 4;
   static const _retryStatusCodes = {429, 502, 503, 504};
 
   static bool disableNetworkForTesting = false;
@@ -49,7 +50,7 @@ class OverpassService {
     }
 
     final query =
-        '[out:json][timeout:25];'
+        '[out:json][timeout:50];'
         'nwr[amenity~"^(hospital|pharmacy|police|fire_station|doctors)\$"]'
         '(around:$_radiusMeters,$latitude,$longitude);'
         'out center 300;';
@@ -76,7 +77,7 @@ class OverpassService {
 
   Future<http.Response?> _get(Uri uri) async {
     try {
-      return await http.get(uri, headers: _headers).timeout(const Duration(seconds: 30));
+      return await http.get(uri, headers: _headers).timeout(httpTimeout);
     } on IOException {
       return null;
     } on http.ClientException {

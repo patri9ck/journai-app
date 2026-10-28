@@ -5,11 +5,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 import '../model/location_info.dart';
 import '../util/cache.dart';
+import '../util/http_timeout.dart';
 
 class GeocodingService {
   static const _cacheKey = 'cache_geocoding';
@@ -22,16 +24,18 @@ class GeocodingService {
   Future<LocationInfo?> getCachedLocation() => _getCached();
 
   Future<LocationInfo?> reverseGeocode(double latitude, double longitude) async {
+    final languageCode = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+
     try {
       final response = await http
           .get(
             Uri.parse(
               'https://nominatim.openstreetmap.org/reverse'
-              '?lat=$latitude&lon=$longitude&format=json&accept-language=de',
+              '?lat=$latitude&lon=$longitude&format=json&accept-language=$languageCode',
             ),
             headers: {'User-Agent': 'JournaiApp/1.0 ($_contactEmail)'},
           )
-          .timeout(const Duration(seconds: 8));
+          .timeout(httpTimeout);
 
       if (response.statusCode != 200) {
         return await _getCached();
@@ -85,7 +89,7 @@ class GeocodingService {
             Uri.parse('https://nominatim.openstreetmap.org/search?country=$countryCode&featureType=country&format=json&limit=1'),
             headers: {'User-Agent': 'JournaiApp/1.0 ($_contactEmail)'},
           )
-          .timeout(const Duration(seconds: 8));
+          .timeout(httpTimeout);
 
       if (response.statusCode != 200) {
         return null;

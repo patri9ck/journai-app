@@ -13,6 +13,7 @@ import '../../model/result.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
 import '../../util/country_data.dart';
+import '../../util/country_name.dart';
 import '../shared/status_row.dart';
 
 class EntryCheckPage extends StatefulWidget {
@@ -123,7 +124,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Text(Country.tryParse(widget.trip.countryCode)?.flagEmoji ?? '', style: const TextStyle(fontSize: 28)),
-            title: Text(widget.trip.countryName, style: theme.textTheme.titleMedium),
+            title: Text(tripCountryName(context, widget.trip), style: theme.textTheme.titleMedium),
             subtitle: Text(_formatRange(DateTimeRange(start: widget.trip.start, end: widget.trip.end))),
           ),
           const SizedBox(height: 8),
@@ -319,7 +320,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
 
     final scheduled = await notificationService.scheduleVaccinationReminder(
       reminderDate,
-      localizations.entryCheckPlanReminderTitle(widget.trip.countryName),
+      localizations.entryCheckPlanReminderTitle(tripCountryName(context, widget.trip)),
       localizations.entryCheckPlanReminderBody,
     );
 

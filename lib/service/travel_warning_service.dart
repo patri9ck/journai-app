@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../model/country_content.dart';
 import '../util/cache.dart';
 import '../util/country_data.dart';
+import '../util/http_timeout.dart';
 
 class TravelWarning {
   final String countryGermanName;
@@ -85,7 +86,7 @@ class TravelWarningService {
     try {
       final response = await http
           .get(Uri.parse('https://www.auswaertiges-amt.de/opendata/travelwarning'))
-          .timeout(const Duration(seconds: 10));
+          .timeout(httpTimeout);
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -158,7 +159,7 @@ class TravelWarningService {
               'https://www.auswaertiges-amt.de/opendata/travelwarning/$countryId',
             ),
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(httpTimeout);
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;

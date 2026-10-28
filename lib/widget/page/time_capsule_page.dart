@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../messages/app_localizations.dart';
 import '../../model/data.dart';
+import '../../model/result.dart';
 import '../../model/time_capsule.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
+import '../../util/country_name.dart';
 import '../shared/document_shared.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
@@ -72,6 +74,34 @@ class _TimeCapsulePageState extends State<TimeCapsulePage> {
     }
   }
 
+  Future<void> _delete() async {
+    final localizations = AppLocalizations.of(context)!;
+
+    final confirmed = await confirmDelete(
+      context,
+      localizations.timeCapsuleDeleteConfirm,
+      localizations.documentDeleteConfirmYes,
+    );
+
+    if (!confirmed || !mounted) {
+      return;
+    }
+
+    final result = await dataService.deleteData(widget.timeCapsule!.id!);
+
+    if (!mounted) {
+      return;
+    }
+
+    if (result is Failure<void>) {
+      result.show(localizations);
+
+      return;
+    }
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -99,8 +129,14 @@ class _TimeCapsulePageState extends State<TimeCapsulePage> {
                 context,
                 fileName: 'time_capsule',
                 subject: localizations.tripTimeCapsuleTitle,
-                child: SharePoster(title: widget.trip.countryName, child: postcard),
+                child: SharePoster(title: tripCountryName(context, widget.trip), child: postcard),
               ),
+            ),
+          if (timeCapsule != null)
+            IconButton(
+              tooltip: localizations.documentDeleteConfirmYes,
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _delete,
             ),
         ],
       ),
@@ -199,7 +235,7 @@ class _Postcard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   localizations.timeCapsuleFrom(
-                    trip.countryName,
+                    tripCountryName(context, trip),
                     DateFormat.yMMMd(localizations.localeName).format(timeCapsule.writtenAt),
                   ),
                   style: theme.textTheme.bodySmall?.copyWith(color: inkColor),

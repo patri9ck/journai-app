@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 import '../model/day_weather.dart';
+import '../util/http_timeout.dart';
 
 class WeatherService {
   static const _archiveDelay = Duration(days: 6);
@@ -26,7 +27,7 @@ class WeatherService {
               '&current=temperature_2m',
             ),
           )
-          .timeout(const Duration(seconds: 5));
+          .timeout(httpTimeout);
 
       if (response.statusCode != 200) {
         return null;
@@ -100,7 +101,7 @@ class WeatherService {
               '&daily=temperature_2m_mean,precipitation_sum&timezone=auto',
             ),
           )
-          .timeout(const Duration(seconds: 8));
+          .timeout(httpTimeout);
 
       if (response.statusCode != 200) {
         return {};

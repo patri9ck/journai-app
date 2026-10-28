@@ -40,8 +40,8 @@ void main() {
     await settle(tester);
 
     expect(find.text('Thailand'), findsOneWidget);
-    expect(find.text('Travel stripes'), findsOneWidget);
-    expect(find.text('Entry check'), findsOneWidget);
+    expect(find.text('Travel Stripes'), findsOneWidget);
+    expect(find.text('Entry Check'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('trip_menu')));
     await settle(tester);

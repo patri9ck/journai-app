@@ -47,7 +47,6 @@ class DataService {
     final result = await _requestService.postAuthenticatedRequest(
       'data/$category/scan',
       {'images': encryptedImages},
-      timeout: const Duration(seconds: 60),
     );
 
     if (result is! Success<Map<String, dynamic>>) {
