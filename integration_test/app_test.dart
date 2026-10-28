@@ -20,7 +20,6 @@ void main() {
 
   testWidgets('encrypted data is decrypted and shown offline', (tester) async {
     app.main();
-    app.testLocaleNotifier.value = const Locale('en');
 
     expect(
       await waitFor(tester, find.byKey(const ValueKey('emergency_card_preview')), timeout: const Duration(seconds: 30)),
