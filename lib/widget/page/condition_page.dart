@@ -23,7 +23,7 @@ class ConditionPage extends StatelessWidget {
       deleteConfirmText: (localizations) => localizations.conditionDeleteConfirm,
       icon: Icons.medical_information_outlined,
       summarize: (fields, localizations) => (
-        fields['name'] as String? ?? '-',
+        fields['name'] as String? ?? '',
         [
           if (fields['diagnosedDate'] case final String diagnosedDate) (localizations.conditionDiagnosedDate, diagnosedDate),
         ],

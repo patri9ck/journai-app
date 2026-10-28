@@ -119,7 +119,7 @@ class EmergencyCardTranslation {
 
   static List<String> vaccineNamesFrom(List<Data> healthData) => healthData
       .where((data) => data.feature == 'VACCINE')
-      .map((data) => data.fields['name'] as String? ?? '-')
+      .map((data) => data.fields['name'] as String? ?? '')
       .toList();
 
   static List<String?> vaccineDiseaseFrom(List<Data> healthData) => healthData

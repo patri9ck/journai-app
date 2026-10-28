@@ -28,7 +28,7 @@ class VisaPage extends StatelessWidget {
       ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
-        fields['country'] as String? ?? '-',
+        fields['country'] as String? ?? '',
         [
           if (fields['visaType'] case final String visaType) (localizations.visaType, visaType),
           if (fields['validUntil'] case final String validUntil) (localizations.visaValidUntil, validUntil),

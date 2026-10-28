@@ -503,7 +503,7 @@ class _Album extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    (item.fields['title'] ?? item.fields['merchant'] ?? '-') as String,
+                    (item.fields['title'] ?? item.fields['merchant'] ?? '') as String,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(color: inkColor, fontWeight: FontWeight.w600),

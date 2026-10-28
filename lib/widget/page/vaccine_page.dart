@@ -348,7 +348,7 @@ class _VaccineCard extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final fields = vaccine.fields;
-    final name = fields['name'] as String? ?? '-';
+    final name = fields['name'] as String? ?? '';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
@@ -755,7 +755,7 @@ class _ScanResultCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(fields['name'] as String? ?? '-', style: theme.textTheme.titleSmall),
+                Text(fields['name'] as String? ?? '', style: theme.textTheme.titleSmall),
                 if (fields['disease'] case final String disease) ...[
                   const SizedBox(height: 4),
                   InfoRow(label: localizations.vaccineDiseaseHint.split(' ').first, value: disease),

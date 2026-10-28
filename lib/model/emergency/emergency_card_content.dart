@@ -30,7 +30,7 @@ class EmergencyCardContent {
       vaccines: [
         for (final vaccine in vaccines)
           vaccineLabel(
-            vaccine.fields['name'] as String? ?? '-',
+            vaccine.fields['name'] as String? ?? '',
             vaccine.fields['disease'] as String?,
             vaccine.fields['date'] as String?,
           ),
@@ -61,7 +61,9 @@ class EmergencyCardContent {
 }
 
 String vaccineLabel(String name, String? disease, String? date) {
-  final details = [if (disease != null && disease.isNotEmpty) disease, if (date != null && date.isNotEmpty) date];
-
-  return details.isEmpty ? name : '$name - ${details.join(' - ')}';
+  return [
+    if (name.isNotEmpty) name,
+    if (disease != null && disease.isNotEmpty) disease,
+    if (date != null && date.isNotEmpty) date,
+  ].join(' - ');
 }

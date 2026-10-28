@@ -28,7 +28,7 @@ class MedicalCertificatePage extends StatelessWidget {
       ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
       toScannedItems: withAllImagesFallback,
       summarize: (fields, localizations) => (
-        fields['title'] as String? ?? '-',
+        fields['title'] as String? ?? '',
         [
           if (fields['date'] case final String date) (localizations.medicalCertificateDate, date),
           if (fields['issuer'] case final String issuer) (localizations.medicalCertificateIssuer, issuer),

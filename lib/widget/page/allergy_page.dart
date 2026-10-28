@@ -22,7 +22,7 @@ class AllergyPage extends StatelessWidget {
       deleteConfirmText: (localizations) => localizations.allergyDeleteConfirm,
       icon: Icons.warning_amber_outlined,
       summarize: (fields, localizations) => (
-        fields['name'] as String? ?? '-',
+        fields['name'] as String? ?? '',
         [
           if (fields['severity'] case final String severity)
             (

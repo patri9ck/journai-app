@@ -67,7 +67,7 @@ class IdentityDocumentPage extends StatelessWidget {
     final name = [fields['givenNames'], fields['surname']].whereType<String>().join(' ');
 
     return (
-      name.isNotEmpty ? name : fields[numberKey] as String? ?? '-',
+      name.isNotEmpty ? name : fields[numberKey] as String? ?? '',
       [
         if (fields[numberKey] case final String number) (numberLabel, number),
         if (documentType == IdentityDocumentType.driversLicense)

@@ -29,7 +29,7 @@ class HealthInsuranceCardPage extends StatelessWidget {
       pickImages: pickFrontAndBack,
       toScannedItems: mergeFrontAndBack,
       summarize: (fields, localizations) => (
-        fields['insuranceName'] as String? ?? '-',
+        fields['insuranceName'] as String? ?? '',
         [
           if (fields['memberNumber'] case final String memberNumber) (localizations.healthInsuranceMemberNumber, memberNumber),
           if (fields['validUntil'] case final String validUntil) (localizations.healthInsuranceValidUntil, validUntil),

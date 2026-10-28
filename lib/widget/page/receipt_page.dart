@@ -44,7 +44,7 @@ class ReceiptPage extends StatelessWidget {
       ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
-        fields['merchant'] as String? ?? '-',
+        fields['merchant'] as String? ?? '',
         [
           if (fields['date'] case final String date) (localizations.receiptDate, date),
           if (fields['amount'] case final num amount) (localizations.receiptAmount, '$amount ${fields['currency'] ?? ''}'.trim()),

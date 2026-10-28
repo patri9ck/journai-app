@@ -28,7 +28,7 @@ class TicketPage extends StatelessWidget {
       ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
       toScannedItems: withFirstImageFallback,
       summarize: (fields, localizations) => (
-        fields['title'] as String? ?? '-',
+        fields['title'] as String? ?? '',
         [
           if (fields['date'] case final String date) (localizations.ticketDate, date),
           ...?(fields['extraFields'] as Map?)?.entries.take(2).map((entry) => ('${entry.key}', '${entry.value}')),
