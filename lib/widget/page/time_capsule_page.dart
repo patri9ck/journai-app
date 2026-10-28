@@ -128,7 +128,7 @@ class _TimeCapsulePageState extends State<TimeCapsulePage> {
               icon: const Icon(Icons.share_outlined),
               onPressed: () => shareWidgetAsImage(
                 context,
-                fileName: 'time_capsule',
+                fileName: 'time-capsule',
                 subject: localizations.tripTimeCapsuleTitle,
                 child: SharePoster(title: tripPlaceName(context, widget.trip), child: postcard),
               ),

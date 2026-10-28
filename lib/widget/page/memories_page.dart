@@ -175,7 +175,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
 
   Future<void> _shareLifeBand(AppLocalizations localizations) => shareWidgetAsImage(
     context,
-    fileName: 'life_band',
+    fileName: 'life-band',
     subject: localizations.memoriesLifeBand,
     child: SharePoster(
       title: localizations.memoriesLifeBand,

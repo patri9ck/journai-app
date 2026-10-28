@@ -1485,7 +1485,7 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
     try {
       await shareWidgetAsImage(
         context,
-        fileName: 'emergency_card',
+        fileName: 'emergency-card',
         subject: localizations.dashboardEmergencyCardTitle,
         child: EmergencyCardView(localizations: translatedLocalizations ?? localizations, content: _content),
       );

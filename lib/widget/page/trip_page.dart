@@ -308,7 +308,7 @@ class _TripPageState extends State<TripPage> {
 
     await shareWidgetAsImage(
       context,
-      fileName: 'album',
+      fileName: 'scrapbook',
       subject: localizations.tripAlbumTitle,
       child: SharePoster(
         title: localizations.tripAlbumTitle,
