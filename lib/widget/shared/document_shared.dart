@@ -4,6 +4,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource, XFile;
 
@@ -14,6 +15,40 @@ import '../sheet/encryption_sheet.dart';
 import 'form_sheet.dart';
 
 Future<List<XFile>?> pickDocumentImages(
+  BuildContext context, {
+  bool multipleAllowed = false,
+}) async => (await _pickDocumentImages(context, multipleAllowed: multipleAllowed))?.photos;
+
+Future<({List<XFile> photos, DateTime date})?> pickDatedDocumentImages(
+  BuildContext context, {
+  bool multipleAllowed = false,
+}) async {
+  final picked = await _pickDocumentImages(context, multipleAllowed: multipleAllowed);
+
+  if (picked == null) {
+    return null;
+  }
+
+  if (picked.source == ImageSource.camera) {
+    return (photos: picked.photos, date: DateTime.now());
+  }
+
+  return (photos: picked.photos, date: await _captureDate(picked.photos.first) ?? DateTime.now());
+}
+
+Future<DateTime?> _captureDate(XFile photo) async {
+  final tags = await readExifFromBytes(await photo.readAsBytes());
+  final value = (tags['EXIF DateTimeOriginal'] ?? tags['Image DateTime'])?.printable;
+  final match = RegExp(r'^(\d{4}):(\d{2}):(\d{2})').firstMatch(value ?? '');
+
+  if (match == null) {
+    return null;
+  }
+
+  return DateTime(int.parse(match.group(1)!), int.parse(match.group(2)!), int.parse(match.group(3)!));
+}
+
+Future<({ImageSource source, List<XFile> photos})?> _pickDocumentImages(
   BuildContext context, {
   bool multipleAllowed = false,
 }) async {
@@ -57,7 +92,7 @@ Future<List<XFile>?> pickDocumentImages(
       return null;
     }
 
-    return [photo];
+    return (source: source, photos: [photo]);
   } else {
     final photos = await picker.pickMultiImage(imageQuality: 80, maxWidth: 1600);
 
@@ -65,7 +100,7 @@ Future<List<XFile>?> pickDocumentImages(
       return null;
     }
 
-    return photos;
+    return (source: source, photos: photos);
   }
 }
 

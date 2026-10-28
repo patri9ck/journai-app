@@ -39,6 +39,7 @@ dependencies:
   dynamic_color: ^2.1.0
   record: ^7.1.2
   audioplayers: ^6.8.1
+  exif: ^3.3.0
 
 dev_dependencies:
   flutter_test:

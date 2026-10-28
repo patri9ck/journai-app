@@ -60,15 +60,18 @@ class _ImageFormSheetState extends State<_ImageFormSheet> {
   }
 
   Future<void> _pickImage() async {
-    final photos = await pickDocumentImages(context);
+    final picked = await pickDatedDocumentImages(context);
 
-    if (photos == null || !mounted) {
+    if (picked == null || !mounted) {
       return;
     }
 
-    final bytes = await photos.first.readAsBytes();
+    final bytes = await picked.photos.first.readAsBytes();
 
-    setState(() => _imageBase64 = base64Encode(bytes));
+    setState(() {
+      _imageBase64 = base64Encode(bytes);
+      _dateController.text = formatDocumentDate(picked.date);
+    });
   }
 
   void _submit() {

@@ -86,16 +86,17 @@ class _CertFormSheetState extends State<_CertFormSheet> {
   }
 
   Future<void> _addImage() async {
-    final photos = await pickDocumentImages(context, multipleAllowed: true);
+    final picked = await pickDatedDocumentImages(context, multipleAllowed: true);
 
-    if (photos == null || !mounted) {
+    if (picked == null || !mounted) {
       return;
     }
 
-    final bytesList = await Future.wait(photos.map((photo) => photo.readAsBytes()));
+    final bytesList = await Future.wait(picked.photos.map((photo) => photo.readAsBytes()));
 
     setState(() {
       _images.addAll(bytesList.map(base64Encode));
+      _dateController.text = formatDocumentDate(picked.date);
     });
   }
 
