@@ -182,7 +182,8 @@ class _HealthValuePageState extends State<HealthValuePage> {
                     SliverFillRemaining(
                       child: EmptyState(
                         icon: Icons.monitor_heart_outlined,
-                        text: localizations.healthValueEmpty,
+                        title: localizations.healthValueEmpty,
+                        text: localizations.emptyAddHint,
                         actions: [
                           OutlinedButton.icon(
                             onPressed: _add,

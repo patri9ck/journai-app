@@ -12,7 +12,6 @@ import '../../model/data.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
-import '../../util/document_date.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../shared/scanning_dialog.dart';
@@ -275,7 +274,8 @@ class _VaccinePageState extends State<VaccinePage> {
                     SliverFillRemaining(
                       child: EmptyState(
                         icon: Icons.vaccines_outlined,
-                        text: localizations.vaccinesEmpty,
+                        title: localizations.vaccinesEmpty,
+                        text: localizations.emptyAddHint,
                         actions: [
                           OutlinedButton.icon(
                             onPressed: _pickAndScan,
@@ -845,7 +845,7 @@ class _VaccineFormSheetState extends State<_VaccineFormSheet> {
     _nameController = TextEditingController(text: initial['name'] as String? ?? '');
     _diseaseController = TextEditingController(text: initial['disease'] as String? ?? '');
     _dateController = TextEditingController(
-      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+      text: initial['date'] as String? ?? '',
     );
     _nextDateController = TextEditingController(text: initial['nextDate'] as String? ?? '');
     _manufacturerController = TextEditingController(text: initial['manufacturer'] as String? ?? '');

@@ -22,7 +22,7 @@ class HealthInsuranceCardPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'HEALTH_INSURANCE_CARD',
       title: localizations.healthInsuranceCardTitle,
-      emptyText: localizations.healthInsuranceCardEmpty,
+      emptyTitle: localizations.healthInsuranceCardEmpty,
       deleteConfirmText: (localizations) => localizations.healthInsuranceCardDeleteConfirm,
       icon: Icons.credit_card_outlined,
       ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),

@@ -34,7 +34,7 @@ class IdentityDocumentPage extends StatelessWidget {
         IdentityDocumentType.idCard => localizations.idCardTitle,
         IdentityDocumentType.driversLicense => localizations.driversLicenseTitle,
       },
-      emptyText: switch (documentType) {
+      emptyTitle: switch (documentType) {
         IdentityDocumentType.passport => localizations.passportEmpty,
         IdentityDocumentType.idCard => localizations.idCardEmpty,
         IdentityDocumentType.driversLicense => localizations.driversLicenseEmpty,

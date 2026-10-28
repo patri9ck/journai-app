@@ -18,7 +18,7 @@ class AllergyPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'ALLERGY',
       title: localizations.allergyTitle,
-      emptyText: localizations.allergyEmpty,
+      emptyTitle: localizations.allergyEmpty,
       deleteConfirmText: (localizations) => localizations.allergyDeleteConfirm,
       icon: Icons.warning_amber_outlined,
       summarize: (fields, localizations) => (

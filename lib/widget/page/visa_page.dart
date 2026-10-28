@@ -22,7 +22,7 @@ class VisaPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'VISA',
       title: localizations.visaTitle,
-      emptyText: localizations.visaEmpty,
+      emptyTitle: localizations.visaEmpty,
       deleteConfirmText: (localizations) => localizations.visaDeleteConfirm,
       icon: Icons.travel_explore_outlined,
       ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),

@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -510,22 +511,31 @@ class _Album extends StatelessWidget {
 
   const _Album({required this.items});
 
+  static const _spacing = 12.0;
+
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 12,
-      runSpacing: 16,
-      children: [
-        for (final item in items) _AlbumItem(key: ValueKey(item.id), item: item),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = min(150.0, (constraints.maxWidth - _spacing) / 2);
+
+        return Wrap(
+          spacing: _spacing,
+          runSpacing: 16,
+          children: [
+            for (final item in items) _AlbumItem(key: ValueKey(item.id), item: item, width: width),
+          ],
+        );
+      },
     );
   }
 }
 
 class _AlbumItem extends StatelessWidget {
   final Data item;
+  final double width;
 
-  const _AlbumItem({super.key, required this.item});
+  const _AlbumItem({super.key, required this.item, required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +547,7 @@ class _AlbumItem extends StatelessWidget {
     return Transform.rotate(
       angle: ((item.id ?? 0) % 7 - 3) * 0.02,
       child: Container(
-        width: 150,
+        width: width,
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
         decoration: BoxDecoration(
           color: paperColor,
@@ -550,7 +560,7 @@ class _AlbumItem extends StatelessWidget {
             if (image != null) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(2),
-                child: Image(image: image, height: 100, width: double.infinity, fit: BoxFit.cover),
+                child: Image(image: image, height: width * 2 / 3, width: double.infinity, fit: BoxFit.cover),
               ),
               const SizedBox(height: 8),
             ] else ...[

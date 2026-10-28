@@ -88,7 +88,7 @@ List<String>? documentImages(Map<String, dynamic> fields) {
 class DocumentListPage extends StatefulWidget {
   final String feature;
   final String title;
-  final String emptyText;
+  final String emptyTitle;
   final String Function(AppLocalizations localizations) deleteConfirmText;
   final IconData icon;
   final Future<bool> Function(BuildContext context)? ensureConsent;
@@ -102,7 +102,7 @@ class DocumentListPage extends StatefulWidget {
   const DocumentListPage({
     required this.feature,
     required this.title,
-    required this.emptyText,
+    required this.emptyTitle,
     required this.deleteConfirmText,
     required this.icon,
     required this.summarize,
@@ -301,7 +301,8 @@ class _DocumentListPageState extends State<DocumentListPage> {
                     SliverFillRemaining(
                       child: EmptyState(
                         icon: widget.icon,
-                        text: widget.emptyText,
+                        title: widget.emptyTitle,
+                        text: localizations.emptyAddHint,
                         actions: [
                           if (canScan)
                             OutlinedButton.icon(

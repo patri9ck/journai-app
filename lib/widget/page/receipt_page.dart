@@ -39,7 +39,7 @@ class ReceiptPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'RECEIPT',
       title: localizations.receiptTitle,
-      emptyText: localizations.receiptEmpty,
+      emptyTitle: localizations.receiptEmpty,
       deleteConfirmText: (localizations) => localizations.receiptDeleteConfirm,
       icon: Icons.receipt_long_outlined,
       ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
@@ -178,7 +178,7 @@ class _ReceiptFormSheetState extends State<_ReceiptFormSheet> {
 
     _merchantController = TextEditingController(text: initial['merchant'] as String? ?? '');
     _dateController = TextEditingController(
-      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+      text: initial['date'] as String? ?? '',
     );
     _amountController = TextEditingController(text: (initial['amount'] as num?)?.toString() ?? '');
     _currencyController = TextEditingController(text: initial['currency'] as String? ?? 'EUR');

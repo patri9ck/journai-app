@@ -23,7 +23,7 @@ class TicketPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'TICKET',
       title: localizations.ticketTitle,
-      emptyText: localizations.ticketEmpty,
+      emptyTitle: localizations.ticketEmpty,
       deleteConfirmText: (localizations) => localizations.ticketDeleteConfirm,
       icon: Icons.confirmation_number_outlined,
       ensureConsent: (context) => ensureConsent(context, ConsentType.documentScan),
@@ -65,7 +65,7 @@ class _TicketFormSheetState extends State<_TicketFormSheet> {
       text: initial['title'] as String? ?? '',
     );
     _dateController = TextEditingController(
-      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+      text: initial['date'] as String? ?? '',
     );
     _notesController = TextEditingController(
       text: initial['notes'] as String? ?? '',

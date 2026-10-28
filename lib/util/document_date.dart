@@ -23,5 +23,3 @@ DateTime? parseDocumentDate(String? text) {
 
 String formatDocumentDate(DateTime date) =>
     '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
-
-String todayDocumentDate() => formatDocumentDate(DateTime.now());

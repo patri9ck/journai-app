@@ -23,7 +23,7 @@ class MedicalCertificatePage extends StatelessWidget {
     return DocumentListPage(
       feature: 'MEDICAL_CERTIFICATE',
       title: localizations.medicalCertificateTitle,
-      emptyText: localizations.medicalCertificateEmpty,
+      emptyTitle: localizations.medicalCertificateEmpty,
       deleteConfirmText: (localizations) => localizations.medicalCertificateDeleteConfirm,
       icon: Icons.description_outlined,
       ensureConsent: (context) => ensureConsent(context, ConsentType.healthDataScan),
@@ -65,7 +65,7 @@ class _CertFormSheetState extends State<_CertFormSheet> {
       text: initial['title'] as String? ?? '',
     );
     _dateController = TextEditingController(
-      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+      text: initial['date'] as String? ?? '',
     );
     _issuerController = TextEditingController(
       text: initial['issuer'] as String? ?? '',

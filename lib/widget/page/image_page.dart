@@ -21,7 +21,7 @@ class ImagePage extends StatelessWidget {
     return DocumentListPage(
       feature: 'IMAGE',
       title: localizations.imagesTitle,
-      emptyText: localizations.imageEmpty,
+      emptyTitle: localizations.imageEmpty,
       deleteConfirmText: (localizations) => localizations.imageDeleteConfirm,
       icon: Icons.photo_outlined,
       summarize: (fields, localizations) => (
@@ -45,9 +45,7 @@ class _ImageFormSheet extends StatefulWidget {
 }
 
 class _ImageFormSheetState extends State<_ImageFormSheet> {
-  late final _dateController = TextEditingController(
-    text: widget.initialFields == null ? todayDocumentDate() : widget.initialFields!['date'] as String? ?? '',
-  );
+  late final _dateController = TextEditingController(text: widget.initialFields?['date'] as String? ?? '');
   late final _commentController = TextEditingController(text: widget.initialFields?['comment'] as String? ?? '');
   late String? _imageBase64 = widget.initialFields?['imageBase64'] as String?;
   bool _submitted = false;

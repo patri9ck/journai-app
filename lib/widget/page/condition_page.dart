@@ -19,7 +19,7 @@ class ConditionPage extends StatelessWidget {
     return DocumentListPage(
       feature: 'CONDITION',
       title: localizations.conditionTitle,
-      emptyText: localizations.conditionEmpty,
+      emptyTitle: localizations.conditionEmpty,
       deleteConfirmText: (localizations) => localizations.conditionDeleteConfirm,
       icon: Icons.medical_information_outlined,
       summarize: (fields, localizations) => (
