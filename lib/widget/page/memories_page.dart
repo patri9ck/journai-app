@@ -179,7 +179,6 @@ class _MemoriesPageState extends State<MemoriesPage> {
     subject: localizations.memoriesLifeBand,
     child: SharePoster(
       title: localizations.memoriesLifeBand,
-      subtitle: localizations.memoriesLifeBandHint,
       style: _memoriesStyle.lifeBand.poster,
       child: _LifeBand(trips: _trips, weather: _weather, style: _memoriesStyle.lifeBand),
     ),
@@ -231,7 +230,6 @@ class _MemoriesPageState extends State<MemoriesPage> {
               children: [
                 PosterCard(
                   title: localizations.memoriesLifeBand,
-                  subtitle: localizations.memoriesLifeBandHint,
                   style: _memoriesStyle.lifeBand.poster,
                   customizeTooltip: localizations.lifeBandCustomize,
                   onCustomize: _customizeLifeBand,
