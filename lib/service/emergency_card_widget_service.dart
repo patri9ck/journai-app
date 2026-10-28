@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../messages/app_localizations.dart';
 import '../model/data.dart';
@@ -17,22 +18,32 @@ class EmergencyCardWidgetService {
   static const _imageKey = 'emergency_card';
   static const _widthKey = 'emergency_card_width';
   static const _heightKey = 'emergency_card_height';
+  static const _signatureKey = 'emergency_card_signature';
   static const _androidName = 'EmergencyCardWidgetProvider';
   static const _iOSName = 'EmergencyCardWidget';
   static const _defaultSize = Size(360, 380);
 
   Future<void> update(List<Data> healthData, {required bool metricUnits}) async {
     try {
-      if ((await HomeWidget.getInstalledWidgets()).isEmpty) {
+      final localizations = _localizations();
+      final content = EmergencyCardContent.fromHealthData(healthData, metricUnits: metricUnits);
+      final size = await _widgetSize();
+      final packageInfo = await PackageInfo.fromPlatform();
+      final signature = [
+        packageInfo.version,
+        packageInfo.buildNumber,
+        localizations.localeName,
+        '${size.width}x${size.height}',
+        '${emergencyCardColor.toARGB32()}',
+        for (final section in [content.allergies, content.conditions, content.vitalSigns, content.healthValues, content.vaccines])
+          section.join('\u0000'),
+      ].join('\n');
+
+      if (signature == await HomeWidget.getWidgetData<String>(_signatureKey)) {
         return;
       }
 
-      final card = EmergencyCardView(
-        localizations: _localizations(),
-        content: EmergencyCardContent.fromHealthData(healthData, metricUnits: metricUnits),
-      );
-
-      final size = await _widgetSize();
+      final card = EmergencyCardView(localizations: localizations, content: content);
 
       await HomeWidget.renderFlutterWidget(
         Container(
@@ -46,6 +57,7 @@ class EmergencyCardWidgetService {
         pixelRatio: WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio,
       );
 
+      await HomeWidget.saveWidgetData<String>(_signatureKey, signature);
       await HomeWidget.updateWidget(androidName: _androidName, iOSName: _iOSName);
     } on PlatformException {
       return;
@@ -55,6 +67,7 @@ class EmergencyCardWidgetService {
   Future<void> clear() async {
     try {
       await HomeWidget.saveWidgetData<String>(_imageKey, null);
+      await HomeWidget.saveWidgetData<String>(_signatureKey, null);
       await HomeWidget.updateWidget(androidName: _androidName, iOSName: _iOSName);
     } on PlatformException {
       return;
