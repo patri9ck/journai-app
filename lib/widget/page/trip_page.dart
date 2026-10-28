@@ -11,6 +11,7 @@ import '../../model/data.dart';
 import '../../model/day_weather.dart';
 import '../../model/journal_entry.dart';
 import '../../model/limits.dart';
+import '../../model/poster_style.dart';
 import '../../model/result.dart';
 import '../../model/time_capsule.dart';
 import '../../model/trip.dart';
@@ -21,6 +22,7 @@ import '../../util/trip_memories.dart';
 import '../../util/units_notifier.dart';
 import '../sheet/journal_entry_sheet.dart';
 import '../sheet/paywall_sheet.dart';
+import '../sheet/poster_style_sheet.dart';
 import '../shared/document_shared.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
@@ -134,14 +136,7 @@ class _TripPageState extends State<TripPage> {
       return;
     }
 
-    final trip = Trip(
-      id: _trip.id,
-      countryCode: _trip.countryCode,
-      countryName: _trip.countryName,
-      start: dates.start,
-      end: dates.end,
-      stampStyle: _trip.stampStyle,
-    );
+    final trip = _trip.copyWith(start: dates.start, end: dates.end);
 
     final saved = await ensureAndSave(
       context,
@@ -279,8 +274,48 @@ class _TripPageState extends State<TripPage> {
     context,
     fileName: 'album',
     subject: localizations.tripAlbumTitle,
-    child: SharePoster(title: tripCountryName(context, _trip), subtitle: localizations.tripAlbumTitle, child: _Album(items: album)),
+    child: SharePoster(
+      title: localizations.tripAlbumTitle,
+      subtitle: tripCountryName(context, _trip),
+      style: _trip.albumStyle,
+      child: _Album(items: album),
+    ),
   );
+
+  Future<void> _customizeAlbum() async {
+    final localizations = AppLocalizations.of(context)!;
+
+    final style = await showModalBottomSheet<PosterStyle>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => PosterStyleSheet(
+        title: localizations.tripAlbumCustomize,
+        defaultHeading: localizations.tripAlbumTitle,
+        style: _trip.albumStyle,
+      ),
+    );
+
+    if (style == null || !mounted) {
+      return;
+    }
+
+    final trip = _trip.copyWith(albumStyle: style);
+
+    final saved = await ensureAndSave(
+      context,
+      () => dataService.updateData(trip.id!, Data(feature: 'TRIP', fields: trip.toFields())),
+    );
+
+    if (!saved) {
+      return;
+    }
+
+    await dataService.getData();
+
+    if (mounted) {
+      setState(() => _trip = trip);
+    }
+  }
 
   String _dateRange(AppLocalizations localizations) {
     final dateFormat = DateFormat.yMMMd(localizations.localeName);
@@ -400,22 +435,16 @@ class _TripPageState extends State<TripPage> {
             ),
           ),
           const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(child: Text(localizations.tripAlbumTitle, style: theme.textTheme.titleMedium)),
-              if (album.isNotEmpty)
-                IconButton(
-                  tooltip: localizations.share,
-                  icon: const Icon(Icons.share_outlined),
-                  onPressed: () => _shareAlbum(localizations, album),
-                ),
-            ],
+          PosterCard(
+            title: localizations.tripAlbumTitle,
+            style: _trip.albumStyle,
+            customizeTooltip: localizations.tripAlbumCustomize,
+            onCustomize: _customizeAlbum,
+            onShare: album.isEmpty ? null : () => _shareAlbum(localizations, album),
+            child: album.isEmpty
+                ? Text(localizations.tripAlbumEmpty, style: theme.textTheme.bodySmall?.copyWith(color: sharePosterSubtitleColor))
+                : _Album(items: album),
           ),
-          const SizedBox(height: 8),
-          if (album.isEmpty)
-            Text(localizations.tripAlbumEmpty, style: theme.textTheme.bodySmall?.copyWith(color: mutedColor))
-          else
-            _Album(items: album),
           const SizedBox(height: 24),
           Text(localizations.tripTimeCapsuleTitle, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),

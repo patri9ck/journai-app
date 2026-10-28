@@ -26,14 +26,7 @@ class _StampStyleSheetState extends State<StampStyleSheet> {
   late StampStyle _style = widget.trip.stampStyle;
   bool _saving = false;
 
-  Trip get _preview => Trip(
-    id: widget.trip.id,
-    countryCode: widget.trip.countryCode,
-    countryName: widget.trip.countryName,
-    start: widget.trip.start,
-    end: widget.trip.end,
-    stampStyle: _style,
-  );
+  Trip get _preview => widget.trip.copyWith(stampStyle: _style);
 
   Future<void> _save() async {
     setState(() => _saving = true);

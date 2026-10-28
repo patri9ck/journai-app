@@ -220,48 +220,14 @@ class _MemoriesPageState extends State<MemoriesPage> {
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
               children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 4, 16),
-                  decoration: BoxDecoration(
-                    color: _memoriesStyle.lifeBand.poster.background,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: PosterHeading(
-                              title: localizations.memoriesLifeBand,
-                              subtitle: localizations.memoriesLifeBandHint,
-                              style: _memoriesStyle.lifeBand.poster,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              IconButton(
-                                tooltip: localizations.lifeBandCustomize,
-                                icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
-                                onPressed: _customizeLifeBand,
-                              ),
-                              IconButton(
-                                tooltip: localizations.share,
-                                icon: const Icon(Icons.share_outlined, color: sharePosterSubtitleColor),
-                                onPressed: () => _shareLifeBand(localizations),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: _LifeBand(trips: _trips, weather: _weather, style: _memoriesStyle.lifeBand, onOpen: _open),
-                      ),
-                    ],
-                  ),
+                PosterCard(
+                  title: localizations.memoriesLifeBand,
+                  subtitle: localizations.memoriesLifeBandHint,
+                  style: _memoriesStyle.lifeBand.poster,
+                  customizeTooltip: localizations.lifeBandCustomize,
+                  onCustomize: _customizeLifeBand,
+                  onShare: () => _shareLifeBand(localizations),
+                  child: _LifeBand(trips: _trips, weather: _weather, style: _memoriesStyle.lifeBand, onOpen: _open),
                 ),
                 const SizedBox(height: 24),
                 for (final trip in _trips.reversed)
@@ -317,9 +283,8 @@ class _LifeBand extends StatelessWidget {
     final theme = Theme.of(context);
     final labelFormat = DateFormat.yMMM(localizations.localeName);
     final now = DateTime.now();
-    final frameColor = Color.lerp(style.poster.background, const Color(0xFF14161B), 0.45)!;
 
-    final band = Wrap(
+    return Wrap(
       spacing: 12,
       runSpacing: 12,
       crossAxisAlignment: WrapCrossAlignment.end,
@@ -359,28 +324,6 @@ class _LifeBand extends StatelessWidget {
             ),
           ),
       ],
-    );
-
-    if (style.frame == LifeBandFrame.none) {
-      return band;
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: frameColor, width: 2),
-      ),
-      child: style.frame == LifeBandFrame.double
-          ? Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: frameColor, width: 1),
-              ),
-              child: band,
-            )
-          : band,
     );
   }
 

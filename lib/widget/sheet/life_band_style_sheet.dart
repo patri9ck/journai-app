@@ -49,20 +49,7 @@ class _LifeBandStyleSheetState extends State<LifeBandStyleSheet> {
             ],
           ),
         ),
-        ...posterStyleSections(localizations, _style.poster, (poster) => setState(() => _style = _style.copyWith(poster: poster))),
-        StyleSection(
-          label: localizations.lifeBandFrame,
-          child: StyleChoices(
-            values: LifeBandFrame.values,
-            selected: _style.frame,
-            label: (frame) => switch (frame) {
-              LifeBandFrame.none => localizations.lifeBandFrameNone,
-              LifeBandFrame.line => localizations.lifeBandFrameLine,
-              LifeBandFrame.double => localizations.lifeBandFrameDouble,
-            },
-            onSelected: (frame) => setState(() => _style = _style.copyWith(frame: frame)),
-          ),
-        ),
+        ...posterStyleSections(localizations, _style.poster, localizations.memoriesLifeBand, (poster) => setState(() => _style = _style.copyWith(poster: poster))),
         if (_style.showStamps) ...[
           StyleSection(
             label: localizations.stampLayout,

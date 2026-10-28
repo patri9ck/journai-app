@@ -3,15 +3,12 @@
 
 import 'poster_style.dart';
 
-enum LifeBandFrame { none, line, double }
-
 enum StampLayout { tidy, scattered }
 
 enum StampSize { small, medium, large }
 
 class LifeBandStyle {
   final PosterStyle poster;
-  final LifeBandFrame frame;
   final bool showStripes;
   final bool showStamps;
   final StampLayout stampLayout;
@@ -19,7 +16,6 @@ class LifeBandStyle {
 
   const LifeBandStyle({
     this.poster = const PosterStyle(),
-    this.frame = LifeBandFrame.none,
     this.showStripes = true,
     this.showStamps = true,
     this.stampLayout = StampLayout.tidy,
@@ -34,7 +30,6 @@ class LifeBandStyle {
 
   static LifeBandStyle fromJson(Map<String, dynamic>? json) => LifeBandStyle(
     poster: PosterStyle.fromJson(json),
-    frame: LifeBandFrame.values.asNameMap()[json?['frame']] ?? LifeBandFrame.none,
     showStripes: json?['showStripes'] as bool? ?? true,
     showStamps: json?['showStamps'] as bool? ?? true,
     stampLayout: StampLayout.values.asNameMap()[json?['stampLayout']] ?? StampLayout.tidy,
@@ -43,14 +38,12 @@ class LifeBandStyle {
 
   LifeBandStyle copyWith({
     PosterStyle? poster,
-    LifeBandFrame? frame,
     bool? showStripes,
     bool? showStamps,
     StampLayout? stampLayout,
     StampSize? stampSize,
   }) => LifeBandStyle(
     poster: poster ?? this.poster,
-    frame: frame ?? this.frame,
     showStripes: showStripes ?? this.showStripes,
     showStamps: showStamps ?? this.showStamps,
     stampLayout: stampLayout ?? this.stampLayout,
@@ -59,7 +52,6 @@ class LifeBandStyle {
 
   Map<String, dynamic> toJson() => {
     ...poster.toJson(),
-    'frame': frame.name,
     'showStripes': showStripes,
     'showStamps': showStamps,
     'stampLayout': stampLayout.name,

@@ -5,6 +5,8 @@ import 'dart:ui';
 
 import 'stamp_style.dart';
 
+enum PosterFrame { none, line, double }
+
 const posterBackgrounds = [
   Color(0xFFFBF8F1),
   Color(0xFFF3EEDF),
@@ -17,24 +19,48 @@ const posterBackgrounds = [
 
 class PosterStyle {
   final Color background;
+  final String heading;
   final StampFont headingFont;
+  final PosterFrame frame;
+  final Color? frameColor;
 
-  const PosterStyle({this.background = const Color(0xFFFBF8F1), this.headingFont = StampFont.serif});
+  const PosterStyle({
+    this.background = const Color(0xFFFBF8F1),
+    this.heading = '',
+    this.headingFont = StampFont.serif,
+    this.frame = PosterFrame.none,
+    this.frameColor,
+  });
 
   static PosterStyle fromJson(Map<String, dynamic>? json) {
     final background = json?['background'] as int?;
+    final frameColor = json?['frameColor'] as int?;
 
     return PosterStyle(
       background: background == null ? const Color(0xFFFBF8F1) : Color(background),
+      heading: json?['heading'] as String? ?? '',
       headingFont: StampFont.values.asNameMap()[json?['headingFont']] ?? StampFont.serif,
+      frame: PosterFrame.values.asNameMap()[json?['frame']] ?? PosterFrame.none,
+      frameColor: frameColor == null ? null : Color(frameColor),
     );
   }
 
-  PosterStyle copyWith({Color? background, StampFont? headingFont}) =>
-      PosterStyle(background: background ?? this.background, headingFont: headingFont ?? this.headingFont);
+  PosterStyle copyWith({Color? background, String? heading, StampFont? headingFont, PosterFrame? frame, Color? frameColor}) =>
+      PosterStyle(
+        background: background ?? this.background,
+        heading: heading ?? this.heading,
+        headingFont: headingFont ?? this.headingFont,
+        frame: frame ?? this.frame,
+        frameColor: frameColor ?? this.frameColor,
+      );
+
+  String headingOr(String defaultHeading) => heading.trim().isEmpty ? defaultHeading : heading.trim();
 
   Map<String, dynamic> toJson() => {
     'background': background.toARGB32(),
+    'heading': heading.trim(),
     'headingFont': headingFont.name,
+    'frame': frame.name,
+    if (frameColor != null) 'frameColor': frameColor!.toARGB32(),
   };
 }

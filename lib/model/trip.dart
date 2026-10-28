@@ -3,6 +3,7 @@
 
 import '../util/document_date.dart';
 import 'data.dart';
+import 'poster_style.dart';
 import 'stamp_style.dart';
 
 class Trip {
@@ -12,6 +13,7 @@ class Trip {
   final DateTime start;
   final DateTime end;
   final StampStyle stampStyle;
+  final PosterStyle albumStyle;
 
   const Trip({
     this.id,
@@ -20,6 +22,7 @@ class Trip {
     required this.start,
     required this.end,
     this.stampStyle = const StampStyle(),
+    this.albumStyle = const PosterStyle(),
   });
 
   static Trip? fromData(Data data) {
@@ -38,8 +41,19 @@ class Trip {
       start: start,
       end: end,
       stampStyle: StampStyle.fromFields(data.fields),
+      albumStyle: PosterStyle.fromJson(data.fields['albumStyle'] as Map<String, dynamic>?),
     );
   }
+
+  Trip copyWith({DateTime? start, DateTime? end, StampStyle? stampStyle, PosterStyle? albumStyle}) => Trip(
+    id: id,
+    countryCode: countryCode,
+    countryName: countryName,
+    start: start ?? this.start,
+    end: end ?? this.end,
+    stampStyle: stampStyle ?? this.stampStyle,
+    albumStyle: albumStyle ?? this.albumStyle,
+  );
 
   static List<Trip> fromDataList(List<Data> data) =>
       data.where((entry) => entry.feature == 'TRIP').map(fromData).whereType<Trip>().toList()
@@ -59,5 +73,6 @@ class Trip {
     'start': start.toIso8601String().substring(0, 10),
     'end': end.toIso8601String().substring(0, 10),
     ...stampStyle.toFields(),
+    'albumStyle': albumStyle.toJson(),
   };
 }

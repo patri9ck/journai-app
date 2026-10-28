@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart' hide Share;
 
+import '../../messages/app_localizations.dart';
 import '../../model/poster_style.dart';
 import 'stamp_font.dart';
 
@@ -78,12 +79,113 @@ class PosterHeading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
-          style: stampFontStyle(style.headingFont, theme.textTheme.headlineMedium!.copyWith(color: const Color(0xFF14161B))),
+          style.headingOr(title),
+          style: stampFontStyle(
+            style.headingFont,
+            theme.textTheme.headlineMedium!.copyWith(color: const Color(0xFF14161B)),
+          ),
         ),
         if (subtitle != null)
           Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: sharePosterSubtitleColor)),
       ],
+    );
+  }
+}
+
+class PosterFrameBox extends StatelessWidget {
+  final PosterStyle style;
+  final Widget child;
+
+  const PosterFrameBox({super.key, required this.style, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    if (style.frame == PosterFrame.none) {
+      return child;
+    }
+
+    final frameColor = style.frameColor ?? Color.lerp(style.background, const Color(0xFF14161B), 0.45)!;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: frameColor, width: 2),
+      ),
+      child: style.frame == PosterFrame.double
+          ? Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: frameColor, width: 1),
+              ),
+              child: child,
+            )
+          : child,
+    );
+  }
+}
+
+class PosterCard extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final PosterStyle style;
+  final String customizeTooltip;
+  final VoidCallback onCustomize;
+  final VoidCallback? onShare;
+  final Widget child;
+
+  const PosterCard({
+    super.key,
+    required this.title,
+    this.subtitle,
+    required this.style,
+    required this.customizeTooltip,
+    required this.onCustomize,
+    this.onShare,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    return Container(
+      padding: style.frame == PosterFrame.none ? const EdgeInsets.fromLTRB(16, 12, 4, 16) : const EdgeInsets.all(8),
+      decoration: BoxDecoration(color: style.background, borderRadius: BorderRadius.circular(8)),
+      child: PosterFrameBox(
+        style: style,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: PosterHeading(title: title, subtitle: subtitle, style: style),
+                ),
+                Column(
+                  children: [
+                    IconButton(
+                      tooltip: customizeTooltip,
+                      icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
+                      onPressed: onCustomize,
+                    ),
+                    if (onShare != null)
+                      IconButton(
+                        tooltip: localizations.share,
+                        icon: const Icon(Icons.share_outlined, color: sharePosterSubtitleColor),
+                        onPressed: onShare,
+                      ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Padding(padding: const EdgeInsets.only(right: 12), child: child),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -94,7 +196,13 @@ class SharePoster extends StatelessWidget {
   final PosterStyle style;
   final Widget child;
 
-  const SharePoster({super.key, required this.title, this.subtitle, this.style = const PosterStyle(), required this.child});
+  const SharePoster({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.style = const PosterStyle(),
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +214,17 @@ class SharePoster extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PosterHeading(title: title, subtitle: subtitle, style: style),
-          const SizedBox(height: 20),
-          child,
+          PosterFrameBox(
+            style: style,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PosterHeading(title: title, subtitle: subtitle, style: style),
+                const SizedBox(height: 20),
+                child,
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,

@@ -162,13 +162,59 @@ class FontChoices extends StatelessWidget {
   }
 }
 
-List<Widget> posterStyleSections(AppLocalizations localizations, PosterStyle style, ValueChanged<PosterStyle> onChanged) => [
+class HeadingField extends StatefulWidget {
+  final String value;
+  final String defaultHeading;
+  final ValueChanged<String> onChanged;
+
+  const HeadingField({super.key, required this.value, required this.defaultHeading, required this.onChanged});
+
+  @override
+  State<HeadingField> createState() => _HeadingFieldState();
+}
+
+class _HeadingFieldState extends State<HeadingField> {
+  late final _controller = TextEditingController(text: widget.value);
+
+  @override
+  void didUpdateWidget(HeadingField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.value != _controller.text) {
+      _controller.text = widget.value;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      maxLength: 40,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(hintText: widget.defaultHeading, border: const OutlineInputBorder()),
+      onChanged: widget.onChanged,
+    );
+  }
+}
+
+List<Widget> posterStyleSections(
+  AppLocalizations localizations,
+  PosterStyle style,
+  String defaultHeading,
+  ValueChanged<PosterStyle> onChanged,
+) => [
   StyleSection(
-    label: localizations.lifeBandBackground,
-    child: ColorChoices(
-      colors: posterBackgrounds,
-      selected: style.background,
-      onSelected: (background) => onChanged(style.copyWith(background: background)),
+    label: localizations.posterHeading,
+    child: HeadingField(
+      value: style.heading,
+      defaultHeading: defaultHeading,
+      onChanged: (heading) => onChanged(style.copyWith(heading: heading)),
     ),
   ),
   FontChoices(
@@ -176,4 +222,34 @@ List<Widget> posterStyleSections(AppLocalizations localizations, PosterStyle sty
     selected: style.headingFont,
     onSelected: (headingFont) => onChanged(style.copyWith(headingFont: headingFont)),
   ),
+  StyleSection(
+    label: localizations.posterBackground,
+    child: ColorChoices(
+      colors: posterBackgrounds,
+      selected: style.background,
+      onSelected: (background) => onChanged(style.copyWith(background: background)),
+    ),
+  ),
+  StyleSection(
+    label: localizations.posterFrame,
+    child: StyleChoices(
+      values: PosterFrame.values,
+      selected: style.frame,
+      label: (frame) => switch (frame) {
+        PosterFrame.none => localizations.posterFrameNone,
+        PosterFrame.line => localizations.posterFrameLine,
+        PosterFrame.double => localizations.posterFrameDouble,
+      },
+      onSelected: (frame) => onChanged(style.copyWith(frame: frame)),
+    ),
+  ),
+  if (style.frame != PosterFrame.none)
+    StyleSection(
+      label: localizations.posterFrameColor,
+      child: ColorChoices(
+        colors: stampColors,
+        selected: style.frameColor,
+        onSelected: (frameColor) => onChanged(style.copyWith(frameColor: frameColor)),
+      ),
+    ),
 ];
