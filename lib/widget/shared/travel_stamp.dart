@@ -90,9 +90,9 @@ class _StampPainter extends CustomPainter {
     switch (shape) {
       case StampShape.circle:
         _paintBrokenCircle(canvas, center, 46 * unit, outline, random);
-        canvas.drawCircle(center, 36 * unit, innerOutline);
-        _paintArcText(canvas, center, 40.5 * unit, countryName, _style(7.5 * unit, letterSpacing: 1.2 * unit));
-        _paintCenteredText(canvas, center.translate(0, -2 * unit), dateLabel, _style(11 * unit));
+        canvas.drawCircle(center, 31 * unit, innerOutline);
+        _paintArcText(canvas, center, 36.5 * unit, countryName, _style(7 * unit, letterSpacing: 1.2 * unit));
+        _paintCenteredText(canvas, center.translate(0, -2 * unit), dateLabel, _style(11 * unit), maximumWidth: 56 * unit);
         _paintCenteredText(canvas, center.translate(0, 13 * unit), daysLabel, _style(6.5 * unit, letterSpacing: unit));
       case StampShape.rectangle:
         final outer = Rect.fromCenter(center: center, width: 92 * unit, height: 66 * unit);
@@ -130,7 +130,7 @@ class _StampPainter extends CustomPainter {
 
     return switch (font) {
       StampFont.sans => GoogleFonts.inter(textStyle: style),
-      StampFont.serif => GoogleFonts.instrumentSerif(textStyle: style.copyWith(fontWeight: FontWeight.w400, fontSize: fontSize * 1.2)),
+      StampFont.serif => GoogleFonts.instrumentSerif(textStyle: style.copyWith(fontWeight: FontWeight.w400, fontSize: fontSize * 1.1)),
       StampFont.typewriter => style.copyWith(fontFamily: 'monospace', fontFamilyFallback: const ['Courier']),
     };
   }
