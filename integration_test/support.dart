@@ -73,8 +73,8 @@ Future<void> seedDemoData() async {
 
   final demoKey = Uint8List.fromList(List.generate(32, (i) => i + 1));
   await storage.write(key: 'dataKey', value: base64Encode(demoKey));
-  await storage.write(key: 'accessToken', value: 'screenshot-demo');
-  await storage.write(key: 'refreshToken', value: 'screenshot-demo');
+  await storage.write(key: 'accessToken', value: 'demo');
+  await storage.write(key: 'refreshToken', value: 'demo');
   await storage.write(
     key: 'trial_popup_next_show',
     value: DateTime.now().add(const Duration(days: 365)).millisecondsSinceEpoch.toString(),

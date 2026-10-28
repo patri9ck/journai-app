@@ -20,7 +20,7 @@ void main() {
 
   testWidgets('encrypted data is decrypted and shown offline', (tester) async {
     app.main();
-    app.screenshotLocaleNotifier.value = const Locale('en');
+    app.testLocaleNotifier.value = const Locale('en');
 
     expect(
       await waitFor(tester, find.byKey(const ValueKey('emergency_card_preview')), timeout: const Duration(seconds: 30)),
@@ -72,11 +72,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('tab_data')));
     await pumpFor(tester, const Duration(seconds: 1));
     await tester.scrollUntilVisible(
-      find.text('Medical Receipts'),
+      find.text('Receipts'),
       200,
       scrollable: find.descendant(of: find.byType(DataPage), matching: find.byType(Scrollable)).first,
     );
-    await tester.tap(find.text('Medical Receipts'));
+    await tester.tap(find.text('Receipts'));
 
     expect(await waitFor(tester, find.text('Bangkok Hospital')), isTrue);
     expect(await waitFor(tester, find.text('Total in euros')), isTrue);

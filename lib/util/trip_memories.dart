@@ -63,7 +63,7 @@ List<TripStripe> tripStripes(Trip trip, Map<DateTime, DayWeather> weather, {Set<
 ];
 
 List<Data> tripAlbum(Trip trip, List<Data> data) => data
-    .where((entry) => entry.feature == 'TICKET' || entry.feature == 'RECEIPT')
+    .where((entry) => entry.feature == 'TICKET' || entry.feature == 'RECEIPT' || entry.feature == 'IMAGE')
     .where((entry) {
       final date = parseDocumentDate(entry.fields['date'] as String?);
 

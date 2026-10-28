@@ -555,14 +555,18 @@ class _AlbumItem extends StatelessWidget {
               const SizedBox(height: 8),
             ] else ...[
               Icon(
-                item.feature == 'TICKET' ? Icons.confirmation_number_outlined : Icons.receipt_long_outlined,
+                switch (item.feature) {
+                  'TICKET' => Icons.confirmation_number_outlined,
+                  'IMAGE' => Icons.photo_outlined,
+                  _ => Icons.receipt_long_outlined,
+                },
                 size: 18,
                 color: inkColor,
               ),
               const SizedBox(height: 6),
             ],
             Text(
-              (item.fields['title'] ?? item.fields['merchant'] ?? '') as String,
+              (item.fields['title'] ?? item.fields['merchant'] ?? item.fields['comment'] ?? '') as String,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(color: inkColor, fontWeight: FontWeight.w600),

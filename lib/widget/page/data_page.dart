@@ -17,6 +17,7 @@ import 'condition_page.dart';
 import 'health_insurance_card_page.dart';
 import 'health_value_page.dart';
 import 'identity_document_page.dart';
+import 'image_page.dart';
 import 'medical_certificate_page.dart';
 import 'receipt_page.dart';
 import 'ticket_page.dart';
@@ -320,6 +321,28 @@ class _DataPageState extends State<DataPage> with AutomaticKeepAliveClientMixin 
                       isLoggedIn && _limits.receiptsEnabled,
                       () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const ReceiptPage()),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+            _sectionHeader(localizations.dataSectionMediaHeader, theme),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  _SectionTile(
+                    icon: Icons.photo_outlined,
+                    title: localizations.imagesTitle,
+                    subtitle: localizations.imagesSubtitle,
+                    count: _entryCounts['IMAGE'] ?? 0,
+                    enabled: isLoggedIn && _limits.isFeatureEnabled('IMAGE'),
+                    loginRequired: !isLoggedIn,
+                    onTap: _onTap(
+                      isLoggedIn && _limits.isFeatureEnabled('IMAGE'),
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const ImagePage()),
                       ),
                     ),
                   ),

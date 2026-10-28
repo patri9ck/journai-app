@@ -24,7 +24,7 @@ import 'util/units_notifier.dart';
 import 'widget/page/home_page.dart';
 import 'widget/page/start_page.dart';
 
-final screenshotLocaleNotifier = ValueNotifier<Locale?>(null);
+final testLocaleNotifier = ValueNotifier<Locale?>(null);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -198,8 +198,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Locale?>(
-      valueListenable: screenshotLocaleNotifier,
-      builder: (context, screenshotLocale, _) {
+      valueListenable: testLocaleNotifier,
+      builder: (context, testLocale, _) {
         return ValueListenableBuilder<bool>(
           valueListenable: isLoggedInNotifier,
           builder: (context, isLoggedIn, _) {
@@ -215,7 +215,7 @@ class App extends StatelessWidget {
                   CountryLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
-                locale: screenshotLocale,
+                locale: testLocale,
                 theme: _buildTheme(Brightness.light),
                 darkTheme: _buildTheme(Brightness.dark),
                 home: showHome ? const HomePage() : const StartPage(),

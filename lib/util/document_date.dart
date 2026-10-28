@@ -21,7 +21,7 @@ DateTime? parseDocumentDate(String? text) {
   return DateTime.tryParse(trimmed);
 }
 
-const datedFeatures = {'VACCINE', 'MEDICAL_CERTIFICATE', 'TICKET', 'RECEIPT'};
+const datedFeatures = {'VACCINE', 'MEDICAL_CERTIFICATE', 'TICKET', 'RECEIPT', 'IMAGE'};
 
 String formatDocumentDate(DateTime date) =>
     '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
