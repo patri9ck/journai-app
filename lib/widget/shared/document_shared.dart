@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource, X
 
 import '../../messages/app_localizations.dart';
 import '../../model/result.dart';
+import '../../util/document_date.dart';
 import '../sheet/encryption_sheet.dart';
 import 'form_sheet.dart';
 
@@ -650,8 +651,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
     );
 
     if (picked != null) {
-      widget.controller.text =
-          '${picked.day.toString().padLeft(2, '0')}.${picked.month.toString().padLeft(2, '0')}.${picked.year}';
+      widget.controller.text = formatDocumentDate(picked);
     }
   }
 

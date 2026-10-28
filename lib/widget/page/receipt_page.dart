@@ -14,6 +14,7 @@ import '../../model/consent_type.dart';
 import '../../model/data.dart';
 import '../../model/receipt.dart';
 import '../../service/services.dart';
+import '../../util/document_date.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
 import '../sheet/consent_sheet.dart';
@@ -176,7 +177,9 @@ class _ReceiptFormSheetState extends State<_ReceiptFormSheet> {
     final initial = widget.initialFields ?? {};
 
     _merchantController = TextEditingController(text: initial['merchant'] as String? ?? '');
-    _dateController = TextEditingController(text: initial['date'] as String? ?? '');
+    _dateController = TextEditingController(
+      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+    );
     _amountController = TextEditingController(text: (initial['amount'] as num?)?.toString() ?? '');
     _currencyController = TextEditingController(text: initial['currency'] as String? ?? 'EUR');
     _category = _categories.contains(initial['category']) ? initial['category'] as String : 'DOCTOR';

@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -474,52 +475,87 @@ class _Album extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    const paperColor = Color(0xFFFBF6EA);
-    const inkColor = Color(0xFF3A3A3A);
-
     return Wrap(
       spacing: 12,
       runSpacing: 16,
       children: [
-        for (final item in items)
-          Transform.rotate(
-            angle: ((item.id ?? 0) % 7 - 3) * 0.02,
-            child: Container(
-              width: 150,
-              padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
-              decoration: BoxDecoration(
-                color: paperColor,
-                borderRadius: BorderRadius.circular(4),
-                boxShadow: const [BoxShadow(color: Color(0x22000000), blurRadius: 6, offset: Offset(0, 2))],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    item.feature == 'TICKET' ? Icons.confirmation_number_outlined : Icons.receipt_long_outlined,
-                    size: 18,
-                    color: inkColor,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    (item.fields['title'] ?? item.fields['merchant'] ?? '') as String,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: inkColor, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    [
-                      item.fields['date'],
-                      if (item.fields['amount'] != null) '${item.fields['amount']} ${item.fields['currency'] ?? ''}'.trim(),
-                    ].join(' · '),
-                    style: theme.textTheme.bodySmall?.copyWith(color: inkColor),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        for (final item in items) _AlbumItem(key: ValueKey(item.id), item: item),
       ],
+    );
+  }
+}
+
+class _AlbumItem extends StatefulWidget {
+  final Data item;
+
+  const _AlbumItem({super.key, required this.item});
+
+  @override
+  State<_AlbumItem> createState() => _AlbumItemState();
+}
+
+class _AlbumItemState extends State<_AlbumItem> {
+  late Uint8List? _image = tryDecodeBase64(widget.item.fields['imageBase64'] as String?);
+
+  @override
+  void didUpdateWidget(_AlbumItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.item.fields['imageBase64'] != widget.item.fields['imageBase64']) {
+      _image = tryDecodeBase64(widget.item.fields['imageBase64'] as String?);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final item = widget.item;
+    const paperColor = Color(0xFFFBF6EA);
+    const inkColor = Color(0xFF3A3A3A);
+
+    return Transform.rotate(
+      angle: ((item.id ?? 0) % 7 - 3) * 0.02,
+      child: Container(
+        width: 150,
+        padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
+        decoration: BoxDecoration(
+          color: paperColor,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: const [BoxShadow(color: Color(0x22000000), blurRadius: 6, offset: Offset(0, 2))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_image != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(2),
+                child: Image.memory(_image!, height: 100, width: double.infinity, fit: BoxFit.cover, cacheWidth: 450),
+              ),
+              const SizedBox(height: 8),
+            ] else ...[
+              Icon(
+                item.feature == 'TICKET' ? Icons.confirmation_number_outlined : Icons.receipt_long_outlined,
+                size: 18,
+                color: inkColor,
+              ),
+              const SizedBox(height: 6),
+            ],
+            Text(
+              (item.fields['title'] ?? item.fields['merchant'] ?? '') as String,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyMedium?.copyWith(color: inkColor, fontWeight: FontWeight.w600),
+            ),
+            Text(
+              [
+                item.fields['date'],
+                if (item.fields['amount'] != null) '${item.fields['amount']} ${item.fields['currency'] ?? ''}'.trim(),
+              ].join(' · '),
+              style: theme.textTheme.bodySmall?.copyWith(color: inkColor),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

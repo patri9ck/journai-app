@@ -9,6 +9,7 @@ import 'package:cryptography_plus/cryptography_plus.dart';
 import '../model/data.dart';
 import '../model/result.dart';
 import '../util/cache.dart';
+import '../util/document_date.dart';
 import '../util/profile_notifier.dart';
 import '../util/storage.dart';
 import 'cryptography_service.dart';
@@ -68,7 +69,7 @@ class DataService {
       final jsonList = jsonDecode(utf8.decode(decryptedBytes)) as List;
 
       return Success(
-        jsonList.map((item) => Map<String, dynamic>.from(item as Map)).toList(),
+        jsonList.map((item) => withDefaultDate(category, Map<String, dynamic>.from(item as Map))).toList(),
       );
     } on SecretBoxAuthenticationError {
       return Failure<List<Map<String, dynamic>>>();

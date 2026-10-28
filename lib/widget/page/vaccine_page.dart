@@ -12,6 +12,7 @@ import '../../model/data.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
+import '../../util/document_date.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../shared/scanning_dialog.dart';
@@ -843,7 +844,9 @@ class _VaccineFormSheetState extends State<_VaccineFormSheet> {
     final initial = widget.initialFields ?? {};
     _nameController = TextEditingController(text: initial['name'] as String? ?? '');
     _diseaseController = TextEditingController(text: initial['disease'] as String? ?? '');
-    _dateController = TextEditingController(text: initial['date'] as String? ?? '');
+    _dateController = TextEditingController(
+      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
+    );
     _nextDateController = TextEditingController(text: initial['nextDate'] as String? ?? '');
     _manufacturerController = TextEditingController(text: initial['manufacturer'] as String? ?? '');
     _batchNumberController = TextEditingController(text: initial['batchNumber'] as String? ?? '');

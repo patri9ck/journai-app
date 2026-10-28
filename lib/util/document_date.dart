@@ -20,3 +20,18 @@ DateTime? parseDocumentDate(String? text) {
 
   return DateTime.tryParse(trimmed);
 }
+
+const datedFeatures = {'VACCINE', 'MEDICAL_CERTIFICATE', 'TICKET', 'RECEIPT'};
+
+String formatDocumentDate(DateTime date) =>
+    '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+
+String todayDocumentDate() => formatDocumentDate(DateTime.now());
+
+Map<String, dynamic> withDefaultDate(String feature, Map<String, dynamic> fields) {
+  if (!datedFeatures.contains(feature) || (fields['date'] as String? ?? '').trim().isNotEmpty) {
+    return fields;
+  }
+
+  return {...fields, 'date': todayDocumentDate()};
+}

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
 import '../../model/consent_type.dart';
+import '../../util/document_date.dart';
 import '../shared/document_list_page.dart';
 import '../shared/document_shared.dart';
 import '../shared/form_sheet.dart';
@@ -64,7 +65,7 @@ class _CertFormSheetState extends State<_CertFormSheet> {
       text: initial['title'] as String? ?? '',
     );
     _dateController = TextEditingController(
-      text: initial['date'] as String? ?? '',
+      text: widget.initialFields == null ? todayDocumentDate() : initial['date'] as String? ?? '',
     );
     _issuerController = TextEditingController(
       text: initial['issuer'] as String? ?? '',
