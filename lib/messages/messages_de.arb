@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "Klang aufnehmen",
   "journalEntryRecording": "Aufnahme beenden",
   "journalEntryPlaySound": "Klang des Tages",
+  "journalEntryPlayRecording": "Abspielen",
+  "journalEntryStopSound": "Stopp",
   "journalEntryDeleteSound": "Klang löschen",
   "journalEntryMicrophoneDenied": "Journai braucht Zugriff auf das Mikrofon, um Klänge aufzunehmen.",
   "tripAlbumTitle": "Sammelalbum",

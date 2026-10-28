@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "Ses kaydet",
   "journalEntryRecording": "Kaydı durdur",
   "journalEntryPlaySound": "Günün sesi",
+  "journalEntryPlayRecording": "Oynat",
+  "journalEntryStopSound": "Durdur",
   "journalEntryDeleteSound": "Sesi sil",
   "journalEntryMicrophoneDenied": "Journai'nin ses kaydetmek için mikrofon erişimine ihtiyacı var.",
   "tripAlbumTitle": "Anı albümü",

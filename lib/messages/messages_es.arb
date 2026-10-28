@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "Grabar sonido",
   "journalEntryRecording": "Detener grabación",
   "journalEntryPlaySound": "Sonido del día",
+  "journalEntryPlayRecording": "Reproducir",
+  "journalEntryStopSound": "Detener",
   "journalEntryDeleteSound": "Eliminar sonido",
   "journalEntryMicrophoneDenied": "Journai necesita acceso al micrófono para grabar sonidos.",
   "tripAlbumTitle": "Álbum de recuerdos",

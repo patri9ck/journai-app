@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "音を録音",
   "journalEntryRecording": "録音を停止",
   "journalEntryPlaySound": "今日の音",
+  "journalEntryPlayRecording": "再生",
+  "journalEntryStopSound": "停止",
   "journalEntryDeleteSound": "音を削除",
   "journalEntryMicrophoneDenied": "音を録音するには、Journai にマイクへのアクセスを許可してください。",
   "tripAlbumTitle": "スクラップブック",

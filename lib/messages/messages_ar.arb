@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "تسجيل صوت",
   "journalEntryRecording": "إيقاف التسجيل",
   "journalEntryPlaySound": "صوت اليوم",
+  "journalEntryPlayRecording": "تشغيل",
+  "journalEntryStopSound": "إيقاف",
   "journalEntryDeleteSound": "حذف الصوت",
   "journalEntryMicrophoneDenied": "يحتاج Journai إلى الوصول إلى الميكروفون لتسجيل الأصوات.",
   "tripAlbumTitle": "ألبوم الذكريات",

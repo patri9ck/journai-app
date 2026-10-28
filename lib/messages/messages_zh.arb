@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "录制声音",
   "journalEntryRecording": "停止录音",
   "journalEntryPlaySound": "今日之声",
+  "journalEntryPlayRecording": "播放",
+  "journalEntryStopSound": "停止",
   "journalEntryDeleteSound": "删除声音",
   "journalEntryMicrophoneDenied": "Journai 需要麦克风权限来录制声音。",
   "tripAlbumTitle": "剪贴簿",

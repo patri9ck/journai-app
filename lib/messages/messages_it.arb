@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "Registra suono",
   "journalEntryRecording": "Interrompi registrazione",
   "journalEntryPlaySound": "Il suono del giorno",
+  "journalEntryPlayRecording": "Riproduci",
+  "journalEntryStopSound": "Interrompi",
   "journalEntryDeleteSound": "Elimina suono",
   "journalEntryMicrophoneDenied": "Journai ha bisogno dell'accesso al microfono per registrare suoni.",
   "tripAlbumTitle": "Album dei ricordi",

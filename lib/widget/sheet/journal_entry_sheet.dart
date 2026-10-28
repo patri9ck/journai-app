@@ -28,17 +28,57 @@ class _JournalEntrySheetState extends State<JournalEntrySheet> {
   late final _textController = TextEditingController(text: widget.entry?.text);
   late String? _sound = widget.entry?.sound;
   bool _recording = false;
+  bool _playing = false;
   bool _saving = false;
   Timer? _recordingTimer;
+  StreamSubscription<void>? _playerCompletion;
+
+  @override
+  void initState() {
+    super.initState();
+    _playerCompletion = soundService.onPlayerComplete.listen((_) {
+      if (mounted) {
+        setState(() => _playing = false);
+      }
+    });
+  }
 
   @override
   void dispose() {
     _recordingTimer?.cancel();
+    _playerCompletion?.cancel();
+    soundService.stop();
     _textController.dispose();
     super.dispose();
   }
 
+  Future<void> _togglePlayback(String sound) async {
+    if (_playing) {
+      await soundService.stop();
+      setState(() => _playing = false);
+
+      return;
+    }
+
+    setState(() => _playing = true);
+    await soundService.play(sound);
+  }
+
+  Future<void> _stopPlayback() async {
+    if (!_playing) {
+      return;
+    }
+
+    await soundService.stop();
+
+    if (mounted) {
+      setState(() => _playing = false);
+    }
+  }
+
   Future<void> _startRecording() async {
+    await _stopPlayback();
+
     final started = await soundService.startRecording();
 
     if (!mounted) {
@@ -144,7 +184,16 @@ class _JournalEntrySheetState extends State<JournalEntrySheet> {
               ),
               if (_sound != null && !_recording)
                 TextButton.icon(
-                  onPressed: () => setState(() => _sound = null),
+                  onPressed: () => _togglePlayback(_sound!),
+                  icon: Icon(_playing ? Icons.stop : Icons.play_arrow, size: 18),
+                  label: Text(_playing ? localizations.journalEntryStopSound : localizations.journalEntryPlayRecording),
+                ),
+              if (_sound != null && !_recording)
+                TextButton.icon(
+                  onPressed: () async {
+                    await _stopPlayback();
+                    setState(() => _sound = null);
+                  },
                   icon: const Icon(Icons.delete_outline, size: 18),
                   label: Text(localizations.journalEntryDeleteSound),
                 ),

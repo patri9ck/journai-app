@@ -924,6 +924,8 @@
   "journalEntryRecordSound": "Record sound",
   "journalEntryRecording": "Stop recording",
   "journalEntryPlaySound": "Sound of the day",
+  "journalEntryPlayRecording": "Play",
+  "journalEntryStopSound": "Stop",
   "journalEntryDeleteSound": "Delete sound",
   "journalEntryMicrophoneDenied": "Journai needs microphone access to record sounds.",
   "tripAlbumTitle": "Scrapbook",

@@ -790,6 +790,8 @@
   "journalEntryRecordSound": "Записати звук",
   "journalEntryRecording": "Зупинити запис",
   "journalEntryPlaySound": "Звук дня",
+  "journalEntryPlayRecording": "Відтворити",
+  "journalEntryStopSound": "Зупинити",
   "journalEntryDeleteSound": "Видалити звук",
   "journalEntryMicrophoneDenied": "Journai потрібен доступ до мікрофона, щоб записувати звуки.",
   "tripAlbumTitle": "Альбом спогадів",
