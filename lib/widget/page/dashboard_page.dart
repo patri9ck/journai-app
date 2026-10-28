@@ -1281,38 +1281,16 @@ class _EmergencyCardSheetState extends State<_EmergencyCardSheet> {
                             ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: _exporting ? null : () => _shareCard(appLocalizations),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: _exporting
-                                ? const SizedBox(
-                                    width: 14,
-                                    height: 14,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.share_outlined, color: Colors.white, size: 14),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        appLocalizations.share,
-                                        style: theme.textTheme.labelSmall?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
+                        IconButton(
+                          tooltip: appLocalizations.share,
+                          onPressed: _exporting ? null : () => _shareCard(appLocalizations),
+                          icon: _exporting
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                )
+                              : const Icon(Icons.share_outlined, color: Colors.white),
                         ),
                       ],
                     ),
