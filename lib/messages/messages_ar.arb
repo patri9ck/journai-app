@@ -739,7 +739,7 @@
   "tripPassportExpires": "ينتهي جواز سفرك قبل نهاية الرحلة.",
   "tripReminderTitle": "رحلة إلى {country}",
   "tripReminderBody": "تبدأ رحلتك بعد {days} يومًا. تحقق الآن من شروط الدخول والتطعيمات.",
-  "subscriptionFeaturePro6": "تخطيط الرحلات والإيصالات والصور",
+  "subscriptionFeaturePro6": "حتى 20 رحلة و100 إيصال و100 صورة",
   "tabMemories": "الذكريات",
   "memoriesTitle": "الذكريات",
   "memoriesEmpty": "لا توجد رحلات بعد",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}، {date}",
   "timeCapsuleNotificationTitle": "بريد من {country}",
   "timeCapsuleNotificationBody": "يمكنك الآن فتح بطاقتك البريدية من قبل عام.",
-  "subscriptionFeatureFree4": "رحلة واحدة مع ختم وأشرطة الرحلة",
+  "subscriptionFeatureFree4": "رحلة واحدة مع ختم وأشرطة الرحلة، 3 صور",
   "subscriptionFeaturePro7": "يوميات سفر مع أصوات وكبسولة زمنية"
 }

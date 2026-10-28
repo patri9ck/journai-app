@@ -739,7 +739,7 @@
   "tripPassportExpires": "你的护照在行程结束前到期。",
   "tripReminderTitle": "前往{country}的行程",
   "tripReminderBody": "你的行程将在 {days} 天后开始。现在检查入境要求和疫苗。",
-  "subscriptionFeaturePro6": "旅行规划、收据和图片",
+  "subscriptionFeaturePro6": "最多 20 次旅行、100 张收据和 100 张图片",
   "tabMemories": "回忆",
   "memoriesTitle": "回忆",
   "memoriesEmpty": "还没有旅行",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}，{date}",
   "timeCapsuleNotificationTitle": "来自{country}的信",
   "timeCapsuleNotificationBody": "你一年前写的明信片现在可以打开了。",
-  "subscriptionFeatureFree4": "1 次旅行，含印章和旅行色带",
+  "subscriptionFeatureFree4": "1 次旅行（含印章和旅行色带）、3 张图片",
   "subscriptionFeaturePro7": "带声音和时间胶囊的旅行日记"
 }

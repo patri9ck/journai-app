@@ -739,7 +739,7 @@
   "tripPassportExpires": "Twój paszport traci ważność przed końcem podróży.",
   "tripReminderTitle": "Podróż: {country}",
   "tripReminderBody": "Twoja podróż zaczyna się za {days} dni. Sprawdź teraz wymogi wjazdowe i szczepienia.",
-  "subscriptionFeaturePro6": "Planowanie podróży, rachunki i zdjęcia",
+  "subscriptionFeaturePro6": "Do 20 podróży, 100 rachunków i 100 zdjęć",
   "tabMemories": "Wspomnienia",
   "memoriesTitle": "Wspomnienia",
   "memoriesEmpty": "Brak podróży",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Poczta z: {country}",
   "timeCapsuleNotificationBody": "Twoją pocztówkę sprzed roku można już otworzyć.",
-  "subscriptionFeatureFree4": "1 podróż z pieczątką i paskami podróży",
+  "subscriptionFeatureFree4": "1 podróż z pieczątką i paskami podróży, 3 zdjęcia",
   "subscriptionFeaturePro7": "Dziennik podróży z dźwiękami i kapsułą czasu"
 }

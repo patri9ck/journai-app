@@ -739,7 +739,7 @@
   "tripPassportExpires": "旅行終了前にパスポートの有効期限が切れます。",
   "tripReminderTitle": "{country}への旅行",
   "tripReminderBody": "旅行開始まであと{days}日です。入国条件と予防接種を今すぐ確認しましょう。",
-  "subscriptionFeaturePro6": "旅行計画、領収書と画像",
+  "subscriptionFeaturePro6": "旅行20件、領収書100件、画像100枚まで",
   "tabMemories": "思い出",
   "memoriesTitle": "思い出",
   "memoriesEmpty": "まだ旅行はありません",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}、{date}",
   "timeCapsuleNotificationTitle": "{country}からのお便り",
   "timeCapsuleNotificationBody": "1年前のポストカードを開封できるようになりました。",
-  "subscriptionFeatureFree4": "スタンプと旅のストライプ付きの旅行1件",
+  "subscriptionFeatureFree4": "スタンプと旅のストライプ付きの旅行1件、画像3枚",
   "subscriptionFeaturePro7": "音とタイムカプセル付きの旅日記"
 }

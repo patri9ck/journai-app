@@ -739,7 +739,7 @@
   "tripPassportExpires": "Votre passeport expire avant la fin du voyage.",
   "tripReminderTitle": "Voyage en {country}",
   "tripReminderBody": "Votre voyage commence dans {days} jours. Vérifiez dès maintenant les conditions d'entrée et les vaccins.",
-  "subscriptionFeaturePro6": "Planification de voyage, justificatifs & images",
+  "subscriptionFeaturePro6": "Jusqu'à 20 voyages, 100 justificatifs & 100 images",
   "tabMemories": "Souvenirs",
   "memoriesTitle": "Souvenirs",
   "memoriesEmpty": "Aucun voyage pour l'instant",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Courrier de {country}",
   "timeCapsuleNotificationBody": "Ta carte postale d'il y a un an peut maintenant être ouverte.",
-  "subscriptionFeatureFree4": "1 voyage avec tampon & bandes de voyage",
+  "subscriptionFeatureFree4": "1 voyage avec tampon & bandes de voyage, 3 images",
   "subscriptionFeaturePro7": "Journal de voyage avec sons & capsule temporelle"
 }

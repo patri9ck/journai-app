@@ -739,7 +739,7 @@
   "tripPassportExpires": "Dein Reisepass läuft vor dem Ende der Reise ab.",
   "tripReminderTitle": "Reise nach {country}",
   "tripReminderBody": "Deine Reise beginnt in {days} Tagen. Prüfe jetzt Einreise und Impfungen.",
-  "subscriptionFeaturePro6": "Reiseplanung, Belege & Bilder",
+  "subscriptionFeaturePro6": "Bis zu 20 Reisen, 100 Belege & 100 Bilder",
   "tabMemories": "Erinnerungen",
   "memoriesTitle": "Erinnerungen",
   "memoriesEmpty": "Noch keine Reisen",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Post aus {country}",
   "timeCapsuleNotificationBody": "Deine Postkarte von vor einem Jahr kann jetzt geöffnet werden.",
-  "subscriptionFeatureFree4": "1 Reise mit Stempel & Reisestreifen",
+  "subscriptionFeatureFree4": "1 Reise mit Stempel & Reisestreifen, 3 Bilder",
   "subscriptionFeaturePro7": "Reisetagebuch mit Klängen & Zeitkapsel"
 }

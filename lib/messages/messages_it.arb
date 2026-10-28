@@ -739,7 +739,7 @@
   "tripPassportExpires": "Il tuo passaporto scade prima della fine del viaggio.",
   "tripReminderTitle": "Viaggio in {country}",
   "tripReminderBody": "Il tuo viaggio inizia tra {days} giorni. Controlla ora requisiti d'ingresso e vaccinazioni.",
-  "subscriptionFeaturePro6": "Pianificazione viaggi, ricevute e immagini",
+  "subscriptionFeaturePro6": "Fino a 20 viaggi, 100 ricevute e 100 immagini",
   "tabMemories": "Ricordi",
   "memoriesTitle": "Ricordi",
   "memoriesEmpty": "Nessun viaggio ancora",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Posta da {country}",
   "timeCapsuleNotificationBody": "La tua cartolina di un anno fa ora può essere aperta.",
-  "subscriptionFeatureFree4": "1 viaggio con timbro e strisce di viaggio",
+  "subscriptionFeatureFree4": "1 viaggio con timbro e strisce di viaggio, 3 immagini",
   "subscriptionFeaturePro7": "Diario di viaggio con suoni e capsula del tempo"
 }

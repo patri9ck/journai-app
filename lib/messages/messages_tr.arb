@@ -739,7 +739,7 @@
   "tripPassportExpires": "Pasaportunun süresi seyahat bitmeden doluyor.",
   "tripReminderTitle": "{country} seyahati",
   "tripReminderBody": "Seyahatin {days} gün sonra başlıyor. Giriş koşullarını ve aşıları şimdi kontrol et.",
-  "subscriptionFeaturePro6": "Seyahat planlama, makbuzlar ve görseller",
+  "subscriptionFeaturePro6": "20 seyahate, 100 makbuza ve 100 görsele kadar",
   "tabMemories": "Anılar",
   "memoriesTitle": "Anılar",
   "memoriesEmpty": "Henüz seyahat yok",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "{country} ülkesinden posta",
   "timeCapsuleNotificationBody": "Bir yıl önceki kartpostalın artık açılabilir.",
-  "subscriptionFeatureFree4": "Damga ve seyahat şeritleriyle 1 seyahat",
+  "subscriptionFeatureFree4": "Damga ve seyahat şeritleriyle 1 seyahat, 3 görsel",
   "subscriptionFeaturePro7": "Seslerle seyahat günlüğü ve zaman kapsülü"
 }

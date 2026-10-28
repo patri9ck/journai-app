@@ -835,7 +835,7 @@
       }
     }
   },
-  "subscriptionFeaturePro6": "Trip planning, receipts & images",
+  "subscriptionFeaturePro6": "Up to 20 trips, 100 receipts & 100 images",
   "tabMemories": "Memories",
   "memoriesTitle": "Memories",
   "memoriesEmpty": "No Trips Yet",
@@ -972,6 +972,6 @@
     }
   },
   "timeCapsuleNotificationBody": "Your postcard from one year ago can now be opened.",
-  "subscriptionFeatureFree4": "1 trip with stamp & travel stripes",
+  "subscriptionFeatureFree4": "1 trip with stamp & travel stripes, 3 images",
   "subscriptionFeaturePro7": "Travel journal with sounds & time capsule"
 }

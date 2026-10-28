@@ -739,7 +739,7 @@
   "tripPassportExpires": "Срок действия паспорта истекает до конца поездки.",
   "tripReminderTitle": "Поездка: {country}",
   "tripReminderBody": "Ваша поездка начнётся через {days} дн. Проверьте условия въезда и прививки.",
-  "subscriptionFeaturePro6": "Планирование поездок, чеки и изображения",
+  "subscriptionFeaturePro6": "До 20 поездок, 100 чеков и 100 изображений",
   "tabMemories": "Воспоминания",
   "memoriesTitle": "Воспоминания",
   "memoriesEmpty": "Пока нет поездок",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Почта из страны: {country}",
   "timeCapsuleNotificationBody": "Твою открытку годичной давности теперь можно открыть.",
-  "subscriptionFeatureFree4": "1 поездка со штампом и полосами поездки",
+  "subscriptionFeatureFree4": "1 поездка со штампом и полосами поездки, 3 изображения",
   "subscriptionFeaturePro7": "Дневник путешествий со звуками и капсулой времени"
 }

@@ -739,7 +739,7 @@
   "tripPassportExpires": "Tu pasaporte caduca antes del final del viaje.",
   "tripReminderTitle": "Viaje a {country}",
   "tripReminderBody": "Tu viaje empieza en {days} días. Revisa ahora los requisitos de entrada y las vacunas.",
-  "subscriptionFeaturePro6": "Planificación de viajes, recibos e imágenes",
+  "subscriptionFeaturePro6": "Hasta 20 viajes, 100 recibos y 100 imágenes",
   "tabMemories": "Recuerdos",
   "memoriesTitle": "Recuerdos",
   "memoriesEmpty": "Aún no hay viajes",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Correo desde {country}",
   "timeCapsuleNotificationBody": "Ya puedes abrir tu postal de hace un año.",
-  "subscriptionFeatureFree4": "1 viaje con sello y franjas de viaje",
+  "subscriptionFeatureFree4": "1 viaje con sello y franjas de viaje, 3 imágenes",
   "subscriptionFeaturePro7": "Diario de viaje con sonidos y cápsula del tiempo"
 }

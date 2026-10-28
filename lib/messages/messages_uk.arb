@@ -739,7 +739,7 @@
   "tripPassportExpires": "Термін дії паспорта спливає до кінця подорожі.",
   "tripReminderTitle": "Подорож: {country}",
   "tripReminderBody": "Ваша подорож почнеться через {days} дн. Перевірте умови в'їзду та щеплення.",
-  "subscriptionFeaturePro6": "Планування подорожей, чеки й зображення",
+  "subscriptionFeaturePro6": "До 20 подорожей, 100 чеків і 100 зображень",
   "tabMemories": "Спогади",
   "memoriesTitle": "Спогади",
   "memoriesEmpty": "Поки немає подорожей",
@@ -807,6 +807,6 @@
   "timeCapsuleFrom": "{country}, {date}",
   "timeCapsuleNotificationTitle": "Пошта з країни: {country}",
   "timeCapsuleNotificationBody": "Твою листівку річної давності тепер можна відкрити.",
-  "subscriptionFeatureFree4": "1 подорож зі штампом і смугами подорожі",
+  "subscriptionFeatureFree4": "1 подорож зі штампом і смугами подорожі, 3 зображення",
   "subscriptionFeaturePro7": "Щоденник подорожей зі звуками й капсулою часу"
 }
