@@ -21,10 +21,10 @@ import '../../util/temperature_format.dart';
 import '../../util/trip_memories.dart';
 import '../../util/units_notifier.dart';
 import '../sheet/journal_entry_sheet.dart';
+import '../sheet/location_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../sheet/poster_style_sheet.dart';
 import '../shared/document_shared.dart';
-import '../shared/location_dialog.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
@@ -195,7 +195,7 @@ class _TripPageState extends State<TripPage> {
   }
 
   Future<void> _changeLocation() async {
-    final city = await showLocationDialog(context, _trip.city);
+    final city = await showLocationSheet(context, _trip.city);
 
     if (city == null || !mounted) {
       return;

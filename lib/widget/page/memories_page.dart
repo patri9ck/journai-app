@@ -22,10 +22,10 @@ import '../../util/document_date.dart';
 import '../../util/memories_style.dart';
 import '../../util/trip_memories.dart';
 import '../sheet/life_band_style_sheet.dart';
+import '../sheet/location_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
-import '../shared/location_dialog.dart';
 import '../shared/share_image.dart';
 import '../shared/travel_stamp.dart';
 import '../shared/trip_stripes.dart';
@@ -130,7 +130,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
           return;
         }
 
-        final city = await showLocationDialog(context, '');
+        final city = await showLocationSheet(context, '');
 
         if (!mounted) {
           return;

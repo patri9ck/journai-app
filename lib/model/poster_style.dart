@@ -27,7 +27,7 @@ class PosterStyle {
   const PosterStyle({
     this.background = const Color(0xFFFBF8F1),
     this.heading = '',
-    this.headingFont = StampFont.serif,
+    this.headingFont = StampFont.sans,
     this.frame = PosterFrame.none,
     this.frameColor = const Color(0xFF2B2B33),
   });
@@ -39,7 +39,7 @@ class PosterStyle {
     return PosterStyle(
       background: background == null ? const Color(0xFFFBF8F1) : Color(background),
       heading: json?['heading'] as String? ?? '',
-      headingFont: StampFont.values.asNameMap()[json?['headingFont']] ?? StampFont.serif,
+      headingFont: StampFont.values.asNameMap()[json?['headingFont']] ?? StampFont.sans,
       frame: PosterFrame.values.asNameMap()[json?['frame']] ?? PosterFrame.none,
       frameColor: frameColor == null ? const Color(0xFF2B2B33) : Color(frameColor),
     );

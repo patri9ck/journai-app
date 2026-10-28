@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Patrick Zwick
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../messages/app_localizations.dart';
@@ -218,10 +219,8 @@ class _Postcard extends StatelessWidget {
                   ? SingleChildScrollView(
                       child: Text(
                         timeCapsule.text,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: inkColor,
-                          fontFamily: theme.textTheme.headlineMedium?.fontFamily,
-                          fontStyle: FontStyle.italic,
+                        style: GoogleFonts.instrumentSerif(
+                          textStyle: theme.textTheme.titleMedium?.copyWith(color: inkColor, fontStyle: FontStyle.italic),
                         ),
                       ),
                     )
