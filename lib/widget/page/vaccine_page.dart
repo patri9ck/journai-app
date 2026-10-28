@@ -680,7 +680,7 @@ class _ScanResultSheetState extends State<_ScanResultSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(localizations.documentScanResult, style: theme.textTheme.headlineSmall),
+            Text(localizations.documentScanResult, style: theme.textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(localizations.documentScanResultSubtitle, style: theme.textTheme.bodySmall),
             const SizedBox(height: 16),
@@ -1042,7 +1042,7 @@ class _PhotoPreviewSheetState extends State<_PhotoPreviewSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(localizations.vaccinePhotosTitle, style: theme.textTheme.headlineSmall),
+            Text(localizations.vaccinePhotosTitle, style: theme.textTheme.titleLarge),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,

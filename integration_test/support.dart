@@ -235,7 +235,7 @@ Future<void> seedDemoData() async {
       'feature': 'BLOOD_TYPE',
       'data': await encrypt({
         'feature': 'BLOOD_TYPE',
-        'fields': {'key': 'Blood type', 'value': 'A+'},
+        'fields': {'key': 'Blood Type', 'value': 'A+'},
       }),
     },
     {
