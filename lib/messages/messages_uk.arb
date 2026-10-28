@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "Діюче попередження для мандрівників",
   "dashboardTravelWarningPartial": "Часткове повідомлення про безпеку",
   "dashboardTravelWarningOpenMore": "Докладніше на auswaertiges-amt.de",
+  "countrySearchHint": "Пошук країни",
   "countryNoInformation": "Для цієї країни немає інформації",
   "countryNoInformationGermany": "Федеральне міністерство закордонних справ публікує рекомендації для мандрівників лише щодо інших країн, а не щодо Німеччини.",
   "fullMapPoiHospital": "Лікарня",

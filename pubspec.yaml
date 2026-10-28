@@ -34,7 +34,6 @@ dependencies:
   flutter_timezone: ^5.0.0
   timezone: ^0.11.0
   purchases_flutter: ^10.18.1
-  country_picker: ^2.0.28
   home_widget: ^0.10.0
   dynamic_color: ^2.1.0
   record: ^7.1.2

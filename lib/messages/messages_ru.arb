@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "Действующее предупреждение для путешественников",
   "dashboardTravelWarningPartial": "Частичное уведомление о безопасности",
   "dashboardTravelWarningOpenMore": "Подробнее на auswaertiges-amt.de",
+  "countrySearchHint": "Поиск страны",
   "countryNoInformation": "Для этой страны нет информации",
   "countryNoInformationGermany": "Федеральное министерство иностранных дел публикует рекомендации для путешественников только по другим странам, а не по Германии.",
   "fullMapPoiHospital": "Больница",

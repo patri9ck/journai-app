@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,7 @@ void main() {
 
   Widget app() => MaterialApp(
     locale: const Locale('en'),
-    localizationsDelegates: const [...AppLocalizations.localizationsDelegates, CountryLocalizations.delegate],
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: TripPage(
       trip: Trip(

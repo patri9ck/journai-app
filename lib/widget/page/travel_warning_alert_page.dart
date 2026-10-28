@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
 import '../../service/services.dart';
 import '../../util/country_data.dart';
+import '../../util/country_name.dart';
 import '../shared/empty_state.dart';
+import '../sheet/country_sheet.dart';
 
 class TravelWarningAlertPage extends StatefulWidget {
   const TravelWarningAlertPage({super.key});
@@ -33,16 +34,20 @@ class _TravelWarningAlertPageState extends State<TravelWarningAlertPage> {
     }
   }
 
-  void _addCountry() {
-    showCountryPicker(
-      context: context,
-      showPhoneCode: false,
-      exclude: [
+  Future<void> _addCountry() async {
+    final countryCode = await showCountrySheet(
+      context,
+      excludedCountryCodes: {
         for (final entry in iso2ToIso3.entries)
           if (_countries.contains(entry.value)) entry.key,
-      ],
-      onSelect: (country) => _watch(iso2ToIso3[country.countryCode]),
+      },
     );
+
+    if (countryCode == null) {
+      return;
+    }
+
+    await _watch(iso2ToIso3[countryCode]);
   }
 
   Future<void> _watch(String? countryCode) async {
@@ -79,9 +84,7 @@ class _TravelWarningAlertPageState extends State<TravelWarningAlertPage> {
         .firstWhere((entry) => entry.value == countryCode, orElse: () => MapEntry(countryCode, countryCode))
         .key;
 
-    return CountryLocalizations.of(context)?.countryName(countryCode: iso2CountryCode) ??
-        Country.tryParse(iso2CountryCode)?.name ??
-        countryCode;
+    return localizedCountryName(context, iso2CountryCode);
   }
 
   @override

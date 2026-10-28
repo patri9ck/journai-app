@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
-import 'package:country_picker/country_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
@@ -205,10 +204,7 @@ class App extends StatelessWidget {
             scaffoldMessengerKey: scaffoldMessengerKey,
             debugShowCheckedModeBanner: false,
             title: 'Journai',
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              CountryLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             theme: _buildTheme(Brightness.light),
             darkTheme: _buildTheme(Brightness.dark),

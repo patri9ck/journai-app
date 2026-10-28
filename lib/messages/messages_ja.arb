@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "渡航警告発令中",
   "dashboardTravelWarningPartial": "部分的な安全勧告",
   "dashboardTravelWarningOpenMore": "詳細はauswaertiges-amt.deで",
+  "countrySearchHint": "国を検索",
   "countryNoInformation": "この国の情報はありません",
   "countryNoInformationGermany": "ドイツ連邦外務省は他国の渡航情報のみを公開しており、ドイツについては公開していません。",
   "fullMapPoiHospital": "病院",

@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "Reisewarnung aktiv",
   "dashboardTravelWarningPartial": "Teilweiser Sicherheitshinweis",
   "dashboardTravelWarningOpenMore": "Details auf auswaertiges-amt.de",
+  "countrySearchHint": "Land suchen",
   "countryNoInformation": "Für dieses Land sind keine Informationen verfügbar",
   "countryNoInformationGermany": "Das Auswärtige Amt veröffentlicht Reisehinweise nur für andere Länder, nicht für Deutschland.",
   "fullMapPoiHospital": "Krankenhaus",

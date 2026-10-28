@@ -3,7 +3,6 @@
 
 import 'dart:math';
 
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +21,7 @@ import '../../util/document_date.dart';
 import '../../util/memories_style.dart';
 import '../../util/trip_memories.dart';
 import '../sheet/life_band_style_sheet.dart';
+import '../sheet/country_sheet.dart';
 import '../sheet/location_sheet.dart';
 import '../sheet/paywall_sheet.dart';
 import '../shared/document_shared.dart';
@@ -96,7 +96,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
     }
   }
 
-  void _add() {
+  Future<void> _add() async {
     final tripLimit = _limits.features['TRIP'];
 
     if (tripLimit != null && tripLimit != -1 && _trips.length >= tripLimit) {
@@ -105,58 +105,46 @@ class _MemoriesPageState extends State<MemoriesPage> {
       return;
     }
 
-    Country? selectedCountry;
+    final countryCode = await showCountrySheet(context);
 
-    showCountryPicker(
+    if (countryCode == null || !mounted) {
+      return;
+    }
+
+    final now = DateTime.now();
+
+    final dates = await showDateRangePicker(
       context: context,
-      showPhoneCode: false,
-      onSelect: (country) => selectedCountry = country,
-      onClosed: () async {
-        final country = selectedCountry;
-
-        if (country == null) {
-          return;
-        }
-
-        final now = DateTime.now();
-
-        final dates = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(2000),
-          lastDate: DateTime(now.year + 2, now.month, now.day),
-        );
-
-        if (dates == null || !mounted) {
-          return;
-        }
-
-        final city = await showLocationSheet(context, '');
-
-        if (!mounted) {
-          return;
-        }
-
-        final countryName =
-            CountryLocalizations.of(context)?.countryName(countryCode: country.countryCode) ?? country.name;
-
-        final trip = Trip(
-          countryCode: country.countryCode,
-          countryName: countryName,
-          city: city ?? '',
-          start: dates.start,
-          end: dates.end,
-        );
-
-        final saved = await ensureAndSave(
-          context,
-          () => dataService.saveData(Data(feature: 'TRIP', fields: trip.toFields())),
-        );
-
-        if (saved) {
-          await _load();
-        }
-      },
+      firstDate: DateTime(2000),
+      lastDate: DateTime(now.year + 2, now.month, now.day),
     );
+
+    if (dates == null || !mounted) {
+      return;
+    }
+
+    final city = await showLocationSheet(context, '');
+
+    if (!mounted) {
+      return;
+    }
+
+    final trip = Trip(
+      countryCode: countryCode,
+      countryName: localizedCountryName(context, countryCode),
+      city: city ?? '',
+      start: dates.start,
+      end: dates.end,
+    );
+
+    final saved = await ensureAndSave(
+      context,
+      () => dataService.saveData(Data(feature: 'TRIP', fields: trip.toFields())),
+    );
+
+    if (saved) {
+      await _load();
+    }
   }
 
   Future<void> _open(Trip trip) async {

@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "Aktywne ostrzeżenie podróżnicze",
   "dashboardTravelWarningPartial": "Częściowe powiadomienie o bezpieczeństwie",
   "dashboardTravelWarningOpenMore": "Szczegóły na auswaertiges-amt.de",
+  "countrySearchHint": "Szukaj kraju",
   "countryNoInformation": "Brak informacji dla tego kraju",
   "countryNoInformationGermany": "Federalne Ministerstwo Spraw Zagranicznych publikuje informacje dla podróżnych tylko o innych krajach, nie o Niemczech.",
   "fullMapPoiHospital": "Szpital",

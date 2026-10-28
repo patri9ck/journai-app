@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "تحذير سفر نشط",
   "dashboardTravelWarningPartial": "إشعار أمني جزئي",
   "dashboardTravelWarningOpenMore": "التفاصيل على auswaertiges-amt.de",
+  "countrySearchHint": "ابحث عن دولة",
   "countryNoInformation": "لا تتوفر معلومات عن هذا البلد",
   "countryNoInformationGermany": "تنشر وزارة الخارجية الاتحادية إرشادات السفر للدول الأخرى فقط، وليس لألمانيا.",
   "fullMapPoiHospital": "مستشفى",

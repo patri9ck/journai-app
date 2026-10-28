@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "旅行警告生效中",
   "dashboardTravelWarningPartial": "部分安全提示",
   "dashboardTravelWarningOpenMore": "详情请访问 auswaertiges-amt.de",
+  "countrySearchHint": "搜索国家",
   "countryNoInformation": "没有该国家的信息",
   "countryNoInformationGermany": "德国联邦外交部只发布其他国家的旅行提示，不发布德国的旅行提示。",
   "fullMapPoiHospital": "医院",

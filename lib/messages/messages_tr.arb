@@ -368,6 +368,7 @@
   "dashboardTravelWarningActive": "Aktif seyahat uyarısı",
   "dashboardTravelWarningPartial": "Kısmi güvenlik bildirimi",
   "dashboardTravelWarningOpenMore": "auswaertiges-amt.de adresinde ayrıntılar",
+  "countrySearchHint": "Ülke ara",
   "countryNoInformation": "Bu ülke için bilgi yok",
   "countryNoInformationGermany": "Federal Dışişleri Bakanlığı yalnızca diğer ülkeler için seyahat uyarıları yayımlar, Almanya için yayımlamaz.",
   "fullMapPoiHospital": "Hastane",

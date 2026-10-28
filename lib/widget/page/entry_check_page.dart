@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -123,7 +122,7 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
           const SizedBox(height: 16),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Text(Country.tryParse(widget.trip.countryCode)?.flagEmoji ?? '', style: const TextStyle(fontSize: 28)),
+            leading: Text(countryFlag(widget.trip.countryCode), style: const TextStyle(fontSize: 28)),
             title: Text(tripCountryName(context, widget.trip), style: theme.textTheme.titleMedium),
             subtitle: Text(_formatRange(DateTimeRange(start: widget.trip.start, end: widget.trip.end))),
           ),
