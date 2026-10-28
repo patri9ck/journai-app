@@ -154,34 +154,34 @@ class PosterCard extends StatelessWidget {
       decoration: BoxDecoration(color: style.background, borderRadius: BorderRadius.circular(8)),
       child: PosterFrameBox(
         style: style,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  PosterHeading(title: title, subtitle: subtitle, style: style),
+                  const SizedBox(height: 12),
+                  child,
+                ],
+              ),
+            ),
+            Column(
               children: [
-                Expanded(
-                  child: PosterHeading(title: title, subtitle: subtitle, style: style),
+                IconButton(
+                  tooltip: customizeTooltip,
+                  icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
+                  onPressed: onCustomize,
                 ),
-                Column(
-                  children: [
-                    IconButton(
-                      tooltip: customizeTooltip,
-                      icon: const Icon(Icons.palette_outlined, color: sharePosterSubtitleColor),
-                      onPressed: onCustomize,
-                    ),
-                    if (onShare != null)
-                      IconButton(
-                        tooltip: localizations.share,
-                        icon: const Icon(Icons.share_outlined, color: sharePosterSubtitleColor),
-                        onPressed: onShare,
-                      ),
-                  ],
-                ),
+                if (onShare != null)
+                  IconButton(
+                    tooltip: localizations.share,
+                    icon: const Icon(Icons.share_outlined, color: sharePosterSubtitleColor),
+                    onPressed: onShare,
+                  ),
               ],
             ),
-            const SizedBox(height: 12),
-            Padding(padding: const EdgeInsets.only(right: 12), child: child),
           ],
         ),
       ),
