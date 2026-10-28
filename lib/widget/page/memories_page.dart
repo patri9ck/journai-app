@@ -157,7 +157,7 @@ class _MemoriesPageState extends State<MemoriesPage> {
     child: SharePoster(
       title: localizations.memoriesLifeBand,
       subtitle: localizations.memoriesLifeBandHint,
-      child: _LifeBand(trips: _trips, weather: _weather),
+      child: _LifeBand(trips: _trips, weather: _weather, labelColor: sharePosterSubtitleColor),
     ),
   );
 
@@ -252,8 +252,9 @@ class _LifeBand extends StatelessWidget {
   final List<Trip> trips;
   final Map<int, Map<DateTime, DayWeather>> weather;
   final ValueChanged<Trip>? onOpen;
+  final Color? labelColor;
 
-  const _LifeBand({required this.trips, required this.weather, this.onOpen});
+  const _LifeBand({required this.trips, required this.weather, this.onOpen, this.labelColor});
 
   static const _dayWidth = 9.0;
 
@@ -280,7 +281,7 @@ class _LifeBand extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '${trip.countryCode} · ${labelFormat.format(trip.start)}',
-                  style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                  style: theme.textTheme.labelSmall?.copyWith(color: labelColor ?? theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                 ),
               ],
             ),

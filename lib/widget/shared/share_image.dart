@@ -58,6 +58,8 @@ Future<void> shareWidgetAsImage(
   }
 }
 
+const sharePosterSubtitleColor = Color(0xFF5B6170);
+
 class SharePoster extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -77,13 +79,13 @@ class SharePoster extends StatelessWidget {
         children: [
           Text(title, style: theme.textTheme.headlineMedium?.copyWith(color: const Color(0xFF14161B))),
           if (subtitle != null)
-            Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF5B6170))),
+            Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: sharePosterSubtitleColor)),
           const SizedBox(height: 20),
           child,
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,
-            child: Text('journai.xyz', style: theme.textTheme.labelSmall?.copyWith(color: const Color(0xFF5B6170))),
+            child: Text('journai.xyz', style: theme.textTheme.labelSmall?.copyWith(color: sharePosterSubtitleColor)),
           ),
         ],
       ),

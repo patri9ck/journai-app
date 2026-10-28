@@ -46,6 +46,10 @@ class _StampStyleSheetState extends State<StampStyleSheet> {
       () => dataService.updateData(trip.id!, Data(feature: 'TRIP', fields: trip.toFields())),
     );
 
+    if (saved) {
+      await dataService.getData();
+    }
+
     if (!mounted) {
       return;
     }
