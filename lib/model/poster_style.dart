@@ -22,14 +22,14 @@ class PosterStyle {
   final String heading;
   final StampFont headingFont;
   final PosterFrame frame;
-  final Color? frameColor;
+  final Color frameColor;
 
   const PosterStyle({
     this.background = const Color(0xFFFBF8F1),
     this.heading = '',
     this.headingFont = StampFont.serif,
     this.frame = PosterFrame.none,
-    this.frameColor,
+    this.frameColor = const Color(0xFF2B2B33),
   });
 
   static PosterStyle fromJson(Map<String, dynamic>? json) {
@@ -41,7 +41,7 @@ class PosterStyle {
       heading: json?['heading'] as String? ?? '',
       headingFont: StampFont.values.asNameMap()[json?['headingFont']] ?? StampFont.serif,
       frame: PosterFrame.values.asNameMap()[json?['frame']] ?? PosterFrame.none,
-      frameColor: frameColor == null ? null : Color(frameColor),
+      frameColor: frameColor == null ? const Color(0xFF2B2B33) : Color(frameColor),
     );
   }
 
@@ -61,6 +61,6 @@ class PosterStyle {
     'heading': heading.trim(),
     'headingFont': headingFont.name,
     'frame': frame.name,
-    if (frameColor != null) 'frameColor': frameColor!.toARGB32(),
+    'frameColor': frameColor.toARGB32(),
   };
 }

@@ -104,20 +104,19 @@ class PosterFrameBox extends StatelessWidget {
       return child;
     }
 
-    final frameColor = style.frameColor ?? Color.lerp(style.background, const Color(0xFF14161B), 0.45)!;
 
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: frameColor, width: 2),
+        border: Border.all(color: style.frameColor, width: 2),
       ),
       child: style.frame == PosterFrame.double
           ? Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: frameColor, width: 1),
+                border: Border.all(color: style.frameColor, width: 1),
               ),
               child: child,
             )
