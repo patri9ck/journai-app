@@ -95,7 +95,7 @@ class _VaccinePageState extends State<VaccinePage> {
       });
     } else if (_vaccines.isEmpty) {
       setState(() => _loading = false);
-      (freshResult as Failure).show(AppLocalizations.of(context));
+      (freshResult as Failure).show(AppLocalizations.of(context)!);
     } else {
       setState(() => _loading = false);
     }
@@ -447,7 +447,7 @@ class _VaccineCard extends StatelessWidget {
     }
 
     if (result is Failure<void>) {
-      result.show(AppLocalizations.of(context));
+      result.show(AppLocalizations.of(context)!);
       return;
     }
 
@@ -486,7 +486,7 @@ class _VaccineCard extends StatelessWidget {
     }
 
     if (result is Failure<void>) {
-      result.show(AppLocalizations.of(context));
+      result.show(AppLocalizations.of(context)!);
       return;
     }
 
@@ -648,7 +648,7 @@ class _ScanResultSheetState extends State<_ScanResultSheet> {
         setState(() {
           _items.removeRange(0, savedCount);
           _saving = false;
-          _error = result.localizedMessage(AppLocalizations.of(context));
+          _error = result.localizedMessage(AppLocalizations.of(context)!);
         });
         return;
       }

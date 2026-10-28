@@ -100,7 +100,7 @@ class _ContactVerificationPageState extends State<ContactVerificationPage> {
 
     if (result is Failure<Login>) {
       setState(() => _error = null);
-      result.show(AppLocalizations.of(context));
+      result.show(AppLocalizations.of(context)!);
 
       return;
     }

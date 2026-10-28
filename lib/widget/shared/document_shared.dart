@@ -620,7 +620,7 @@ Future<bool> ensureAndSave(
   }
 
   if (result is Failure<void>) {
-    result.show(AppLocalizations.of(context));
+    result.show(AppLocalizations.of(context)!);
 
     return false;
   }

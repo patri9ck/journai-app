@@ -165,7 +165,7 @@ class _DocumentListPageState extends State<DocumentListPage> {
     });
 
     if (freshResult is Failure && _documents.isEmpty) {
-      (freshResult as Failure).show(AppLocalizations.of(context));
+      (freshResult as Failure).show(AppLocalizations.of(context)!);
     }
   }
 
@@ -407,7 +407,7 @@ class _ScanResultSheetState extends State<_ScanResultSheet> {
       if (result is Failure<void>) {
         setState(() {
           _saving = false;
-          _error = result.localizedMessage(AppLocalizations.of(context));
+          _error = result.localizedMessage(AppLocalizations.of(context)!);
         });
 
         return;

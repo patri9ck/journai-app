@@ -28,7 +28,7 @@ Future<bool> ensureEncryptionUnlocked(BuildContext context) async {
 
     if (encryptedDataKeyResult is! Success<String?>) {
       if (context.mounted) {
-        (encryptedDataKeyResult as Failure<String?>).show(AppLocalizations.of(context));
+        (encryptedDataKeyResult as Failure<String?>).show(AppLocalizations.of(context)!);
       }
 
       return false;

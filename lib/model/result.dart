@@ -10,11 +10,11 @@ import '../util/scaffold_messenger_key.dart';
 sealed class Result<T> {}
 
 class Failure<T> extends Result<T> {
-  String localizedMessage([AppLocalizations? localizations]) {
-    return localizations?.failure ?? 'An error occurred.';
+  String localizedMessage(AppLocalizations localizations) {
+    return localizations.failure;
   }
 
-  void show([AppLocalizations? localizations]) {
+  void show(AppLocalizations localizations) {
     final messenger = scaffoldMessengerKey.currentState;
 
     if (messenger == null) {
@@ -36,8 +36,8 @@ class Failure<T> extends Result<T> {
 
 class NetworkFailure<T> extends Failure<T> {
   @override
-  String localizedMessage([AppLocalizations? localizations]) {
-    return localizations?.failureNoInternet ?? 'No internet connection.';
+  String localizedMessage(AppLocalizations localizations) {
+    return localizations.failureNoInternet;
   }
 }
 
@@ -70,32 +70,8 @@ class ServerFailure<T> extends Failure<T> {
   }
 
   @override
-  String localizedMessage([AppLocalizations? localizations]) {
-    return _resolveMessage(localizations);
-  }
-
-  @override
-  void show([AppLocalizations? localizations]) {
-    final messenger = scaffoldMessengerKey.currentState;
-
-    if (messenger == null) {
-      return;
-    }
-
-    messenger.removeCurrentSnackBar();
-
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          _resolveMessage(localizations),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
-  String _resolveMessage(AppLocalizations? localizations) {
-    if (localizations != null && key == 'scan-limit-exceeded') {
+  String localizedMessage(AppLocalizations localizations) {
+    if (key == 'scan-limit-exceeded') {
       final remaining = imagesRemaining;
       final attempted = imagesAttempted;
 
@@ -124,9 +100,7 @@ class ServerFailure<T> extends Failure<T> {
           : localizations.failureScanLimitAlltime;
     }
 
-    return localizations != null
-        ? (_localizations[key]?.call(localizations) ?? message)
-        : message;
+    return _localizations[key]?.call(localizations) ?? message;
   }
 }
 

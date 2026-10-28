@@ -109,7 +109,7 @@ class _HealthValuePageState extends State<HealthValuePage> {
       });
     } else if (_documents.isEmpty) {
       setState(() => _loading = false);
-      (freshResult as Failure).show(AppLocalizations.of(context));
+      (freshResult as Failure).show(AppLocalizations.of(context)!);
     } else {
       setState(() => _loading = false);
     }
@@ -328,7 +328,7 @@ class _HealthValueItem extends StatelessWidget {
     }
 
     if (result is Failure<void>) {
-      result.show(AppLocalizations.of(context));
+      result.show(AppLocalizations.of(context)!);
       return;
     }
 

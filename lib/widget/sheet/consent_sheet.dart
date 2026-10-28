@@ -121,7 +121,7 @@ class _ConsentSheetState extends State<ConsentSheet> {
     if (result is Failure<void>) {
       setState(() {
         _loading = false;
-        _error = result.localizedMessage(AppLocalizations.of(context));
+        _error = result.localizedMessage(AppLocalizations.of(context)!);
       });
 
       return;
