@@ -4,7 +4,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import '../../messages/app_localizations.dart';
@@ -12,6 +11,7 @@ import '../../model/stamp_style.dart';
 import '../../model/trip.dart';
 import '../../util/country_name.dart';
 import '../../util/temperature_color.dart';
+import 'stamp_font.dart';
 
 class TravelStamp extends StatelessWidget {
   final Trip trip;
@@ -123,16 +123,12 @@ class _StampPainter extends CustomPainter {
     final style = TextStyle(
       color: color,
       fontSize: fontSize,
-      fontWeight: FontWeight.w700,
+      fontWeight: font == StampFont.serif ? FontWeight.w400 : FontWeight.w700,
       letterSpacing: letterSpacing,
       height: 1,
     );
 
-    return switch (font) {
-      StampFont.sans => GoogleFonts.inter(textStyle: style),
-      StampFont.serif => GoogleFonts.instrumentSerif(textStyle: style.copyWith(fontWeight: FontWeight.w400, fontSize: fontSize * 1.1)),
-      StampFont.typewriter => style.copyWith(fontFamily: 'monospace', fontFamilyFallback: const ['Courier']),
-    };
+    return stampFontStyle(font, font == StampFont.serif ? style.copyWith(fontSize: fontSize * 1.1) : style);
   }
 
   Path _hexagon(Offset center, double radius) => Path()

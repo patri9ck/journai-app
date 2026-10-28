@@ -760,6 +760,8 @@
   "stampBookSizeSmall": "Petite",
   "stampBookSizeMedium": "Moyenne",
   "stampBookSizeLarge": "Grande",
+  "lifeBandCustomize": "Personnaliser le ruban de vie",
+  "posterHeadingFont": "Police du titre",
   "tripDays": "{count, plural, =1{1 jour} other{{count} jours}}",
   "tripStripesTitle": "Bandes de voyage",
   "tripStripesLegend": "Chaque bande est un jour : la couleur indique la température, les points la pluie.",

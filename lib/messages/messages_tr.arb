@@ -760,6 +760,8 @@
   "stampBookSizeSmall": "Küçük",
   "stampBookSizeMedium": "Orta",
   "stampBookSizeLarge": "Büyük",
+  "lifeBandCustomize": "Hayat şeridini özelleştir",
+  "posterHeadingFont": "Başlık yazı tipi",
   "tripDays": "{count, plural, =1{1 gün} other{{count} gün}}",
   "tripStripesTitle": "Seyahat şeritleri",
   "tripStripesLegend": "Her şerit bir gün: renk sıcaklığı, noktalar yağmuru gösterir.",

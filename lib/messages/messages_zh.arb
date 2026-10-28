@@ -760,6 +760,8 @@
   "stampBookSizeSmall": "小",
   "stampBookSizeMedium": "中",
   "stampBookSizeLarge": "大",
+  "lifeBandCustomize": "自定义人生色带",
+  "posterHeadingFont": "标题字体",
   "tripDays": "{count, plural, other{{count} 天}}",
   "tripStripesTitle": "旅行色带",
   "tripStripesLegend": "每条色带代表一天：颜色表示温度，圆点表示下雨。",

@@ -856,6 +856,8 @@
   "stampBookSizeSmall": "Small",
   "stampBookSizeMedium": "Medium",
   "stampBookSizeLarge": "Large",
+  "lifeBandCustomize": "Customize Life Band",
+  "posterHeadingFont": "Heading Font",
   "tripDays": "{count, plural, =1{1 day} other{{count} days}}",
   "@tripDays": {
     "placeholders": {

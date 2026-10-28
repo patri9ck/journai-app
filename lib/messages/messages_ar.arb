@@ -760,6 +760,8 @@
   "stampBookSizeSmall": "صغير",
   "stampBookSizeMedium": "متوسط",
   "stampBookSizeLarge": "كبير",
+  "lifeBandCustomize": "تخصيص شريط الحياة",
+  "posterHeadingFont": "خط العنوان",
   "tripDays": "{count, plural, zero{{count} يوم} one{يوم واحد} two{يومان} few{{count} أيام} many{{count} يومًا} other{{count} يوم}}",
   "tripStripesTitle": "أشرطة الرحلة",
   "tripStripesLegend": "كل شريط هو يوم: يُظهر اللون درجة الحرارة وتُظهر النقاط المطر.",

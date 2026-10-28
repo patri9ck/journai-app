@@ -9,6 +9,9 @@ import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart' hide Share;
 
+import '../../model/poster_style.dart';
+import 'stamp_font.dart';
+
 Future<void> shareWidgetAsImage(
   BuildContext context, {
   required Widget child,
@@ -60,26 +63,50 @@ Future<void> shareWidgetAsImage(
 
 const sharePosterSubtitleColor = Color(0xFF5B6170);
 
+class PosterHeading extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final PosterStyle style;
+
+  const PosterHeading({super.key, required this.title, this.subtitle, required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: stampFontStyle(style.headingFont, theme.textTheme.headlineMedium!.copyWith(color: const Color(0xFF14161B))),
+        ),
+        if (subtitle != null)
+          Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: sharePosterSubtitleColor)),
+      ],
+    );
+  }
+}
+
 class SharePoster extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final PosterStyle style;
   final Widget child;
 
-  const SharePoster({super.key, required this.title, this.subtitle, required this.child});
+  const SharePoster({super.key, required this.title, this.subtitle, this.style = const PosterStyle(), required this.child});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
-      color: const Color(0xFFFBF8F1),
+      color: style.background,
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: theme.textTheme.headlineMedium?.copyWith(color: const Color(0xFF14161B))),
-          if (subtitle != null)
-            Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: sharePosterSubtitleColor)),
+          PosterHeading(title: title, subtitle: subtitle, style: style),
           const SizedBox(height: 20),
           child,
           const SizedBox(height: 20),

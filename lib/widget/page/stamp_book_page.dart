@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 
 import '../../messages/app_localizations.dart';
 import '../../model/day_weather.dart';
+import '../../model/memories_style.dart';
 import '../../model/stamp_book_style.dart';
 import '../../model/trip.dart';
-import '../../util/cache.dart';
+import '../../util/memories_style.dart';
 import '../../util/trip_memories.dart';
 import '../sheet/stamp_book_style_sheet.dart';
 import '../shared/empty_state.dart';
@@ -27,9 +28,9 @@ class StampBookPage extends StatefulWidget {
 }
 
 class _StampBookPageState extends State<StampBookPage> {
-  static const _styleKey = 'settings_stamp_book';
+  MemoriesStyle _memoriesStyle = const MemoriesStyle();
 
-  StampBookStyle _style = const StampBookStyle();
+  StampBookStyle get _style => _memoriesStyle.stampBook;
 
   @override
   void initState() {
@@ -38,13 +39,11 @@ class _StampBookPageState extends State<StampBookPage> {
   }
 
   Future<void> _loadStyle() async {
-    final json = await readObjectCache(_styleKey);
+    final memoriesStyle = await loadMemoriesStyle();
 
-    if (json == null || !mounted) {
-      return;
+    if (mounted) {
+      setState(() => _memoriesStyle = memoriesStyle);
     }
-
-    setState(() => _style = StampBookStyle.fromJson(json));
   }
 
   Future<void> _customize() async {
@@ -58,9 +57,11 @@ class _StampBookPageState extends State<StampBookPage> {
       return;
     }
 
-    setState(() => _style = style);
+    final memoriesStyle = await saveMemoriesStyle(context, _memoriesStyle.copyWith(stampBook: style));
 
-    await saveObjectCache(_styleKey, style.toJson());
+    if (memoriesStyle != null && mounted) {
+      setState(() => _memoriesStyle = memoriesStyle);
+    }
   }
 
   @override
@@ -87,6 +88,7 @@ class _StampBookPageState extends State<StampBookPage> {
                 subject: localizations.memoriesStampBook,
                 child: SharePoster(
                   title: localizations.memoriesStampBook,
+                  style: _style.poster,
                   child: _StampPage(trips: trips, weather: widget.weather, style: _style),
                 ),
               ),
@@ -98,7 +100,18 @@ class _StampBookPageState extends State<StampBookPage> {
           ? EmptyState(icon: Icons.auto_stories_outlined, text: localizations.stampBookEmpty)
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
-              child: _StampPage(trips: trips, weather: widget.weather, style: _style),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: _style.poster.background, borderRadius: BorderRadius.circular(8)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    PosterHeading(title: localizations.memoriesStampBook, style: _style.poster),
+                    const SizedBox(height: 16),
+                    _StampPage(trips: trips, weather: widget.weather, style: _style),
+                  ],
+                ),
+              ),
             ),
     );
   }
@@ -114,7 +127,7 @@ class _StampPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final frameColor = Color.lerp(style.background, const Color(0xFF14161B), 0.45)!;
+    final frameColor = Color.lerp(style.poster.background, const Color(0xFF14161B), 0.45)!;
     final scattered = style.layout == StampBookLayout.scattered;
 
     final stamps = Wrap(
@@ -137,7 +150,7 @@ class _StampPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: style.background,
+        color: style.poster.background,
         borderRadius: BorderRadius.circular(8),
         border: style.frame == StampBookFrame.none ? null : Border.all(color: frameColor, width: 2),
       ),

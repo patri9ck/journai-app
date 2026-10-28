@@ -760,6 +760,8 @@
   "stampBookSizeSmall": "小",
   "stampBookSizeMedium": "中",
   "stampBookSizeLarge": "大",
+  "lifeBandCustomize": "ライフバンドをカスタマイズ",
+  "posterHeadingFont": "見出しのフォント",
   "tripDays": "{count, plural, other{{count}日間}}",
   "tripStripesTitle": "旅のストライプ",
   "tripStripesLegend": "各ストライプは1日を表し、色は気温、点は雨を示します。",
