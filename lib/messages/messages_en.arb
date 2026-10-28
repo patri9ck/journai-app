@@ -835,7 +835,7 @@
   "stampShape": "Shape",
   "stampFont": "Font",
   "stampColor": "Ink",
-  "stampAutomatic": "Automatic",
+  "stampReset": "Reset",
   "stampShapeCircle": "Circle",
   "stampShapeRectangle": "Rectangle",
   "stampShapeOval": "Oval",

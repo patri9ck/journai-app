@@ -739,7 +739,7 @@
   "stampShape": "Форма",
   "stampFont": "Шрифт",
   "stampColor": "Чорнило",
-  "stampAutomatic": "Автоматично",
+  "stampReset": "Скинути",
   "stampShapeCircle": "Коло",
   "stampShapeRectangle": "Прямокутник",
   "stampShapeOval": "Овал",

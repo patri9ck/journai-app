@@ -739,7 +739,7 @@
   "stampShape": "形",
   "stampFont": "フォント",
   "stampColor": "インク",
-  "stampAutomatic": "自動",
+  "stampReset": "リセット",
   "stampShapeCircle": "円",
   "stampShapeRectangle": "長方形",
   "stampShapeOval": "楕円",

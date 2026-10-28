@@ -739,7 +739,7 @@
   "stampShape": "الشكل",
   "stampFont": "الخط",
   "stampColor": "الحبر",
-  "stampAutomatic": "تلقائي",
+  "stampReset": "إعادة تعيين",
   "stampShapeCircle": "دائرة",
   "stampShapeRectangle": "مستطيل",
   "stampShapeOval": "بيضاوي",

@@ -739,7 +739,7 @@
   "stampShape": "Forma",
   "stampFont": "Carattere",
   "stampColor": "Inchiostro",
-  "stampAutomatic": "Automatico",
+  "stampReset": "Ripristina",
   "stampShapeCircle": "Cerchio",
   "stampShapeRectangle": "Rettangolo",
   "stampShapeOval": "Ovale",

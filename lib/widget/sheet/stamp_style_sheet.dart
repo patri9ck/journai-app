@@ -79,11 +79,6 @@ class _StampStyleSheetState extends State<StampStyleSheet> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                ChoiceChip(
-                  label: Text(localizations.stampAutomatic),
-                  selected: _shape == null,
-                  onSelected: (_) => setState(() => _shape = null),
-                ),
                 for (final shape in StampShape.values)
                   ChoiceChip(
                     label: Text(_shapeLabel(localizations, shape)),
@@ -114,11 +109,6 @@ class _StampStyleSheetState extends State<StampStyleSheet> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                ChoiceChip(
-                  label: Text(localizations.stampAutomatic),
-                  selected: _color == null,
-                  onSelected: (_) => setState(() => _color = null),
-                ),
                 for (final color in stampColors)
                   _ColorSwatch(
                     color: color,
@@ -128,6 +118,15 @@ class _StampStyleSheetState extends State<StampStyleSheet> {
               ],
             ),
             const SizedBox(height: 24),
+            OutlinedButton(
+              onPressed: () => setState(() {
+                _shape = null;
+                _font = StampFont.sans;
+                _color = null;
+              }),
+              child: Text(localizations.stampReset),
+            ),
+            const SizedBox(height: 8),
             FilledButton(
               onPressed: _saving ? null : _save,
               child: Text(localizations.documentSave),

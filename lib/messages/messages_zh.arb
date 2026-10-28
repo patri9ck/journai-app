@@ -739,7 +739,7 @@
   "stampShape": "形状",
   "stampFont": "字体",
   "stampColor": "墨色",
-  "stampAutomatic": "自动",
+  "stampReset": "重置",
   "stampShapeCircle": "圆形",
   "stampShapeRectangle": "矩形",
   "stampShapeOval": "椭圆",

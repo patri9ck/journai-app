@@ -739,7 +739,7 @@
   "stampShape": "Şekil",
   "stampFont": "Yazı tipi",
   "stampColor": "Mürekkep",
-  "stampAutomatic": "Otomatik",
+  "stampReset": "Sıfırla",
   "stampShapeCircle": "Daire",
   "stampShapeRectangle": "Dikdörtgen",
   "stampShapeOval": "Oval",
