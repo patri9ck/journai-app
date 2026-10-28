@@ -211,7 +211,7 @@ class SharePoster extends StatelessWidget {
       color: style.background,
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           PosterFrameBox(
             style: style,
