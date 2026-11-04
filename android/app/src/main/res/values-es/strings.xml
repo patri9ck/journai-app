@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Tarjeta de emergencia</string>
+    <string name="emergency_card_widget_description">Tu tarjeta de emergencia en la pantalla de inicio</string>
+    <string name="emergency_card_widget_placeholder">Abre Journai para mostrar aquí tu tarjeta de emergencia.</string>
+</resources>

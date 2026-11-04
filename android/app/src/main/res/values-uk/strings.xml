@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Картка екстреної допомоги</string>
+    <string name="emergency_card_widget_description">Ваша екстрена картка на головному екрані</string>
+    <string name="emergency_card_widget_placeholder">Відкрийте Journai, щоб показати тут екстрену картку.</string>
+</resources>

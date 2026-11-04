@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Carta d\'emergenza</string>
+    <string name="emergency_card_widget_description">La tua scheda di emergenza nella schermata Home</string>
+    <string name="emergency_card_widget_placeholder">Apri Journai per mostrare qui la tua scheda di emergenza.</string>
+</resources>

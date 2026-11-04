@@ -1,0 +1,19 @@
+{
+  "BASE_URL": "https://journai.xyz/",
+  "APP_ID": "xyz.journai.app",
+  "CONTACT_EMAIL": "hello@journai.xyz",
+  "GOOGLE_WEB_CLIENT_ID": "",
+  "REVENUE_CAT_GOOGLE_API_KEY": "",
+  "REVENUE_CAT_APPLE_API_KEY": "",
+  "KEYSTORE_PATH": "",
+  "KEYSTORE_PASSWORD": "",
+  "KEY_ALIAS": "",
+  "KEY_PASSWORD": "",
+  "FIREBASE_PROJECT_ID": "",
+  "FIREBASE_MESSAGING_SENDER_ID": "",
+  "FIREBASE_STORAGE_BUCKET": "",
+  "FIREBASE_ANDROID_API_KEY": "",
+  "FIREBASE_ANDROID_APP_ID": "",
+  "FIREBASE_IOS_API_KEY": "",
+  "FIREBASE_IOS_APP_ID": ""
+}

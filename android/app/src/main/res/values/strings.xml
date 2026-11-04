@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Emergency Card</string>
+    <string name="emergency_card_widget_description">Your emergency card on the home screen</string>
+    <string name="emergency_card_widget_placeholder">Open Journai to show your emergency card here.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emergency_card_widget_name">Acil Durum Kartı</string>
+    <string name="emergency_card_widget_description">Acil durum kartın ana ekranda</string>
+    <string name="emergency_card_widget_placeholder">Acil durum kartını burada göstermek için Journai\'yi aç.</string>
+</resources>
