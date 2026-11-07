@@ -191,6 +191,14 @@ class _PaywallSheetState extends State<PaywallSheet> {
               yearlyBilling: _yearlyBilling,
               onTap: _loading || !canPurchasePaid ? null : () => _purchase(familyPackage),
             ),
+            const SizedBox(height: 12),
+            Text(
+              '${localizations.subscriptionTaxNote} ${localizations.subscriptionBasePriceNote}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 16),
             TextButton(
               onPressed: () => launchUrl(
