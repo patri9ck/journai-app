@@ -52,9 +52,7 @@ class _DataPageState extends State<DataPage> with AutomaticKeepAliveClientMixin 
   Future<void> _loadAll() async {
     final limits = await limitsService.getLimits();
 
-    if (!limits.hasProfiles && selectedProfileNotifier.value != null) {
-      await selectProfile(null);
-
+    if (!limits.hasProfiles && await dataService.ensureProfileForLimits(limits)) {
       return;
     }
 

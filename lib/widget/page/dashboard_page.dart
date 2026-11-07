@@ -199,8 +199,8 @@ class _DashboardPageState extends State<DashboardPage>
       _limitsLoaded = true;
     });
 
-    if (!freshLimits.hasProfiles && selectedProfileNotifier.value != null) {
-      await selectProfile(null);
+    if (!freshLimits.hasProfiles) {
+      await dataService.ensureProfileForLimits(freshLimits);
     }
 
     await travelWarningAlertService.sync(

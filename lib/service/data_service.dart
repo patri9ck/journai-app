@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:cryptography_plus/cryptography_plus.dart';
 
 import '../model/data.dart';
+import '../model/limits.dart';
 import '../model/result.dart';
 import '../util/cache.dart';
 import '../util/profile_notifier.dart';
@@ -131,11 +132,43 @@ class DataService {
     return entries.where((entry) => entry.feature != 'PROFILE').toList();
   }
 
+  Future<bool> ensureProfileForLimits(Limits limits) async {
+    if (limits.hasProfiles) {
+      return false;
+    }
+
+    var profiles = await getCachedData(['PROFILE']);
+
+    if (profiles.isEmpty) {
+      final fresh = await getData(['PROFILE']);
+
+      if (fresh is Success<List<Data>>) {
+        profiles = fresh.value ?? [];
+      }
+    }
+
+    final defaultProfileId = profiles.firstOrNull?.id;
+
+    if (selectedProfileNotifier.value != defaultProfileId) {
+      await selectProfile(defaultProfileId);
+
+      return true;
+    }
+
+    return false;
+  }
+
   Future<Result<void>> deleteProfile(int profileId) async {
     final refreshResult = await getData();
 
     if (refreshResult is! Success<List<Data>>) {
       return (refreshResult as Failure).cast<void>();
+    }
+
+    final profileResult = await deleteData(profileId);
+
+    if (profileResult is Failure<void>) {
+      return profileResult;
     }
 
     final entries = await _readCachedData();
@@ -148,7 +181,7 @@ class DataService {
       }
     }
 
-    return deleteData(profileId);
+    return Success<void>();
   }
 
   Future<List<Data>> _readCachedData([List<String>? features]) async {

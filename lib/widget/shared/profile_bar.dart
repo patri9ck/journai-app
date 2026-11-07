@@ -58,6 +58,69 @@ class _ProfileBarState extends State<ProfileBar> {
     }
 
     setState(() => _profiles = result.value ?? []);
+
+    await _ensureDefaultProfile();
+  }
+
+  Future<void> _ensureDefaultProfile() async {
+    if (selectedProfileNotifier.value != null) {
+      return;
+    }
+
+    if (_profiles.isNotEmpty) {
+      final firstId = _profiles.first.id;
+
+      if (firstId != null) {
+        await selectProfile(firstId);
+      }
+
+      return;
+    }
+
+    final localizations = AppLocalizations.of(context)!;
+    final saved = await ensureAndSave(
+      context,
+      () => dataService.saveData(Data(feature: 'PROFILE', fields: {'name': localizations.profileMe})),
+    );
+
+    if (!saved || !mounted) {
+      return;
+    }
+
+    final refreshed = await dataService.getData(['PROFILE']);
+
+    if (!mounted || refreshed is! Success<List<Data>>) {
+      return;
+    }
+
+    final profiles = refreshed.value ?? [];
+
+    setState(() => _profiles = profiles);
+
+    final createdId = profiles.firstOrNull?.id;
+
+    if (createdId == null) {
+      return;
+    }
+
+    await selectProfile(createdId);
+
+    final entries = await dataService.getCachedDataOfAllProfiles();
+
+    if (!mounted) {
+      return;
+    }
+
+    for (final entry in entries.where((entry) => entry.profileId == null)) {
+      if (entry.id == null) {
+        continue;
+      }
+
+      await ensureAndSave(
+        context,
+        () => dataService.updateData(entry.id!, Data(feature: entry.feature, fields: entry.fields)),
+      );
+    }
   }
 
   Future<String?> _askName(String title, [String initialName = '']) {
@@ -149,10 +212,7 @@ class _ProfileBarState extends State<ProfileBar> {
       return;
     }
 
-    if (selectedProfileNotifier.value == profile.id) {
-      await selectProfile(null);
-    }
-
+    final wasSelected = selectedProfileNotifier.value == profile.id;
     final result = await dataService.deleteProfile(profile.id!);
 
     if (!mounted) {
@@ -161,6 +221,19 @@ class _ProfileBarState extends State<ProfileBar> {
 
     if (result is Failure<void>) {
       result.show(localizations);
+
+      return;
+    }
+
+    if (wasSelected) {
+      final remainingId = _profiles
+          .where((other) => other.id != profile.id)
+          .firstOrNull
+          ?.id;
+
+      if (remainingId != null) {
+        await selectProfile(remainingId);
+      }
     }
 
     await _load();
@@ -173,7 +246,7 @@ class _ProfileBarState extends State<ProfileBar> {
     final selectedProfile = _profiles
         .where((profile) => profile.id == selectedProfileId)
         .firstOrNull;
-    final canAdd = _profiles.length < widget.limits.profiles - 1;
+    final canAdd = _profiles.length < widget.limits.profiles;
 
     final selection = await showModalBottomSheet<Object?>(
       context: context,
@@ -191,15 +264,6 @@ class _ProfileBarState extends State<ProfileBar> {
                   letterSpacing: 0.8,
                 ),
               ),
-            ),
-            ListTile(
-              leading: Icon(
-                selectedProfileId == null
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-              ),
-              title: Text(localizations.profileMe),
-              onTap: () => Navigator.of(sheetContext).pop('me'),
             ),
             for (final profile in _profiles)
               ListTile(
@@ -256,12 +320,6 @@ class _ProfileBarState extends State<ProfileBar> {
 
     if (selection == 'delete' && selectedProfile != null) {
       await _delete(selectedProfile);
-
-      return;
-    }
-
-    if (selection == 'me') {
-      await selectProfile(null);
 
       return;
     }
