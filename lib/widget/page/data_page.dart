@@ -10,7 +10,6 @@ import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/auth_scope.dart';
 import '../../util/profile_notifier.dart';
-import '../shared/profile_bar.dart';
 import '../shared/tier_badge.dart';
 import 'allergy_page.dart';
 import 'condition_page.dart';
@@ -106,11 +105,6 @@ class _DataPageState extends State<DataPage> with AutomaticKeepAliveClientMixin 
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            if (isLoggedIn && _limits.hasProfiles)
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                sliver: SliverToBoxAdapter(child: ProfileBar(limits: _limits)),
-              ),
             _sectionHeader(localizations.dataSectionHealthHeader, theme),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),

@@ -755,6 +755,8 @@
   "profileRename": "Rename",
   "profileDelete": "Delete Profile",
   "profileDeleteBody": "Delete {name} and all of their data? This cannot be undone.",
+  "profileSwitch": "Switch profile",
+  "failureLastProfile": "At least one profile must remain on your account.",
   "@profileDeleteBody": {
     "placeholders": {
       "name": {

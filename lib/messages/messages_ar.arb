@@ -701,6 +701,8 @@
   "profileRename": "إعادة تسمية",
   "profileDelete": "حذف الملف الشخصي",
   "profileDeleteBody": "هل تريد حذف {name} وجميع بياناته؟ لا يمكن التراجع عن ذلك.",
+  "profileSwitch": "تبديل الملف الشخصي",
+  "failureLastProfile": "يجب أن يبقى ملف شخصي واحد على الأقل في حسابك.",
   "subscriptionFamilyPriceMonthly": "€7.99 / شهر",
   "subscriptionFamilyPriceYearly": "€6.99 / شهر",
   "entryCheckSectionPlan": "خطة التطعيم",

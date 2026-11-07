@@ -701,6 +701,8 @@
   "profileRename": "名前を変更",
   "profileDelete": "プロフィールを削除",
   "profileDeleteBody": "{name}とそのすべてのデータを削除しますか？この操作は元に戻せません。",
+  "profileSwitch": "プロフィールを切り替え",
+  "failureLastProfile": "アカウントには少なくとも1つのプロフィールが残っている必要があります。",
   "subscriptionFamilyPriceMonthly": "€7.99 / 月",
   "subscriptionFamilyPriceYearly": "€6.99 / 月",
   "entryCheckSectionPlan": "予防接種プラン",

@@ -701,6 +701,8 @@
   "profileRename": "Переименовать",
   "profileDelete": "Удалить профиль",
   "profileDeleteBody": "Удалить {name} и все данные? Это действие нельзя отменить.",
+  "profileSwitch": "Сменить профиль",
+  "failureLastProfile": "В аккаунте должен остаться хотя бы один профиль.",
   "subscriptionFamilyPriceMonthly": "€7,99 / мес.",
   "subscriptionFamilyPriceYearly": "€6,99 / мес.",
   "entryCheckSectionPlan": "План прививок",

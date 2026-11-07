@@ -153,6 +153,7 @@ final Map<String, String Function(AppLocalizations)> _localizations = {
   "internal-error": (appLocalizations) => appLocalizations.failureInternalError,
   "encryption-already-set": (appLocalizations) => appLocalizations.failureEncryptionAlreadySet,
   "last-login-method": (appLocalizations) => appLocalizations.failureLastLoginMethod,
+  "last-profile": (appLocalizations) => appLocalizations.failureLastProfile,
   "country-not-found": (appLocalizations) => appLocalizations.countryNoInformation,
   "entry-check-unavailable": (appLocalizations) => appLocalizations.failureEntryCheckUnavailable,
   "data-too-large": (appLocalizations) => appLocalizations.failureDataTooLarge,

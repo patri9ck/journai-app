@@ -701,6 +701,8 @@
   "profileRename": "Renommer",
   "profileDelete": "Supprimer le profil",
   "profileDeleteBody": "Supprimer {name} et toutes ses données ? Cette action est irréversible.",
+  "profileSwitch": "Changer de profil",
+  "failureLastProfile": "Au moins un profil doit rester sur votre compte.",
   "subscriptionFamilyPriceMonthly": "€7,99 / mois",
   "subscriptionFamilyPriceYearly": "€6,99 / mois",
   "entryCheckSectionPlan": "Plan de vaccination",

@@ -701,6 +701,8 @@
   "profileRename": "重命名",
   "profileDelete": "删除资料",
   "profileDeleteBody": "删除 {name} 及其所有数据？此操作无法撤销。",
+  "profileSwitch": "切换资料",
+  "failureLastProfile": "您的账户中必须至少保留一个资料。",
   "subscriptionFamilyPriceMonthly": "€7.99 / 月",
   "subscriptionFamilyPriceYearly": "€6.99 / 月",
   "entryCheckSectionPlan": "疫苗接种计划",

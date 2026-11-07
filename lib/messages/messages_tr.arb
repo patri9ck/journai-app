@@ -701,6 +701,8 @@
   "profileRename": "Yeniden adlandır",
   "profileDelete": "Profili sil",
   "profileDeleteBody": "{name} ve tüm verileri silinsin mi? Bu işlem geri alınamaz.",
+  "profileSwitch": "Profili değiştir",
+  "failureLastProfile": "Hesabınızda en az bir profil kalmalıdır.",
   "subscriptionFamilyPriceMonthly": "€7,99 / ay",
   "subscriptionFamilyPriceYearly": "€6,99 / ay",
   "entryCheckSectionPlan": "Aşı planı",

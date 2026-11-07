@@ -701,6 +701,8 @@
   "profileRename": "Rinomina",
   "profileDelete": "Elimina profilo",
   "profileDeleteBody": "Eliminare {name} e tutti i suoi dati? Non è possibile annullare.",
+  "profileSwitch": "Cambia profilo",
+  "failureLastProfile": "Deve rimanere almeno un profilo sul tuo account.",
   "subscriptionFamilyPriceMonthly": "€7,99 / mese",
   "subscriptionFamilyPriceYearly": "€6,99 / mese",
   "entryCheckSectionPlan": "Piano vaccinale",

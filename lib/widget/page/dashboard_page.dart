@@ -34,6 +34,7 @@ import '../../util/storage.dart';
 import '../../util/temperature_format.dart';
 import '../../util/units_notifier.dart';
 import '../shared/emergency_card_view.dart';
+import '../shared/profile_bar.dart';
 import '../shared/share_image.dart';
 import '../shared/sheet_handle.dart';
 import '../shared/status_row.dart';
@@ -504,6 +505,13 @@ class _DashboardPageState extends State<DashboardPage>
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
+            if (AuthScope.of(context) && _limits.hasProfiles)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: ProfileBar(limits: _limits),
+                ),
+              ),
             SliverToBoxAdapter(
               child: _buildHeader(localizations, theme, context),
             ),
@@ -554,7 +562,7 @@ class _DashboardPageState extends State<DashboardPage>
         _locationInfo!.countryCode.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

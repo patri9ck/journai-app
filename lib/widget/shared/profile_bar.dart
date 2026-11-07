@@ -105,43 +105,6 @@ class _ProfileBarState extends State<ProfileBar> {
     }
   }
 
-  Future<void> _edit(Data profile) async {
-    final localizations = AppLocalizations.of(context)!;
-
-    final action = await showModalBottomSheet<String>(
-      context: context,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.edit_outlined),
-              title: Text(localizations.profileRename),
-              onTap: () => Navigator.of(sheetContext).pop('rename'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: Text(localizations.profileDelete, style: const TextStyle(color: Colors.red)),
-              onTap: () => Navigator.of(sheetContext).pop('delete'),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (!mounted) {
-      return;
-    }
-
-    if (action == 'rename') {
-      await _rename(profile);
-    }
-
-    if (action == 'delete') {
-      await _delete(profile);
-    }
-  }
-
   Future<void> _rename(Data profile) async {
     final name = await _askName(
       AppLocalizations.of(context)!.profileRename,
@@ -166,25 +129,23 @@ class _ProfileBarState extends State<ProfileBar> {
     final localizations = AppLocalizations.of(context)!;
     final name = profile.fields['name'] as String? ?? '';
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(localizations.profileDelete),
-        content: Text(localizations.profileDeleteBody(name)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(localizations.back),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(localizations.profileDelete, style: const TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
+    final confirmed = await confirmDelete(
+      context,
+      localizations.profileDeleteBody(name),
+      localizations.documentDeleteConfirmYes,
     );
 
-    if (confirmed != true || !mounted) {
+    if (!confirmed || !mounted) {
+      return;
+    }
+
+    if (_profiles.length <= 1) {
+      ServerFailure<void>(
+        message: 'At least one profile must remain on your account.',
+        key: 'last-profile',
+        statusCode: 409,
+      ).show(localizations);
+
       return;
     }
 
@@ -205,42 +166,167 @@ class _ProfileBarState extends State<ProfileBar> {
     await _load();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _switchProfile() async {
     final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final selectedProfileId = selectedProfileNotifier.value;
     final canAdd = _profiles.length < widget.limits.profiles - 1;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ChoiceChip(
-            label: Text(localizations.profileMe),
-            selected: selectedProfileId == null,
-            onSelected: (_) => selectProfile(null),
-          ),
-          for (final profile in _profiles) ...[
-            const SizedBox(width: 8),
-            GestureDetector(
-              onLongPress: () => _edit(profile),
-              child: ChoiceChip(
-                label: Text(profile.fields['name'] as String? ?? ''),
-                selected: selectedProfileId == profile.id,
-                onSelected: (_) => selectProfile(profile.id),
+    final selection = await showModalBottomSheet<Object?>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+              child: Text(
+                localizations.profileSwitch,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                selectedProfileId == null
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+              ),
+              title: Text(localizations.profileMe),
+              onTap: () => Navigator.of(sheetContext).pop('me'),
+            ),
+            for (final profile in _profiles)
+              ListTile(
+                leading: Icon(
+                  profile.id == selectedProfileId
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                ),
+                title: Text(profile.fields['name'] as String? ?? ''),
+                onTap: () => Navigator.of(sheetContext).pop(profile),
+              ),
+            if (canAdd)
+              ListTile(
+                leading: const Icon(Icons.add),
+                title: Text(localizations.profileAdd),
+                onTap: () => Navigator.of(sheetContext).pop('add'),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    if (!mounted || selection == null) {
+      return;
+    }
+
+    if (selection == 'add') {
+      await _add();
+
+      return;
+    }
+
+    if (selection == 'me') {
+      await selectProfile(null);
+
+      return;
+    }
+
+    if (selection is Data) {
+      await selectProfile(selection.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final selectedProfileId = selectedProfileNotifier.value;
+    final selectedProfile = _profiles
+        .where((profile) => profile.id == selectedProfileId)
+        .firstOrNull;
+    final canEdit = selectedProfile != null;
+
+    return Row(
+      children: [
+        PopupMenuButton<String>(
+          key: const ValueKey('profile_menu'),
+          icon: const Icon(Icons.menu),
+          itemBuilder: (menuContext) => [
+            PopupMenuItem<String>(
+              value: 'rename',
+              enabled: canEdit,
+              child: Row(
+                children: [
+                  const Icon(Icons.edit_outlined, size: 20),
+                  const SizedBox(width: 12),
+                  Text(localizations.profileRename),
+                ],
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'delete',
+              enabled: canEdit,
+              child: Row(
+                children: [
+                  const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                  const SizedBox(width: 12),
+                  Text(
+                    localizations.profileDelete,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
               ),
             ),
           ],
-          if (canAdd) ...[
-            const SizedBox(width: 8),
-            ActionChip(
-              avatar: const Icon(Icons.add, size: 18),
-              label: Text(localizations.profileAdd),
-              onPressed: _add,
+          onSelected: (value) {
+            if (selectedProfile == null) {
+              return;
+            }
+
+            if (value == 'rename') {
+              _rename(selectedProfile);
+            }
+
+            if (value == 'delete') {
+              _delete(selectedProfile);
+            }
+          },
+        ),
+        Expanded(
+          child: Center(
+            child: GestureDetector(
+              key: const ValueKey('profile_switcher'),
+              onTap: _switchProfile,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      selectedProfile?.fields['name'] as String? ??
+                          localizations.profileMe,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 20,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ],
-      ),
+          ),
+        ),
+        const SizedBox(width: 48),
+      ],
     );
   }
 }

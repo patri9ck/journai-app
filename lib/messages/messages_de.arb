@@ -701,6 +701,8 @@
   "profileRename": "Umbenennen",
   "profileDelete": "Profil löschen",
   "profileDeleteBody": "{name} und alle zugehörigen Daten löschen? Das kann nicht rückgängig gemacht werden.",
+  "profileSwitch": "Profil wechseln",
+  "failureLastProfile": "Mindestens ein Profil muss auf deinem Konto bleiben.",
   "subscriptionFamilyPriceMonthly": "€7,99 / Mo.",
   "subscriptionFamilyPriceYearly": "€6,99 / Mo.",
   "entryCheckSectionPlan": "Impfplan",

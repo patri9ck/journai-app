@@ -701,6 +701,8 @@
   "profileRename": "Zmień nazwę",
   "profileDelete": "Usuń profil",
   "profileDeleteBody": "Usunąć {name} i wszystkie powiązane dane? Tego nie można cofnąć.",
+  "profileSwitch": "Zmień profil",
+  "failureLastProfile": "Na koncie musi pozostać co najmniej jeden profil.",
   "subscriptionFamilyPriceMonthly": "€7,99 / mies.",
   "subscriptionFamilyPriceYearly": "€6,99 / mies.",
   "entryCheckSectionPlan": "Plan szczepień",

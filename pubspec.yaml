@@ -1,7 +1,7 @@
 name: journai_app
 description: "Journai App"
 publish_to: 'none'
-version: 0.0.1+4
+version: 0.0.1+6
 
 environment:
   sdk: ^3.8.0

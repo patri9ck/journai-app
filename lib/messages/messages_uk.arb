@@ -701,6 +701,8 @@
   "profileRename": "Перейменувати",
   "profileDelete": "Видалити профіль",
   "profileDeleteBody": "Видалити {name} і всі дані? Цю дію не можна скасувати.",
+  "profileSwitch": "Змінити профіль",
+  "failureLastProfile": "В обліковому записі має залишитися принаймні один профіль.",
   "subscriptionFamilyPriceMonthly": "€7,99 / міс.",
   "subscriptionFamilyPriceYearly": "€6,99 / міс.",
   "entryCheckSectionPlan": "План щеплень",
