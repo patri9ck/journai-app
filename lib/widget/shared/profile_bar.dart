@@ -170,6 +170,9 @@ class _ProfileBarState extends State<ProfileBar> {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final selectedProfileId = selectedProfileNotifier.value;
+    final selectedProfile = _profiles
+        .where((profile) => profile.id == selectedProfileId)
+        .firstOrNull;
     final canAdd = _profiles.length < widget.limits.profiles - 1;
 
     final selection = await showModalBottomSheet<Object?>(
@@ -214,6 +217,22 @@ class _ProfileBarState extends State<ProfileBar> {
                 title: Text(localizations.profileAdd),
                 onTap: () => Navigator.of(sheetContext).pop('add'),
               ),
+            if (selectedProfile != null) ...[
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.edit_outlined),
+                title: Text(localizations.profileRename),
+                onTap: () => Navigator.of(sheetContext).pop('rename'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: Colors.red),
+                title: Text(
+                  localizations.profileDelete,
+                  style: const TextStyle(color: Colors.red),
+                ),
+                onTap: () => Navigator.of(sheetContext).pop('delete'),
+              ),
+            ],
           ],
         ),
       ),
@@ -225,6 +244,18 @@ class _ProfileBarState extends State<ProfileBar> {
 
     if (selection == 'add') {
       await _add();
+
+      return;
+    }
+
+    if (selection == 'rename' && selectedProfile != null) {
+      await _rename(selectedProfile);
+
+      return;
+    }
+
+    if (selection == 'delete' && selectedProfile != null) {
+      await _delete(selectedProfile);
 
       return;
     }
@@ -248,85 +279,33 @@ class _ProfileBarState extends State<ProfileBar> {
     final selectedProfile = _profiles
         .where((profile) => profile.id == selectedProfileId)
         .firstOrNull;
-    final canEdit = selectedProfile != null;
 
-    return Row(
-      children: [
-        PopupMenuButton<String>(
-          key: const ValueKey('profile_menu'),
-          icon: const Icon(Icons.menu),
-          itemBuilder: (menuContext) => [
-            PopupMenuItem<String>(
-              value: 'rename',
-              enabled: canEdit,
-              child: Row(
-                children: [
-                  const Icon(Icons.edit_outlined, size: 20),
-                  const SizedBox(width: 12),
-                  Text(localizations.profileRename),
-                ],
+    return Center(
+      child: GestureDetector(
+        key: const ValueKey('profile_switcher'),
+        onTap: _switchProfile,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                selectedProfile?.fields['name'] as String? ??
+                    localizations.profileMe,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            PopupMenuItem<String>(
-              value: 'delete',
-              enabled: canEdit,
-              child: Row(
-                children: [
-                  const Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                  const SizedBox(width: 12),
-                  Text(
-                    localizations.profileDelete,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 20,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ],
-          onSelected: (value) {
-            if (selectedProfile == null) {
-              return;
-            }
-
-            if (value == 'rename') {
-              _rename(selectedProfile);
-            }
-
-            if (value == 'delete') {
-              _delete(selectedProfile);
-            }
-          },
         ),
-        Expanded(
-          child: Center(
-            child: GestureDetector(
-              key: const ValueKey('profile_switcher'),
-              onTap: _switchProfile,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      selectedProfile?.fields['name'] as String? ??
-                          localizations.profileMe,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 20,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 48),
-      ],
+      ),
     );
   }
 }
