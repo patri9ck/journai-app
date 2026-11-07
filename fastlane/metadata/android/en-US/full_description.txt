@@ -1,5 +1,9 @@
 Journai is your travel health companion - everything you need to be prepared, safe, and informed on every trip.
 
+<b>Memories that stay</b>
+
+Every trip becomes a little work of art: each day a travel stripe coloured by the real weather that day, and each trip its own passport stamp generated from country, dates and weather. Write a journal entry with five seconds of sound per day, let tickets, receipts and photos arrange themselves into a scrapbook - and seal a time capsule postcard to yourself that only opens next year.
+
 <b>All your documents, encrypted and offline</b>
 
 Vaccination records, insurance cards, passport copies, visa documents, allergies, and medical certificates - stored in one place, end-to-end encrypted directly on your device. Only you have access to your data. Even without an internet connection, everything is available when you need it most.

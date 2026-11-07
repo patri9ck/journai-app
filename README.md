@@ -26,6 +26,16 @@ bundle install
 bundle exec fastlane google_play_store json_key:key.json track:alpha aab:true
 ```
 
+## Screenshots
+
+With an emulator running, create the store screenshots and optionally the website images:
+
+```bash
+./screenshots.sh --website ~/Development/journai-server/src/main/resources/static/screenshots
+```
+
+This writes `0.png` to `4.png` for phone, 7-inch and 10-inch tablet to `fastlane/metadata/android/en-US/images/`. With `--website DIR`, the phone screenshots are also downscaled to `0.webp` to `4.webp` in `DIR`.
+
 ## License
 
 Copyright (C) 2026 Patrick Zwick
