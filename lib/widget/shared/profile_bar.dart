@@ -9,6 +9,7 @@ import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/profile_notifier.dart';
+import '../sheet/encryption_sheet.dart';
 import 'document_shared.dart';
 
 class ProfileBar extends StatefulWidget {
@@ -98,6 +99,38 @@ class _ProfileBarState extends State<ProfileBar> {
     );
   }
 
+  Future<Data?> _currentProfile() async {
+    final selected = _profiles
+        .where((profile) => profile.id == selectedProfileNotifier.value)
+        .firstOrNull;
+
+    if (selected != null) {
+      return selected;
+    }
+
+    if (_profiles.isNotEmpty) {
+      return _profiles
+              .where((profile) => profile.fields['isDefault'] == true)
+              .firstOrNull ??
+          _profiles.firstOrNull;
+    }
+
+    final localizations = AppLocalizations.of(context)!;
+    final unlocked = await ensureEncryptionUnlocked(context);
+
+    if (!unlocked || !mounted) {
+      return null;
+    }
+
+    await dataService.createDefaultProfile(localizations.profileMe);
+    await _load();
+
+    return _profiles
+            .where((profile) => profile.fields['isDefault'] == true)
+            .firstOrNull ??
+        _profiles.firstOrNull;
+  }
+
   Future<void> _add() async {
     final name = await _askName(AppLocalizations.of(context)!.profileAdd);
 
@@ -105,17 +138,35 @@ class _ProfileBarState extends State<ProfileBar> {
       return;
     }
 
+    final existingIds = _profiles.map((profile) => profile.id).toSet();
     final saved = await ensureAndSave(
       context,
       () => dataService.saveData(Data(feature: 'PROFILE', fields: {'name': name})),
     );
 
-    if (saved) {
-      await _load();
+    if (!saved || !mounted) {
+      return;
+    }
+
+    await _load();
+
+    final addedId = _profiles
+        .where((profile) => !existingIds.contains(profile.id))
+        .firstOrNull
+        ?.id;
+
+    if (addedId != null) {
+      await selectProfile(addedId);
     }
   }
 
-  Future<void> _rename(Data profile) async {
+  Future<void> _rename() async {
+    final profile = await _currentProfile();
+
+    if (profile == null || !mounted) {
+      return;
+    }
+
     final name = await _askName(
       AppLocalizations.of(context)!.profileRename,
       profile.fields['name'] as String? ?? '',
@@ -138,13 +189,17 @@ class _ProfileBarState extends State<ProfileBar> {
     }
   }
 
-  Future<void> _delete(Data profile) async {
+  Future<void> _delete() async {
     final localizations = AppLocalizations.of(context)!;
-    final name = profile.fields['name'] as String? ?? '';
+    final profile = await _currentProfile();
+
+    if (profile == null || !mounted) {
+      return;
+    }
 
     final confirmed = await confirmDelete(
       context,
-      localizations.profileDeleteBody(name),
+      localizations.profileDeleteBody(profile.fields['name'] as String? ?? ''),
       localizations.documentDeleteConfirmYes,
     );
 
@@ -183,9 +238,6 @@ class _ProfileBarState extends State<ProfileBar> {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final selectedProfileId = selectedProfileNotifier.value;
-    final selectedProfile = _profiles
-        .where((profile) => profile.id == selectedProfileId)
-        .firstOrNull;
     final canAdd = _profiles.length < widget.limits.profiles;
 
     final selection = await showModalBottomSheet<Object?>(
@@ -205,6 +257,12 @@ class _ProfileBarState extends State<ProfileBar> {
                 ),
               ),
             ),
+            if (_profiles.isEmpty)
+              ListTile(
+                leading: const Icon(Icons.radio_button_checked),
+                title: Text(localizations.profileMe),
+                onTap: () => Navigator.of(sheetContext).pop(),
+              ),
             for (final profile in _profiles)
               ListTile(
                 leading: Icon(
@@ -221,22 +279,20 @@ class _ProfileBarState extends State<ProfileBar> {
                 title: Text(localizations.profileAdd),
                 onTap: () => Navigator.of(sheetContext).pop('add'),
               ),
-            if (selectedProfile != null) ...[
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.edit_outlined),
-                title: Text(localizations.profileRename),
-                onTap: () => Navigator.of(sheetContext).pop('rename'),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: Text(localizations.profileRename),
+              onTap: () => Navigator.of(sheetContext).pop('rename'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: Text(
+                localizations.profileDelete,
+                style: const TextStyle(color: Colors.red),
               ),
-              ListTile(
-                leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: Text(
-                  localizations.profileDelete,
-                  style: const TextStyle(color: Colors.red),
-                ),
-                onTap: () => Navigator.of(sheetContext).pop('delete'),
-              ),
-            ],
+              onTap: () => Navigator.of(sheetContext).pop('delete'),
+            ),
           ],
         ),
       ),
@@ -252,14 +308,14 @@ class _ProfileBarState extends State<ProfileBar> {
       return;
     }
 
-    if (selection == 'rename' && selectedProfile != null) {
-      await _rename(selectedProfile);
+    if (selection == 'rename') {
+      await _rename();
 
       return;
     }
 
-    if (selection == 'delete' && selectedProfile != null) {
-      await _delete(selectedProfile);
+    if (selection == 'delete') {
+      await _delete();
 
       return;
     }
