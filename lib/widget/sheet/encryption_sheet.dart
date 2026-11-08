@@ -204,6 +204,8 @@ class _EncryptionSetupSheetState extends State<EncryptionSetupSheet> {
       return;
     }
 
+    await dataService.createDefaultProfile(localizations.profileMe);
+
     widget.onSetupComplete();
   }
 }

@@ -18,6 +18,7 @@ import '../../service/services.dart';
 import '../../util/auth_scope.dart';
 import '../../util/country_name.dart';
 import '../../util/document_date.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/memories_style.dart';
 import '../../util/trip_memories.dart';
 import '../sheet/life_band_style_sheet.dart';
@@ -47,7 +48,20 @@ class _MemoriesPageState extends State<MemoriesPage> {
   @override
   void initState() {
     super.initState();
+    limitsNotifier.addListener(_onLimitsChanged);
     _load();
+  }
+
+  @override
+  void dispose() {
+    limitsNotifier.removeListener(_onLimitsChanged);
+    super.dispose();
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
   }
 
   Future<void> _load() async {

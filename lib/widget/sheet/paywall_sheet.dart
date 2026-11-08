@@ -10,12 +10,20 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../messages/app_localizations.dart';
 import '../../service/services.dart';
 
-Future<bool?> showPaywall(BuildContext context, {String currentTier = 'FREE'}) => showModalBottomSheet<bool>(
-  context: context,
-  isScrollControlled: true,
-  useSafeArea: true,
-  builder: (_) => PaywallSheet(currentTier: currentTier),
-);
+Future<bool?> showPaywall(BuildContext context, {String currentTier = 'FREE'}) async {
+  final purchased = await showModalBottomSheet<bool>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => PaywallSheet(currentTier: currentTier),
+  );
+
+  if (purchased == true) {
+    await limitsService.getLimits();
+  }
+
+  return purchased;
+}
 
 class PaywallSheet extends StatefulWidget {
   final String currentTier;

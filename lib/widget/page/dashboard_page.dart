@@ -29,6 +29,7 @@ import '../../util/cache.dart';
 import '../../util/country_data.dart';
 import '../../util/country_name.dart';
 import '../../util/emergency_card_notifier.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/profile_notifier.dart';
 import '../../util/storage.dart';
 import '../../util/temperature_format.dart';
@@ -91,6 +92,7 @@ class _DashboardPageState extends State<DashboardPage>
     metricUnitsNotifier.addListener(_onUnitsChanged);
     selectedProfileNotifier.addListener(_loadHealthData);
     emergencyCardRequestedNotifier.addListener(_onEmergencyCardRequested);
+    limitsNotifier.addListener(_onLimitsChanged);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _onEmergencyCardRequested(),
     );
@@ -103,7 +105,14 @@ class _DashboardPageState extends State<DashboardPage>
     metricUnitsNotifier.removeListener(_onUnitsChanged);
     selectedProfileNotifier.removeListener(_loadHealthData);
     emergencyCardRequestedNotifier.removeListener(_onEmergencyCardRequested);
+    limitsNotifier.removeListener(_onLimitsChanged);
     super.dispose();
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
   }
 
   @override
@@ -199,9 +208,7 @@ class _DashboardPageState extends State<DashboardPage>
       _limitsLoaded = true;
     });
 
-    if (!freshLimits.hasProfiles) {
-      await dataService.ensureProfileForLimits(freshLimits);
-    }
+    await dataService.ensureDefaultProfile(freshLimits, AppLocalizations.of(context)!.profileMe);
 
     await travelWarningAlertService.sync(
       freshLimits.travelWarningAlertsEnabled,
@@ -509,7 +516,7 @@ class _DashboardPageState extends State<DashboardPage>
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: ProfileBar(limits: _limits),
+                  child: ProfileBar(limits: _limits, refreshTrigger: widget.refreshTrigger),
                 ),
               ),
             SliverToBoxAdapter(

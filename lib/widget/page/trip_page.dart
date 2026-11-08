@@ -18,6 +18,7 @@ import '../../model/time_capsule.dart';
 import '../../model/trip.dart';
 import '../../service/services.dart';
 import '../../util/country_name.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/temperature_format.dart';
 import '../../util/trip_memories.dart';
 import '../../util/units_notifier.dart';
@@ -59,6 +60,7 @@ class _TripPageState extends State<TripPage> {
         setState(() => _playing = false);
       }
     });
+    limitsNotifier.addListener(_onLimitsChanged);
     _load();
   }
 
@@ -66,7 +68,14 @@ class _TripPageState extends State<TripPage> {
   void dispose() {
     _playerCompletion?.cancel();
     soundService.stop();
+    limitsNotifier.removeListener(_onLimitsChanged);
     super.dispose();
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
   }
 
   int _initialDay() {

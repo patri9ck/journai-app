@@ -4,6 +4,7 @@
 import '../model/limits.dart';
 import '../model/result.dart';
 import '../util/cache.dart';
+import '../util/limits_notifier.dart';
 import 'request_service.dart';
 
 class LimitsService {
@@ -15,11 +16,10 @@ class LimitsService {
   Future<Limits> getCachedLimits() async {
     final cached = await readObjectCache('cache_limits');
 
-    if (cached != null) {
-      return Limits.fromJson(cached);
-    }
+    final limits = cached != null ? Limits.fromJson(cached) : Limits.unlimited;
+    limitsNotifier.value = limits;
 
-    return Limits.unlimited;
+    return limits;
   }
 
   Future<Limits> getLimits() async {
@@ -28,15 +28,11 @@ class LimitsService {
     if (result is Success<Map<String, dynamic>>) {
       final limits = Limits.fromJson(result.value!);
       await saveObjectCache('cache_limits', result.value!);
+      limitsNotifier.value = limits;
+
       return limits;
     }
 
-    final cached = await readObjectCache('cache_limits');
-
-    if (cached != null) {
-      return Limits.fromJson(cached);
-    }
-
-    return Limits.unlimited;
+    return getCachedLimits();
   }
 }

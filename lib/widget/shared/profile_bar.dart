@@ -13,8 +13,9 @@ import 'document_shared.dart';
 
 class ProfileBar extends StatefulWidget {
   final Limits limits;
+  final int refreshTrigger;
 
-  const ProfileBar({required this.limits, super.key});
+  const ProfileBar({required this.limits, this.refreshTrigger = 0, super.key});
 
   @override
   State<ProfileBar> createState() => _ProfileBarState();
@@ -28,6 +29,15 @@ class _ProfileBarState extends State<ProfileBar> {
     super.initState();
     selectedProfileNotifier.addListener(_onProfileChanged);
     _load();
+  }
+
+  @override
+  void didUpdateWidget(ProfileBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.refreshTrigger != oldWidget.refreshTrigger) {
+      _load();
+    }
   }
 
   @override
@@ -58,69 +68,6 @@ class _ProfileBarState extends State<ProfileBar> {
     }
 
     setState(() => _profiles = result.value ?? []);
-
-    await _ensureDefaultProfile();
-  }
-
-  Future<void> _ensureDefaultProfile() async {
-    if (selectedProfileNotifier.value != null) {
-      return;
-    }
-
-    if (_profiles.isNotEmpty) {
-      final firstId = _profiles.first.id;
-
-      if (firstId != null) {
-        await selectProfile(firstId);
-      }
-
-      return;
-    }
-
-    final localizations = AppLocalizations.of(context)!;
-    final saved = await ensureAndSave(
-      context,
-      () => dataService.saveData(Data(feature: 'PROFILE', fields: {'name': localizations.profileMe})),
-    );
-
-    if (!saved || !mounted) {
-      return;
-    }
-
-    final refreshed = await dataService.getData(['PROFILE']);
-
-    if (!mounted || refreshed is! Success<List<Data>>) {
-      return;
-    }
-
-    final profiles = refreshed.value ?? [];
-
-    setState(() => _profiles = profiles);
-
-    final createdId = profiles.firstOrNull?.id;
-
-    if (createdId == null) {
-      return;
-    }
-
-    await selectProfile(createdId);
-
-    final entries = await dataService.getCachedDataOfAllProfiles();
-
-    if (!mounted) {
-      return;
-    }
-
-    for (final entry in entries.where((entry) => entry.profileId == null)) {
-      if (entry.id == null) {
-        continue;
-      }
-
-      await ensureAndSave(
-        context,
-        () => dataService.updateData(entry.id!, Data(feature: entry.feature, fields: entry.fields)),
-      );
-    }
   }
 
   Future<String?> _askName(String title, [String initialName = '']) {
@@ -180,7 +127,10 @@ class _ProfileBarState extends State<ProfileBar> {
 
     final saved = await ensureAndSave(
       context,
-      () => dataService.updateData(profile.id!, Data(feature: 'PROFILE', fields: {'name': name})),
+      () => dataService.updateData(
+        profile.id!,
+        Data(feature: 'PROFILE', fields: {...profile.fields, 'name': name}),
+      ),
     );
 
     if (saved) {
@@ -199,16 +149,6 @@ class _ProfileBarState extends State<ProfileBar> {
     );
 
     if (!confirmed || !mounted) {
-      return;
-    }
-
-    if (_profiles.length <= 1) {
-      ServerFailure<void>(
-        message: 'At least one profile must remain on your account.',
-        key: 'last-profile',
-        statusCode: 409,
-      ).show(localizations);
-
       return;
     }
 

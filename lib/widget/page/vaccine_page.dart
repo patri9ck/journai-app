@@ -12,6 +12,7 @@ import '../../model/data.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
+import '../../util/limits_notifier.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
 import '../shared/scanning_dialog.dart';
@@ -38,7 +39,20 @@ class _VaccinePageState extends State<VaccinePage> {
   @override
   void initState() {
     super.initState();
+    limitsNotifier.addListener(_onLimitsChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadVaccines());
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
+  }
+
+  @override
+  void dispose() {
+    limitsNotifier.removeListener(_onLimitsChanged);
+    super.dispose();
   }
 
   Future<void> _loadVaccines() async {

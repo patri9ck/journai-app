@@ -18,6 +18,7 @@ import '../../model/user_info.dart';
 import '../../service/services.dart';
 import '../../util/auth_notifier.dart';
 import '../../util/auth_scope.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/scaffold_messenger_key.dart';
 import '../../util/storage.dart';
 import '../../util/notifications_notifier.dart';
@@ -54,13 +55,21 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     newsNotificationsNotifier.addListener(_onNewsNotificationsChanged);
+    limitsNotifier.addListener(_onLimitsChanged);
     _loadPreferences();
   }
 
   @override
   void dispose() {
     newsNotificationsNotifier.removeListener(_onNewsNotificationsChanged);
+    limitsNotifier.removeListener(_onLimitsChanged);
     super.dispose();
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
   }
 
   void _onNewsNotificationsChanged() {

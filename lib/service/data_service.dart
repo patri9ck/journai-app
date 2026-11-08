@@ -132,30 +132,69 @@ class DataService {
     return entries.where((entry) => entry.feature != 'PROFILE').toList();
   }
 
-  Future<bool> ensureProfileForLimits(Limits limits) async {
-    if (limits.hasProfiles) {
-      return false;
+  Future<List<Data>> _allProfiles() async {
+    final cached = await getCachedData(['PROFILE']);
+
+    if (cached.isNotEmpty) {
+      return cached;
     }
 
-    var profiles = await getCachedData(['PROFILE']);
+    final fresh = await getData(['PROFILE']);
 
-    if (profiles.isEmpty) {
-      final fresh = await getData(['PROFILE']);
+    return fresh is Success<List<Data>> ? fresh.value ?? [] : cached;
+  }
 
-      if (fresh is Success<List<Data>>) {
-        profiles = fresh.value ?? [];
+  int? _defaultProfileIdOf(List<Data> profiles) {
+    return profiles
+            .where((profile) => profile.fields['isDefault'] == true)
+            .firstOrNull
+            ?.id ??
+        profiles.firstOrNull?.id;
+  }
+
+  Future<void> createDefaultProfile(String name) async {
+    var profiles = await _allProfiles();
+    var defaultId = _defaultProfileIdOf(profiles);
+
+    if (defaultId == null) {
+      if (await _cryptographyService.readDataKey() == null) {
+        return;
       }
+
+      final result = await saveData(Data(feature: 'PROFILE', fields: {'name': name, 'isDefault': true}));
+
+      if (result is! Success<void>) {
+        return;
+      }
+
+      final refreshed = await getData(['PROFILE']);
+
+      if (refreshed is! Success<List<Data>>) {
+        return;
+      }
+
+      profiles = refreshed.value ?? [];
+      defaultId = _defaultProfileIdOf(profiles);
     }
 
-    final defaultProfileId = profiles.firstOrNull?.id;
+    if (defaultId != null && selectedProfileNotifier.value == null) {
+      await selectProfile(defaultId);
+    }
+  }
 
-    if (selectedProfileNotifier.value != defaultProfileId) {
-      await selectProfile(defaultProfileId);
+  Future<void> ensureDefaultProfile(Limits limits, String defaultName) async {
+    await createDefaultProfile(defaultName);
 
-      return true;
+    if (limits.hasProfiles) {
+      return;
     }
 
-    return false;
+    final profiles = await _allProfiles();
+    final defaultId = _defaultProfileIdOf(profiles);
+
+    for (final profile in profiles.where((profile) => profile.id != null && profile.id != defaultId)) {
+      await deleteProfile(profile.id!);
+    }
   }
 
   Future<Result<void>> deleteProfile(int profileId) async {

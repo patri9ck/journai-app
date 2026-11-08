@@ -8,6 +8,7 @@ import '../../model/data.dart';
 import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/storage.dart';
 import '../shared/document_shared.dart';
 import '../shared/empty_state.dart';
@@ -46,7 +47,20 @@ class _HealthValuePageState extends State<HealthValuePage> {
   @override
   void initState() {
     super.initState();
+    limitsNotifier.addListener(_onLimitsChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
+  }
+
+  @override
+  void dispose() {
+    limitsNotifier.removeListener(_onLimitsChanged);
+    super.dispose();
   }
 
   Future<void> _load() async {

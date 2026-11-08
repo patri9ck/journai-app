@@ -9,6 +9,7 @@ import '../../model/limits.dart';
 import '../../model/result.dart';
 import '../../service/services.dart';
 import '../../util/auth_scope.dart';
+import '../../util/limits_notifier.dart';
 import '../../util/profile_notifier.dart';
 import '../shared/tier_badge.dart';
 import 'allergy_page.dart';
@@ -40,21 +41,25 @@ class _DataPageState extends State<DataPage> with AutomaticKeepAliveClientMixin 
   void initState() {
     super.initState();
     selectedProfileNotifier.addListener(_loadAll);
+    limitsNotifier.addListener(_onLimitsChanged);
     _loadAll();
   }
 
   @override
   void dispose() {
     selectedProfileNotifier.removeListener(_loadAll);
+    limitsNotifier.removeListener(_onLimitsChanged);
     super.dispose();
+  }
+
+  void _onLimitsChanged() {
+    if (mounted) {
+      setState(() => _limits = limitsNotifier.value);
+    }
   }
 
   Future<void> _loadAll() async {
     final limits = await limitsService.getLimits();
-
-    if (!limits.hasProfiles && await dataService.ensureProfileForLimits(limits)) {
-      return;
-    }
 
     final allDataResult = await dataService.getData();
 
