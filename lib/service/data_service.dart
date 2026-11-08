@@ -192,8 +192,8 @@ class DataService {
     final profiles = await _allProfiles();
     final defaultId = _defaultProfileIdOf(profiles);
 
-    for (final profile in profiles.where((profile) => profile.id != null && profile.id != defaultId)) {
-      await deleteProfile(profile.id!);
+    if (defaultId != null && selectedProfileNotifier.value != defaultId) {
+      await selectProfile(defaultId);
     }
   }
 
