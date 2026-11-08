@@ -320,6 +320,17 @@ class DataService {
       {'data': encryptedData},
     );
 
+    if (result is Success) {
+      final cached = await readListCache('cache_data');
+
+      if (cached != null) {
+        await saveListCache(
+          'cache_data',
+          cached.map((item) => item['id'] == dataId ? {...item, 'data': encryptedData} : item).toList(),
+        );
+      }
+    }
+
     return voidResult(result);
   }
 

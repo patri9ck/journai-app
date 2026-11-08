@@ -68,7 +68,21 @@ class _ProfileBarState extends State<ProfileBar> {
       return;
     }
 
-    setState(() => _profiles = result.value ?? []);
+    final profiles = result.value ?? [];
+
+    setState(() => _profiles = profiles);
+
+    final selectedId = selectedProfileNotifier.value;
+
+    if (profiles.isNotEmpty && profiles.every((profile) => profile.id != selectedId)) {
+      final defaultId =
+          profiles.where((profile) => profile.fields['isDefault'] == true).firstOrNull?.id ??
+          profiles.first.id;
+
+      if (defaultId != null) {
+        await selectProfile(defaultId);
+      }
+    }
   }
 
   Future<String?> _askName(String title, [String initialName = '']) {

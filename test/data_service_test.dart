@@ -23,6 +23,15 @@ class _DeleteRequestService extends RequestService {
   Future<Result<Map<String, dynamic>>> deleteAuthenticatedRequest(String path) async => deleteResult;
 }
 
+class _PutRequestService extends RequestService {
+  final Result<Map<String, dynamic>> putResult;
+
+  _PutRequestService(this.putResult) : super(baseUrl: '');
+
+  @override
+  Future<Result<Map<String, dynamic>>> putAuthenticatedRequest(String path, dynamic body) async => putResult;
+}
+
 void main() {
   final cryptographyService = CryptographyService();
   final limitsService = LimitsService(requestService: RequestService(baseUrl: ''));
@@ -97,6 +106,20 @@ void main() {
 
     expect(await offlineDataService.deleteData(1), isA<NetworkFailure<void>>());
     expect((await offlineDataService.getCachedData()).map((data) => data.id), [1]);
+  });
+
+  test('a successful update refreshes the cache', () async {
+    final onlineDataService = DataService(
+      requestService: _PutRequestService(Success({})),
+      cryptographyService: cryptographyService,
+      limitsService: limitsService,
+    );
+
+    expect(
+      await onlineDataService.updateData(2, Data(feature: 'PROFILE', fields: {'name': 'Neu'})),
+      isA<Success<void>>(),
+    );
+    expect((await onlineDataService.getCachedData(['PROFILE'])).single.fields['name'], 'Neu');
   });
 
   test('a successful delete removes only that entry from the cache', () async {
