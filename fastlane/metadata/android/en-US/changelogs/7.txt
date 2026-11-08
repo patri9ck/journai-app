@@ -1,0 +1,1 @@
+Initial release. Store vaccinations, travel documents, and health data encrypted on your device, and use the emergency card and offline maps anywhere in the world. Profiles: switch profiles directly in the home tab, rename or delete them. With the Family plan, every family member gets their own profile with their own data.

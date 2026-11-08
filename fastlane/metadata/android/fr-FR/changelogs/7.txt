@@ -1,0 +1,1 @@
+Première version. Stockez vaccinations, documents de voyage et données de santé chiffrés sur votre appareil, avec carte d'urgence et cartes hors ligne partout dans le monde. Profils : changez de profil directement dans l'onglet d'accueil, renommez-les ou supprimez-les. Avec l'abonnement Family, chaque membre a son propre profil avec ses propres données.

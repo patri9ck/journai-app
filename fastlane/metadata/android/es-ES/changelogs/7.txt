@@ -1,0 +1,1 @@
+Primera versión. Guarda vacunas, documentos de viaje y datos de salud cifrados en tu dispositivo, y usa la tarjeta de emergencia y los mapas sin conexión en cualquier parte del mundo. Perfiles: cambia de perfil directamente en la pestaña de inicio, renómbralos o elimínalos. Con el plan Family, cada miembro tiene su propio perfil con sus propios datos.
