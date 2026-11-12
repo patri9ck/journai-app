@@ -79,7 +79,13 @@ class _ContactVerificationPageState extends State<ContactVerificationPage> {
     final code = _controller.text.trim();
 
     if (code.length < 6) {
-      setState(() => _error = AppLocalizations.of(context)!.failureInvalidVerificationCode);
+      setState(() => _error = null);
+
+      ServerFailure<Login>(
+        message: 'Invalid verification code.',
+        key: 'invalid-verification-code',
+        statusCode: 400,
+      ).show(AppLocalizations.of(context)!);
 
       return;
     }
