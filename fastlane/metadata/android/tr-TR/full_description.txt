@@ -29,3 +29,5 @@ Aşı hatırlatmaları, pasaport yenilemeleri, vize süreleri - Journai tüm bel
 Uçtan uca şifreleme, belgelerinizin cihazınızdan ayrılmadan önce şifrelendiği anlamına gelir. Journai ekibi verilerinizi okuyamaz. Sağlık bilgileriniz size ait kalır - özel, güvenli ve her zaman erişilebilir.
 
 Nereye giderseniz gidin, güvenle seyahat edin.
+
+Bu uygulama hiçbir resmi kurum tarafından işletilmez ve hiçbir resmi kurumu veya kamu kuruluşunu temsil etmez. Tüm bilgiler garanti olmaksızın sunulur. Bazı bilgiler için uygulama, Almanya Federal Dışişleri Bakanlığı'nın resmi seyahat uyarılarını kullanır (https://www.auswaertiges-amt.de).

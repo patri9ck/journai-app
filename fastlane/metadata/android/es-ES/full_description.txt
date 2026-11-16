@@ -29,3 +29,5 @@ Refuerzos de vacunas, renovaciones de pasaporte, plazos de visado - Journai hace
 El cifrado de extremo a extremo significa que tus documentos se cifran en tu dispositivo antes de salir de él. El equipo de Journai no puede leer tus datos. Tu información de salud es tuya - privada, segura y siempre accesible.
 
 Viaja seguro, vayas donde vayas.
+
+Esta aplicación no está operada por ninguna autoridad gubernamental ni representa a ninguna autoridad gubernamental u organismo público. Toda la información se proporciona sin garantía. Para cierta información, la aplicación utiliza las recomendaciones de viaje oficiales del Ministerio Federal de Relaciones Exteriores de Alemania (https://www.auswaertiges-amt.de).

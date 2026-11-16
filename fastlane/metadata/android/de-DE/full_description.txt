@@ -29,3 +29,5 @@ Impfauffrischungen, Reisepassverlängerungen, Visa-Fristen - Journai behält all
 Ende-zu-Ende-Verschlüsselung bedeutet, dass deine Dokumente verschlüsselt werden, bevor sie dein Gerät verlassen. Das Journai-Team kann deine Daten nicht einsehen. Deine Gesundheitsinformationen bleiben dein - privat, sicher und immer zugänglich.
 
 Sicher reisen, wohin auch immer du gehst.
+
+Diese App wird von keiner Behörde betrieben und vertritt keine Behörde oder sonstige öffentliche Stelle. Alle Angaben erfolgen ohne Gewähr. Für manche Informationen nutzt die App die offiziellen Reise- und Sicherheitshinweise des Auswärtigen Amts (https://www.auswaertiges-amt.de).

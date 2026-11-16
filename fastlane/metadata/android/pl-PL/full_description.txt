@@ -29,3 +29,5 @@ Przypomnienia o szczepieniach, odnowienie paszportu, terminy wiz - Journai śled
 Szyfrowanie end-to-end oznacza, że Twoje dokumenty są szyfrowane na urządzeniu, zanim je opuszczą. Zespół Journai nie może odczytać Twoich danych. Twoje informacje zdrowotne pozostają Twoje - prywatne, bezpieczne i zawsze dostępne.
 
 Podróżuj bezpiecznie, gdziekolwiek pójdziesz.
+
+Ta aplikacja nie jest prowadzona przez żaden organ administracji publicznej i nie reprezentuje żadnego organu ani instytucji publicznej. Wszystkie informacje są podawane bez gwarancji. W przypadku niektórych informacji aplikacja korzysta z oficjalnych wskazówek dla podróżnych niemieckiego Ministerstwa Spraw Zagranicznych (https://www.auswaertiges-amt.de).

@@ -29,3 +29,5 @@ Richiami vaccinali, rinnovi del passaporto, scadenze del visto - Journai tiene t
 La cifratura end-to-end significa che i tuoi documenti vengono cifrati sul tuo dispositivo prima di lasciarlo. Il team di Journai non può leggere i tuoi dati. Le tue informazioni sanitarie rimangono tue - private, sicure e sempre accessibili.
 
 Viaggia sicuro, ovunque tu vada.
+
+Questa app non è gestita da alcuna autorità pubblica e non rappresenta alcuna autorità pubblica o ente pubblico. Tutte le informazioni sono fornite senza alcuna garanzia. Per alcune informazioni, l'app utilizza le avvertenze di viaggio ufficiali del Ministero degli Affari Esteri tedesco (https://www.auswaertiges-amt.de).

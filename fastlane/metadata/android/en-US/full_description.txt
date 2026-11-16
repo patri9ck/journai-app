@@ -33,3 +33,5 @@ Vaccination boosters, passport renewals, visa deadlines - Journai tracks all you
 End-to-end encryption means your documents are encrypted on your device before they ever leave it. The Journai team cannot read your data. Your health information stays yours - private, secure, and always accessible.
 
 Travel safe, wherever you go.
+
+This app is not operated by any government authority and does not represent any government authority or public body. All information is provided without warranty. For some information, the app uses the official travel advice of the German Foreign Office (https://www.auswaertiges-amt.de).

@@ -29,3 +29,5 @@ Rappels de vaccination, renouvellements de passeport, délais de visa - Journai 
 Le chiffrement de bout en bout signifie que vos documents sont chiffrés sur votre appareil avant de le quitter. L'équipe Journai ne peut pas lire vos données. Vos informations de santé restent les vôtres - privées, sécurisées et toujours accessibles.
 
 Voyagez en sécurité, où que vous alliez.
+
+Cette application n'est exploitée par aucune autorité publique et ne représente aucune autorité publique ou organisme public. Toutes les informations sont fournies sans garantie. Pour certaines informations, l'application utilise les conseils aux voyageurs officiels du ministère fédéral allemand des Affaires étrangères (https://www.auswaertiges-amt.de).
