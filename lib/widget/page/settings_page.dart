@@ -499,6 +499,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 6),
+                  Center(
+                    child: Text(
+                      localizations.footerDisclaimer,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

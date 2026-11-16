@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Patrick Zwick
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -220,25 +221,26 @@ class _EntryCheckPageState extends State<EntryCheckPage> {
         ],
       ],
       const SizedBox(height: 24),
-      Text(switch (entryCheck.source) {
-        EntrySource.foreignOffice => localizations.entryCheckSource(dateFormat.format(entryCheck.sourceUpdatedAt)),
-        EntrySource.passportAct => localizations.entryCheckSourcePassportAct(
-          dateFormat.format(entryCheck.sourceUpdatedAt),
+      Text.rich(
+        TextSpan(
+          text: switch (entryCheck.source) {
+            EntrySource.foreignOffice => localizations.entryCheckSource(dateFormat.format(entryCheck.sourceUpdatedAt)),
+            EntrySource.passportAct => localizations.entryCheckSourcePassportAct(
+              dateFormat.format(entryCheck.sourceUpdatedAt),
+            ),
+          },
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () => launchUrl(Uri.parse(entryCheck.sourceUrl), mode: LaunchMode.externalApplication),
         ),
-      }, style: theme.textTheme.bodySmall),
+      ),
       const SizedBox(height: 4),
-      Text(switch (entryCheck.source) {
-        EntrySource.foreignOffice => localizations.entryCheckDisclaimer,
-        EntrySource.passportAct => localizations.entryCheckDisclaimerPassportAct,
-      }, style: theme.textTheme.bodySmall),
-      const SizedBox(height: 12),
-      OutlinedButton.icon(
-        onPressed: () => launchUrl(Uri.parse(entryCheck.sourceUrl), mode: LaunchMode.externalApplication),
-        icon: const Icon(Icons.open_in_new, size: 16),
-        label: Text(switch (entryCheck.source) {
-          EntrySource.foreignOffice => localizations.entryCheckOpenSource,
-          EntrySource.passportAct => localizations.entryCheckOpenPassportAct,
-        }),
+      Text(
+        localizations.footerDisclaimer,
+        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
       ),
     ];
   }

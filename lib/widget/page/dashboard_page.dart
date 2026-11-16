@@ -3,6 +3,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -2183,25 +2184,33 @@ class _TravelWarningSheetState extends State<_TravelWarningSheet> {
                       widget.limits.countryInfoLgbtqEnabled,
                       _content?.lgbtq,
                     ),
-                    if (_result?.warning?.countryId != null) ...[
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          onPressed: () => launchUrl(
-                            Uri.parse(
-                              'https://www.auswaertiges-amt.de/de/ReiseUndSicherheit/${warning!.countryId}',
-                            ),
-                            mode: LaunchMode.externalApplication,
-                          ),
-                          icon: const Icon(Icons.open_in_new, size: 16),
-                          label: Text(
-                            localizations.dashboardTravelWarningOpenMore,
-                          ),
-                        ),
-                      ),
-                    ],
                   ],
+                  const SizedBox(height: 24),
+                  Text.rich(
+                    TextSpan(
+                      text: localizations.countryInfoSourceLink,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchUrl(
+                              Uri.parse(
+                                warning?.countryId != null
+                                    ? 'https://www.auswaertiges-amt.de/de/ReiseUndSicherheit/${warning!.countryId}'
+                                    : 'https://www.auswaertiges-amt.de/de/reiseundsicherheit/reise-und-sicherheitshinweise',
+                              ),
+                              mode: LaunchMode.externalApplication,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    localizations.footerDisclaimer,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
                 ],
               ),
             ),
